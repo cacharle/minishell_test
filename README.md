@@ -28,8 +28,8 @@ The reasons for this is are:
 
 ## Run
 
-`> ./test.sh`
+`> ./main.py`
 
 # Configuration
 
-The default configuration can be changed in the `minishell\_test.config` file.
+The default configuration can be changed in <config.py>
