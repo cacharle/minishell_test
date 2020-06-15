@@ -35,18 +35,22 @@ def run_sandboxed(program: str, cmd: str) -> str:
     return output
 
 
+status = 0
 ignored_suites = []
 suites = {}
 current_suite = "default"
 
 def test(cmd, setup = None, *files):
+    global status
+
     if current_suite in ignored_suites:
         return
     expected = run_sandboxed(config.REFERENCE_SHELL_PATH, cmd)
-    actual = run_sandboxed(os.path.join(config.MINISHELL_DIR, config.MINISHELL_EXEC), cmd)
+    actual = run_sandboxed(os.path.abspath(os.path.join(config.MINISHELL_DIR, config.MINISHELL_EXEC)), cmd)
 
     if actual != expected:
         sys.stdout.write(red(config.FAIL_MARKER))
+        status = 1
     else:
         sys.stdout.write(green(config.PASS_MARKER))
     sys.stdout.flush()
@@ -76,3 +80,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    sys.exit(status)

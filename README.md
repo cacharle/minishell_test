@@ -22,9 +22,9 @@ README.md test.sh
 README.md test.sh
 ```
 
-The reasons for this is are:
-1. we're free to set the prompt to whatever we want
-2. termcaps would be a nightmare to test
+The reasons for this:
+1. You're free to set the prompt to whatever you want
+2. Termcaps would be a nightmare to test
 
 ## Run
 

@@ -1,7 +1,7 @@
 # Minishell configuration file
 
 # minishell dir path
-MINISHELL_DIR = "/home/charles/minishell"
+MINISHELL_DIR = ".."
 
 # minishell executable
 MINISHELL_EXEC = "minishell"
