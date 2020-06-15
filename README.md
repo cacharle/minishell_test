@@ -32,4 +32,4 @@ The reasons for this is are:
 
 # Configuration
 
-The default configuration can be changed in the minishell\_test.config file.
+The default configuration can be changed in the `minishell\_test.config` file.

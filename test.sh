@@ -1,16 +1,16 @@
 #!/bin/sh
 
-# **************************************************************************** #
+# ############################################################################ #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    test.sh                                            :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/05/01 10:54:53 by charles           #+#    #+#              #
-#    Updated: 2020/05/01 10:54:53 by charles          ###   ########.fr        #
+#    Created: 2020/06/07 14:02:56 by charles           #+#    #+#              #
+#    Updated: 2020/06/07 14:02:56 by charles          ###   ########.fr        #
 #                                                                              #
-# **************************************************************************** #
+# ############################################################################ #
 
 case $# in
     0) config_file=minishell_test.config;;
@@ -31,6 +31,7 @@ lorem=`cat $lorem_path`
 pass_marker=`config_extract pass_marker`
 fail_marker=`config_extract fail_marker`
 log_file=`config_extract log_file`
+sandbox_path=`config_extract sandbox_path`
 
 # echo $minishell_path
 # echo $minishell_exec
@@ -56,28 +57,51 @@ append_fail () {
     echo "for $1"
 }
 
-expect() {
-    expected=`$referecence_shell_path -c $1`
-    expected_status=$?
-    actual=`$minishell_exec_path -c $1`
-    actual_status=$?
-    ([ $expected = $actual ] && [ $expected_status -eq $actual_status ] && put_pass_marker)
-        || (put_fail_marker &&
-    echo <<EOF
-for $1:
-expected: $expected
-actual:   $actual
-status: expected: $expected_status actual: $actual_status
-
-EOF
+sandbox_new() {
+    init_cmd="$1"
+    mkdir -p $sandbox_path
+    cd $sandbox_path
+    sh -c "$init_cmd"
 }
 
-###############################################################################
-# Builtin
-###############################################################################
+sandbox_clean() {
+    cd - > /dev/null
+    rm -rf $sandbox_path
+}
 
-expect 'echo bonjour'
-expect 'echo bonjour je suis'
-expect "echo $lorem"
-expect "echo $lorem $lorem $lorem $lorem"
+expect() {
+    expect_init $1 ""
+}
 
+expect_init() {
+    init_cmd="$2"
+    sandbox_new "$init_cmd"
+    expected=`$referecence_shell_path -c $1`
+    expected_status=$?
+    sandbox_clean
+    sandbox_new "$init_cmd"
+    actual=`$minishell_exec_path -c $1`
+    actual_status=$?
+    sandbox_clean
+    if [ $expected = $actual ] && [ $expected_status -eq $actual_status ]
+    then
+        put_pass_marker
+    else
+        put_fail_marker
+        cat <<EOF >> $log_file
+WITH { $1 }
+STATUS: expected: $expected_status actual: $actual_status
+----------------------------------------EXPECTED--------------------------------
+$expected
+----------------------------------------ACTUAL----------------------------------
+$actual
+================================================================================
+
+EOF
+    fi
+}
+
+rm -f $log_file
+
+source './tests/base.sh'
+source './tests/builtin.sh'
