@@ -15,12 +15,12 @@ PASS_MARKER = '.'
 FAIL_MARKER = '!'
 
 # log file path
-LOG_FILE = "result.log"
+LOG_PATH = "result.log"
 
 # path to the sandbox directory
 SANDBOX_PATH = "sandbox"
 
-LONG_TEXT = """
+LOREM = """
 Mollitia asperiores assumenda excepturi et ipsa. Nihil corporis facere aut a rem consequatur.
 Quas molestiae corporis et quibusdam maiores. Molestiae sed unde aut at sed.
 Deserunt quidem quidem aspernatur pariatur vel illum voluptatum. Culpa unde dolor aspernatur sit.
@@ -35,3 +35,12 @@ Dolor itaque distinctio in. Magnam rerum quia est laboriosam repellat perspiciat
 Consequuntur quae corrupti atque. Numquam enim ut ut.
 Perspiciatis ut maxime et libero quo voluptas consequatur illum. Pariatur porro dolor cumque molestiae harum.
 """
+LOREM = ' '.join(LOREM.split('\n'))
+
+
+# do not edit
+import os
+
+MINISHELL_PATH = os.path.abspath(
+    os.path.join(MINISHELL_DIR, MINISHELL_EXEC)
+)
