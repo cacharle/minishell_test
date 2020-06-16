@@ -4,8 +4,10 @@ Test for the minishell project of school 42.
 
 # Usage
 
-`> ./main.py --help`
-`> ./main.py`
+The default path to your project is `..` but you can change it the the [configuration](config.py).
+
+* `> ./main.py --help`
+* `> ./main.py`
 
 ## Test compatibility
 
