@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import os
 import sys
 import argparse
 import shutil
@@ -9,11 +10,18 @@ import config
 import suites
 
 def main():
+    if not os.path.exists(config.EXECUTABLES_PATH):
+        os.mkdir(config.EXECUTABLES_PATH)
+    for cmd in config.AVAILABLE_COMMANDS:
+        shutil.copy(os.path.join("/usr/bin", cmd),  # search whole PATH
+                    os.path.join(config.EXECUTABLES_PATH, cmd))
+
     try:
         suites.suite_quote()
         suites.suite_echo()
         suites.suite_redirection()
         suites.suite_edgecases()
+        suites.suite_cmd_error()
     except KeyboardInterrupt:
         shutil.rmtree(config.SANDBOX_PATH)
 

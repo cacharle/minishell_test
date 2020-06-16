@@ -77,7 +77,31 @@ def suite_redirection():
     test("echo bonjour>>test>je>>suis", setup="", files=["test", "je", "suis"])
     test("cat<test<je", setup="echo bonjour > test; echo salut > je")
 
+    test("echo bonjour > a'b'c'd'e'f'g'h'i'j'k'l'm'n'o'p'q'r's't'u'v'w'x'y'z'", files=["abcdefghijklmnopqrstuvzxyz"])
+    test('echo bonjour > a"b"c"d"e"f"g"h"i"j"k"l"m"n"o"p"q"r"s"t"u"v"w"x"y"z"', files=["abcdefghijklmnopqrstuvzxyz"])
+    test('echo bonjour > a\'b\'c"d"e\'f\'g"h"i\'j\'k"l"m\'n\'o"p\'q\'r"s\'t\'u"v"w"x"y\'z\'', files=["abcdefghijklmnopqrstuvzxyz"])
 
 @suite
 def suite_edgecases():
     test('echo "\\"" >>a"b""c"  ', files=["abc"])
+
+@suite
+def suite_cmd_error():
+    test(">")
+    test(">>")
+    test("<")
+    test("echo >")
+    test("echo >>")
+    test("echo <")
+
+    test("> test", files=["test"])
+    test(">> test", files=["test"])
+    test("< test", setup="touch test")
+
+    test("echo foo >>> bar")
+    test("echo foo >>>> bar")
+    test("echo foo >>>>> bar")
+
+    test("cat <<< bar", setup="echo bonjour > bar")
+    test("cat <<<< bar", setup="echo bonjour > bar")
+    test("cat <<<<< bar", setup="echo bonjour > bar")

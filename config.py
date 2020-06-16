@@ -1,4 +1,5 @@
 # Minishell configuration file
+import os
 
 # minishell dir path
 MINISHELL_DIR = ".."
@@ -15,6 +16,15 @@ LOG_PATH = "result.log"
 
 # path to the sandbox directory
 SANDBOX_PATH = "sandbox"
+
+# where the availables commands are stored
+EXECUTABLES_PATH = "./bin"
+
+# commands available in test"
+AVAILABLE_COMMANDS = ["cat", "touch"]
+
+# $PATH environment variable passed to the shell
+PATH_VARIABLE = os.path.abspath(EXECUTABLES_PATH)
 
 LOREM = """
 Mollitia asperiores assumenda excepturi et ipsa. Nihil corporis facere aut a rem consequatur.
@@ -35,7 +45,6 @@ LOREM = ' '.join(LOREM.split('\n'))
 
 
 # do not edit
-import os
 
 MINISHELL_PATH = os.path.abspath(
     os.path.join(MINISHELL_DIR, MINISHELL_EXEC)

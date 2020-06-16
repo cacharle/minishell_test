@@ -108,7 +108,8 @@ def run_sandboxed(program: str, cmd: str, setup: str = None, files: [str] = []) 
     process_status = subprocess.run([program, "-c", cmd],
                                     stderr=subprocess.STDOUT,
                                     stdout=subprocess.PIPE,
-                                    cwd=config.SANDBOX_PATH)
+                                    cwd=config.SANDBOX_PATH,
+                                    env={'PATH': config.PATH_VARIABLE})
     output = process_status.stdout.decode()
 
     output_files = []
@@ -144,8 +145,11 @@ def test(cmd: str, setup: str = None, files: [str] = []):
 
     if not verbose:
         put_result(passed, cmd)
-    if verbose and not passed:
-        print(diff(cmd, expected, actual, files, expected_files, actual_files, color=True))
+    if verbose:
+        if not passed:
+            print(diff(cmd, expected, actual, files, expected_files, actual_files, color=True))
+        else:
+            put_result(passed, cmd)
 
     if runned_suites.get(current_suite) is None:
         runned_suites[current_suite] = []
