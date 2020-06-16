@@ -22,6 +22,11 @@ def main():
         suites.suite_redirection()
         suites.suite_edgecases()
         suites.suite_cmd_error()
+        suites.suite_interpolation()
+        suites.suite_glob()
+        suites.suite_escape()
+        suites.suite_preprocess()
+        suites.suite_encoding()
     except KeyboardInterrupt:
         shutil.rmtree(config.SANDBOX_PATH)
 
@@ -64,4 +69,5 @@ if __name__ == "__main__":
                 log_file.write("=" * 80 + "\n\n")
         print(utils.green("{:2} [PASS]".format(pass_total)), end="    ")
         print(utils.red("{:2} [FAIL]".format(len(results) - pass_total)))
+    print("See", config.LOG_PATH, "for more information")
     sys.exit(utils.status)

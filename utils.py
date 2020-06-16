@@ -88,7 +88,7 @@ def put_result(passed: bool, cmd: str):
         print(red("{:74} [FAIL]".format(cmd)))
 
 
-def run_sandboxed(program: str, cmd: str, setup: str = None, files: [str] = []) -> str:
+def run_sandboxed(program: str, cmd: str, setup: str = None, files: [str] = [], exports: {str, str} = {}) -> str:
     """ run the command in a sandbox environment, return the output (stdout and stderr) of it """
 
     try:
@@ -109,7 +109,7 @@ def run_sandboxed(program: str, cmd: str, setup: str = None, files: [str] = []) 
                                     stderr=subprocess.STDOUT,
                                     stdout=subprocess.PIPE,
                                     cwd=config.SANDBOX_PATH,
-                                    env={'PATH': config.PATH_VARIABLE})
+                                    env={'PATH': config.PATH_VARIABLE, **exports})
     output = process_status.stdout.decode()
 
     output_files = []
@@ -132,11 +132,11 @@ verbose = False
 def check(expected: str, actual: str, expected_files: [str], actual_files: [str]) -> bool:
     return actual == expected and all([a == e for a, e in zip(actual_files, expected_files)])
 
-def test(cmd: str, setup: str = None, files: [str] = []):
+def test(cmd: str, setup: str = None, files: [str] = [], exports: {str, str} = {}):
     """ get expected and actual strings, compare them and push them to the suites result """
 
-    (expected, expected_files) = run_sandboxed(config.REFERENCE_SHELL_PATH, cmd, setup, files)
-    (actual, actual_files) = run_sandboxed(config.MINISHELL_PATH, cmd, setup, files)
+    (expected, expected_files) = run_sandboxed(config.REFERENCE_SHELL_PATH, cmd, setup, files, exports)
+    (actual, actual_files) = run_sandboxed(config.MINISHELL_PATH, cmd, setup, files, exports)
 
     passed = check(expected, actual, expected_files, actual_files)
     global status

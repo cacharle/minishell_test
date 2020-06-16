@@ -2,6 +2,8 @@
 
 Test for the minishell project of school 42.
 
+![screenshot](./screenshot.png)
+
 # Usage
 
 The default path to your project is `..` but you can change it the the [configuration](config.py).
