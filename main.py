@@ -2,15 +2,19 @@
 
 import sys
 import argparse
+import shutil
 
 import utils
 import config
 import suites
 
 def main():
-    suites.suite_quote()
-    suites.suite_echo()
-    suites.suite_redirection()
+    try:
+        suites.suite_quote()
+        suites.suite_echo()
+        suites.suite_redirection()
+    except KeyboardInterrupt:
+        shutil.rmtree(config.SANDBOX_PATH)
 
 
 if __name__ == "__main__":

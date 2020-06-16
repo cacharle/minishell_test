@@ -77,25 +77,25 @@ def run_sandboxed(program: str, cmd: str, setup: str = None, files: [str] = []) 
         pass
     if setup is not None:
         try:
-            setup_status = subprocess.run(setup, shell=True, cwd=config.SANDBOX_PATH, check=True, text=True, capture_output=True)
+            setup_status = subprocess.run(setup, shell=True, cwd=config.SANDBOX_PATH, check=True)
         except subprocess.CalledProcessError as e:
-            print("Error: `{}` setup command failed for `{}`\n\twith '{}'".format(setup, cmd, e.stderr.strip()))
+            print("Error: `{}` setup command failed for `{}`\n\twith '{}'"
+                  .format(setup, cmd, e.stderr.decode().strip()))
             sys.exit(1)
 
     # TODO: add timeout
     # https://docs.python.org/3/library/subprocess.html#using-the-subprocess-module
     process_status = subprocess.run([program, "-c", cmd],
-                                    text=True,
                                     stderr=subprocess.STDOUT,
                                     stdout=subprocess.PIPE,
                                     cwd=config.SANDBOX_PATH)
-    output = process_status.stdout
+    output = process_status.stdout.decode()
 
     output_files = []
     for file_name in files:
         try:
-            with open(os.path.join(config.SANDBOX_PATH, file_name), "r") as f:
-                output_files.append(f.read())
+            with open(os.path.join(config.SANDBOX_PATH, file_name), "rb") as f:
+                output_files.append(f.read().decode())
         except FileNotFoundError as e:
             output_files.append(None)
 
@@ -148,4 +148,3 @@ def suite(origin):
         origin()
         print()
     return f
-
