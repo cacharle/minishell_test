@@ -10,10 +10,6 @@ MINISHELL_EXEC = "minishell"
 # has to support the -c option (sh, bash and zsh support it)
 REFERENCE_SHELL_PATH = "/bin/bash"
 
-# string marker which show the test result
-PASS_MARKER = '.'
-FAIL_MARKER = '!'
-
 # log file path
 LOG_PATH = "result.log"
 
