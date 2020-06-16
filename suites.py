@@ -76,3 +76,8 @@ def suite_redirection():
     test(">test echo bonjour>je>suis", setup="", files=["test", "je", "suis"])
     test("echo bonjour>>test>je>>suis", setup="", files=["test", "je", "suis"])
     test("cat<test<je", setup="echo bonjour > test; echo salut > je")
+
+
+@suite
+def suite_edgecases():
+    test('echo "\\"" >>a"b""c"  ', files=["abc"])

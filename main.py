@@ -13,6 +13,7 @@ def main():
         suites.suite_quote()
         suites.suite_echo()
         suites.suite_redirection()
+        suites.suite_edgecases()
     except KeyboardInterrupt:
         shutil.rmtree(config.SANDBOX_PATH)
 

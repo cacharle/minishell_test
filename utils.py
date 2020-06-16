@@ -7,7 +7,10 @@ import config
 
 COLOR_RED = "\033[32m"
 COLOR_GREEN = "\033[31m"
+COLOR_BLUE = "\033[34m"
 COLOR_CLOSE = "\033[0m"
+
+BOLD = "\033[1m"
 
 def green(s: str) -> str:
     return COLOR_RED + s + COLOR_CLOSE
@@ -16,44 +19,62 @@ def red(s: str) -> str:
     return COLOR_GREEN + s + COLOR_CLOSE
 
 def expected_line(color: bool) -> str:
-    s = "----------------------------------------EXPECTED--------------------------------"
-    return COLOR_GREEN + s + COLOR_CLOSE if color else s
+    s = "|---------------------------------------EXPECTED--------------------------------"
+    return BOLD + COLOR_GREEN + s + COLOR_CLOSE if color else s
 
 def actual_line(color: bool) -> str:
-    s = "----------------------------------------ACTUAL----------------------------------"
-    return COLOR_RED + s + COLOR_CLOSE if color else s
+    s = "|---------------------------------------ACTUAL----------------------------------"
+    return BOLD + COLOR_RED + s + COLOR_CLOSE if color else s
+
+def file_line(file_name, color: bool) -> str:
+    s = "|# FILE " + file_name
+    return BOLD + COLOR_BLUE + s + COLOR_CLOSE if color else s
+
+def status_line(status, color: bool) -> str:
+    s = "|> STATUS: " + status
+    return BOLD + COLOR_BLUE + s + COLOR_CLOSE if color else s
+
 
 
 def diff_file(file_name: str, expected: str, actual: str, color: bool = False) -> str:
     return """\
-FILE {}
+{}
 {}
 {}\
 {}
 {}\
-""".format(file_name, expected_line(color), expected, actual_line(color),
+""".format(file_line(file_name, color), expected_line(color), expected, actual_line(color),
            "FROM TEST: File not created\n" if actual is None else actual)
 
-def diff_output(cmd: str, expected: str, actual: str, color: bool = False) -> str:
+def diff_output(expected: str, actual: str, color: bool = False) -> str:
     return """\
-WITH: {}
-STATUS: TODO
+{}
 {}
 {}\
 {}
 {}\
-""".format(cmd, expected_line(color), expected, actual_line(color), actual)
+""".format(status_line("TODO", color), expected_line(color), expected, actual_line(color), actual)
 
 def diff(cmd: str, expected: str, actual: str,
         files: [str], expected_files: [str], actual_files: [str],
         color: bool = False) -> str:
     s = ""
+    if color:
+        s = BOLD + COLOR_BLUE + "|> WITH " + cmd + COLOR_CLOSE + "\n"
+    else:
+        s = "|> WITH " + cmd + "\n"
     if expected != actual:
-        s += diff_output(cmd, expected, actual, color)
+        s += diff_output(expected, actual, color)
 
+    strs = []
     for file_name, e, a in zip(files, expected_files, actual_files):
         if a != e:
-            s += "-" * 80 + "\n" + diff_file(file_name, e, a, color)
+            tmp = ""
+            if expected != actual:
+                tmp += "-" * 80 + "\n"
+            tmp += diff_file(file_name, e, a, color)
+            strs.append(tmp)
+    s += ("-" * 80 + "\n").join(strs)
     return s
 
 
@@ -65,7 +86,6 @@ def put_result(passed: bool, cmd: str):
         print(green("{:74} [PASS]".format(cmd)))
     else:
         print(red("{:74} [FAIL]".format(cmd)))
-
 
 
 def run_sandboxed(program: str, cmd: str, setup: str = None, files: [str] = []) -> str:
@@ -119,11 +139,12 @@ def test(cmd: str, setup: str = None, files: [str] = []):
 
     passed = check(expected, actual, expected_files, actual_files)
     global status
-    if not passed:
+    if passed:
         status = 1
+
     if not verbose:
-        put_result(actual == expected, cmd)
-    elif not passed:
+        put_result(passed, cmd)
+    if verbose and not passed:
         print(diff(cmd, expected, actual, files, expected_files, actual_files, color=True))
 
     if runned_suites.get(current_suite) is None:
