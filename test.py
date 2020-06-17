@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/06/17 13:28:44 by charles          ###   ########.fr        #
+#    Updated: 2020/06/17 14:36:17 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -150,6 +150,14 @@ class Result:
             return ret
         if ret[-1] != '\n':
             ret += '\n'
+
+        if len(ret) > 80:
+            breaks = []
+            while len(ret) > 80:
+                breaks.append(ret[:80])
+                ret = ret[80:]
+            ret = "\\\n".join(breaks)
+
         return ret
 
 

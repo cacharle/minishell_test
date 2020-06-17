@@ -178,6 +178,7 @@ def suite_glob(test):
                    mkdir src; touch src/a src/b src/c src/foo.c src/bar.c;\
                    mkdir inc; touch inc/a inc/b inc/c inc/foo.h inc/bar.h")
 
+    test("echo /*")
     test("echo /etc/*")
     test("echo /usr/include/*.h")
     test("echo /*/*")

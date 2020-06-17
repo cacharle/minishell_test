@@ -21,5 +21,5 @@ def parse_args():
     )
     tmp = parser.parse_args()
     if tmp.verbose is None:
-        tmp.verbose = 0
+        tmp.verbose = 1
     return tmp
