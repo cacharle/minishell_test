@@ -88,88 +88,88 @@ def put_result(passed: bool, cmd: str):
         print(red("{:74} [FAIL]".format(cmd)))
 
 
-def run_sandboxed(program: str, cmd: str, setup: str = None, files: [str] = [], exports: {str, str} = {}) -> str:
-    """ run the command in a sandbox environment, return the output (stdout and stderr) of it """
-
-    try:
-        os.mkdir(config.SANDBOX_PATH)
-    except OSError:
-        pass
-    if setup is not None:
-        try:
-            setup_status = subprocess.run(setup, shell=True, cwd=config.SANDBOX_PATH, check=True)
-        except subprocess.CalledProcessError as e:
-            print("Error: `{}` setup command failed for `{}`\n\twith '{}'"
-                  .format(setup, cmd, e.stderr.decode().strip()))
-            sys.exit(1)
-
-    # TODO: add timeout
-    # https://docs.python.org/3/library/subprocess.html#using-the-subprocess-module
-    process_status = subprocess.run([program, "-c", cmd],
-                                    stderr=subprocess.STDOUT,
-                                    stdout=subprocess.PIPE,
-                                    cwd=config.SANDBOX_PATH,
-                                    env={'PATH': config.PATH_VARIABLE, **exports})
-    output = process_status.stdout.decode()
-
-    output_files = []
-    for file_name in files:
-        try:
-            with open(os.path.join(config.SANDBOX_PATH, file_name), "rb") as f:
-                output_files.append(f.read().decode())
-        except FileNotFoundError as e:
-            output_files.append(None)
-
-    shutil.rmtree(config.SANDBOX_PATH)
-    return (output, output_files)
-
-status = 0
-ignored_suites = []
-runned_suites = {}
-current_suite = "default"
-verbose = False
-
-def check(expected: str, actual: str, expected_files: [str], actual_files: [str]) -> bool:
-    return actual == expected and all([a == e for a, e in zip(actual_files, expected_files)])
-
-def test(cmd: str, setup: str = None, files: [str] = [], exports: {str, str} = {}):
-    """ get expected and actual strings, compare them and push them to the suites result """
-
-    (expected, expected_files) = run_sandboxed(config.REFERENCE_SHELL_PATH, cmd, setup, files, exports)
-    (actual, actual_files) = run_sandboxed(config.MINISHELL_PATH, cmd, setup, files, exports)
-
-    passed = check(expected, actual, expected_files, actual_files)
-    global status
-    if passed:
-        status = 1
-
-    if not verbose:
-        put_result(passed, cmd)
-    if verbose:
-        if not passed:
-            print(diff(cmd, expected, actual, files, expected_files, actual_files, color=True))
-        else:
-            put_result(passed, cmd)
-
-    if runned_suites.get(current_suite) is None:
-        runned_suites[current_suite] = []
-    runned_suites[current_suite].append((cmd, expected, actual, files, expected_files, actual_files))
-
-available_suites = []
-
-def suite(origin):
-    """ decorator for a suite function (fmt: suite_[name])
-        update the current_suite global and print it before the suite execution
-    """
-
-    name = origin.__name__[len("suite_"):]
-    available_suites.append(name)
-    def f():
-        if name in ignored_suites:
-            return
-        global current_suite
-        current_suite = name.upper()
-        print("{} {:#<41}".format("#" * 39, current_suite + " "))
-        origin()
-        print()
-    return f
+# def run_sandboxed(program: str, cmd: str, setup: str = None, files: [str] = [], exports: {str, str} = {}) -> str:
+#     """ run the command in a sandbox environment, return the output (stdout and stderr) of it """
+#
+#     try:
+#         os.mkdir(config.SANDBOX_PATH)
+#     except OSError:
+#         pass
+#     if setup is not None:
+#         try:
+#             setup_status = subprocess.run(setup, shell=True, cwd=config.SANDBOX_PATH, check=True)
+#         except subprocess.CalledProcessError as e:
+#             print("Error: `{}` setup command failed for `{}`\n\twith '{}'"
+#                   .format(setup, cmd, e.stderr.decode().strip()))
+#             sys.exit(1)
+#
+#     # TODO: add timeout
+#     # https://docs.python.org/3/library/subprocess.html#using-the-subprocess-module
+#     process_status = subprocess.run([program, "-c", cmd],
+#                                     stderr=subprocess.STDOUT,
+#                                     stdout=subprocess.PIPE,
+#                                     cwd=config.SANDBOX_PATH,
+#                                     env={'PATH': config.PATH_VARIABLE, **exports})
+#     output = process_status.stdout.decode()
+#
+#     output_files = []
+#     for file_name in files:
+#         try:
+#             with open(os.path.join(config.SANDBOX_PATH, file_name), "rb") as f:
+#                 output_files.append(f.read().decode())
+#         except FileNotFoundError as e:
+#             output_files.append(None)
+#
+#     shutil.rmtree(config.SANDBOX_PATH)
+#     return (output, output_files)
+#
+# status = 0
+# ignored_suites = []
+# runned_suites = {}
+# current_suite = "default"
+# verbose = False
+#
+# def check(expected: str, actual: str, expected_files: [str], actual_files: [str]) -> bool:
+#     return actual == expected and all([a == e for a, e in zip(actual_files, expected_files)])
+#
+# def test(cmd: str, setup: str = None, files: [str] = [], exports: {str, str} = {}):
+#     """ get expected and actual strings, compare them and push them to the suites result """
+#
+#     (expected, expected_files) = run_sandboxed(config.REFERENCE_SHELL_PATH, cmd, setup, files, exports)
+#     (actual, actual_files) = run_sandboxed(config.MINISHELL_PATH, cmd, setup, files, exports)
+#
+#     passed = check(expected, actual, expected_files, actual_files)
+#     global status
+#     if passed:
+#         status = 1
+#
+#     if not verbose:
+#         put_result(passed, cmd)
+#     if verbose:
+#         if not passed:
+#             print(diff(cmd, expected, actual, files, expected_files, actual_files, color=True))
+#         else:
+#             put_result(passed, cmd)
+#
+#     if runned_suites.get(current_suite) is None:
+#         runned_suites[current_suite] = []
+#     runned_suites[current_suite].append((cmd, expected, actual, files, expected_files, actual_files))
+#
+# available_suites = []
+#
+# def suite(origin):
+#     """ decorator for a suite function (fmt: suite_[name])
+#         update the current_suite global and print it before the suite execution
+#     """
+#
+#     name = origin.__name__[len("suite_"):]
+#     available_suites.append(name)
+#     def f():
+#         if name in ignored_suites:
+#             return
+#         global current_suite
+#         current_suite = name.upper()
+#         print("{} {:#<41}".format("#" * 39, current_suite + " "))
+#         origin()
+#         print()
+#     return f

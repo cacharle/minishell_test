@@ -1,8 +1,8 @@
 import config
-from utils import suite, test
+from suite import suite
 
 @suite
-def suite_quote():
+def suite_quote(test):
     test("'echo' 'bonjour'")
     test("'echo' 'je' 'suis' 'charles'")
 
@@ -18,7 +18,7 @@ def suite_quote():
     test('echo "\\\\"')
 
 @suite
-def suite_echo():
+def suite_echo(test):
     test("echo bonjour")
     test("echo lalalala lalalalal alalalalal alalalala")
     test("echo lalalala                lalalalal      alalalalal alalalala")
@@ -30,7 +30,7 @@ def suite_echo():
     test("echo -n " + config.LOREM)
 
 @suite
-def suite_redirection():
+def suite_redirection(test):
     test("echo bonjour > test", setup="", files=["test"])
     test("echo > test bonjour", setup="", files=["test"])
     test("> test echo bonjour", setup="", files=["test"])
@@ -85,11 +85,12 @@ def suite_redirection():
             files=["abcdefghijklmnopqrstuvzxyz"])
 
 @suite
-def suite_edgecases():
+def suite_edgecases(test):
     test('echo "\\"" >>a"b""c"  ', files=["abc"])
+    test("echo " + ''.join([chr(i) for i in range(1, 127) if chr(i) not in '\n`"\'()|&><']))
 
 @suite
-def suite_cmd_error():
+def suite_cmd_error(test):
     test(">")
     test(">>")
     test("<")
@@ -110,7 +111,7 @@ def suite_cmd_error():
     test("cat <<<<< bar", setup="echo bonjour > bar")
 
 @suite
-def suite_interpolation():
+def suite_interpolation(test):
     test("echo $TEST", exports={"TEST": "bonjour"})
     test("echo $TES", exports={"TEST": "bonjour"})
     test("echo $TEST_", exports={"TEST": "bonjour"})
@@ -144,7 +145,7 @@ def suite_interpolation():
     test("echo $")
 
 @suite
-def suite_glob():
+def suite_glob(test):
     test("echo *")
     test("echo *", setup="touch a b c")
     test("echo *.c", setup="touch a b c foo.c bar.c")
@@ -205,7 +206,7 @@ def suite_glob():
     test("echo d/*", setup="mkdir d; touch d/a d/b d/c")
 
 @suite
-def suite_escape():
+def suite_escape(test):
     test(r"echo \a")
     test(r"\e\c\h\o bonjour")
     test(r"echo charles\ ")
@@ -217,7 +218,7 @@ def suite_escape():
     test(r"echo\ bonjour")
 
 @suite
-def suite_preprocess():
+def suite_preprocess(test):
     test(r"echo \*", setup="touch a b c")
     test(r"echo \*\*", setup="touch a b c")
     test(r"echo \ *", setup="touch a b c")
@@ -232,7 +233,3 @@ def suite_preprocess():
             setup="mkdir src; touch src/a src/b src/c src/foo.c src/bar.c;\
                    mkdir inc; touch inc/a inc/b inc/c inc/foo.c inc/bar.c",
             exports={"A": "*/.", "B": "*.c"})
-
-@suite
-def suite_encoding():
-    test("echo " + ''.join([chr(i) for i in range(1, 127) if chr(i) not in '\n`"\'()|&><']))

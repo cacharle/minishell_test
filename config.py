@@ -9,7 +9,7 @@ MINISHELL_EXEC = "minishell"
 
 # path to reference shell (shell which will be compared minishell)
 # has to support the -c option (sh, bash and zsh support it)
-REFERENCE_SHELL_PATH = "/bin/bash"
+REFERENCE_PATH = "/bin/bash"
 
 # log file path
 LOG_PATH = "result.log"
@@ -43,9 +43,11 @@ Perspiciatis ut maxime et libero quo voluptas consequatur illum. Pariatur porro 
 """
 LOREM = ' '.join(LOREM.split('\n'))
 
-
 # do not edit
 
 MINISHELL_PATH = os.path.abspath(
     os.path.join(MINISHELL_DIR, MINISHELL_EXEC)
 )
+
+# 0, 1, 2
+VERBOSE_LEVEL = 0
