@@ -18,18 +18,6 @@ def suite_quote(test):
     test('echo "\\\\"')
 
 @suite
-def suite_echo(test):
-    test("echo bonjour")
-    test("echo lalalala lalalalal alalalalal alalalala")
-    test("echo lalalala                lalalalal      alalalalal alalalala")
-    test("echo " + config.LOREM)
-
-    test("echo -n bonjour")
-    test("echo -n lalalala lalalalal alalalalal alalalala")
-    test("echo -n lalalala                lalalalal      alalalalal alalalala")
-    test("echo -n " + config.LOREM)
-
-@suite
 def suite_redirection(test):
     test("echo bonjour > test", setup="", files=["test"])
     test("echo > test bonjour", setup="", files=["test"])

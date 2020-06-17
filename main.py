@@ -7,7 +7,8 @@ import shutil
 import config
 from args import parse_args
 from suite import Suite
-import suites
+import suites.builtin
+import suites.suites
 
 def main():
     if not os.path.exists(config.EXECUTABLES_PATH):
