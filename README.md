@@ -61,7 +61,7 @@ A test suite is a group of related tests.
 
 ```
 @suite
-def suite_yoursuitename():
+def suite_yoursuitename(test):
     test(...)
     test(...)
     test(...)

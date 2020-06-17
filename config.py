@@ -50,4 +50,4 @@ MINISHELL_PATH = os.path.abspath(
 )
 
 # 0, 1, 2
-VERBOSE_LEVEL = 0
+VERBOSE_LEVEL = 1

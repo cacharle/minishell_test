@@ -78,11 +78,11 @@ def suite_redirection(test):
     test("cat<test<je", setup="echo bonjour > test; echo salut > je")
 
     test("echo bonjour > a'b'c'd'e'f'g'h'i'j'k'l'm'n'o'p'q'r's't'u'v'w'x'y'z'",
-            files=["abcdefghijklmnopqrstuvzxyz"])
+            files=["abcdefghijklmnopqrstuvwxyz"])
     test('echo bonjour > a"b"c"d"e"f"g"h"i"j"k"l"m"n"o"p"q"r"s"t"u"v"w"x"y"z"',
-            files=["abcdefghijklmnopqrstuvzxyz"])
+            files=["abcdefghijklmnopqrstuvwxyz"])
     test('echo bonjour > a\'b\'c"d"e\'f\'g"h"i\'j\'k"l"m\'n\'o"p\'q\'r"s\'t\'u"v"w"x"y\'z\'',
-            files=["abcdefghijklmnopqrstuvzxyz"])
+            files=["abcdefghijklmnopqrstuvwxyz"])
 
 @suite
 def suite_edgecases(test):
