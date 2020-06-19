@@ -10,6 +10,7 @@ from suite import Suite
 import suites.builtin
 import suites.suites
 import suites.operation
+import suites.parenthesis
 
 def main():
     if not os.path.exists(config.EXECUTABLES_PATH):
