@@ -21,7 +21,7 @@ SANDBOX_PATH = "sandbox"
 EXECUTABLES_PATH = "./bin"
 
 # commands available in test"
-AVAILABLE_COMMANDS = ["cat", "touch", "env"]
+AVAILABLE_COMMANDS = ["cat", "touch", "env", "ls"]
 
 # $PATH environment variable passed to the shell
 PATH_VARIABLE = os.path.abspath(EXECUTABLES_PATH)

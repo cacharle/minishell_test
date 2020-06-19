@@ -9,6 +9,7 @@ from args import parse_args
 from suite import Suite
 import suites.builtin
 import suites.suites
+import suites.operation
 
 def main():
     if not os.path.exists(config.EXECUTABLES_PATH):

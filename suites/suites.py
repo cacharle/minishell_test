@@ -76,6 +76,10 @@ def suite_redirection(test):
 def suite_edgecases(test):
     test('echo "\\"" >>a"b""c"  ', files=["abc"])
     test("echo " + ''.join([chr(i) for i in range(1, 127) if chr(i) not in '\n`"\'()|&><']))
+    test("echo foo>bar", files=["bar"])
+    test("echo foo >bar", files=["bar"])
+    test("echo foo> bar", files=["bar"])
+    test("echo foo > bar", files=["bar"])
 
 @suite
 def suite_cmd_error(test):
