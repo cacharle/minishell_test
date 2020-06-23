@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/06/17 14:36:17 by charles          ###   ########.fr        #
+#    Updated: 2020/06/23 09:18:29 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -17,12 +17,14 @@ import shutil
 import config
 
 class Captured:
-    def __init__(self, output: str, files_content: [str]):
+    def __init__(self, output: str, status: int, files_content: [str]):
         self.output = output
+        self.status = status
         self.files_content = files_content
 
     def __eq__(self, other: 'Result') -> bool:
         return (self.output == other.output and
+                self.status == other.status and
                 all([x == y for x, y in zip(self.files_content, other.files_content)]))
 
 class Result:
@@ -131,7 +133,9 @@ class Result:
 
     def output_diff(self) -> str:
         return (
-            self.indicator("STATUS: TODO", "| ") + '\n'
+            self.indicator("STATUS: expected {} actual {}"
+                .format(self.expected.status, self.actual.status), "| ")
+            + '\n'
             + self.expected_header + '\n'
             + self.cat_e(self.expected.output)
             + self.actual_header + '\n'
@@ -145,20 +149,12 @@ class Result:
                 + "=" * 80 + '\n')
 
     def cat_e(self, s: str) -> str:
-        ret = "$\n".join(s.split('\n'))
-        if len(ret) < 2:
-            return ret
-        if ret[-1] != '\n':
-            ret += '\n'
-
-        if len(ret) > 80:
-            breaks = []
-            while len(ret) > 80:
-                breaks.append(ret[:80])
-                ret = ret[80:]
-            ret = "\\\n".join(breaks)
-
-        return ret
+        s = s.replace("\n", "$\n")
+        if len(s) < 2:
+            return s
+        if s[-1] != '\n':
+            s += '\n'
+        return s
 
 
 class Test:
@@ -212,4 +208,4 @@ class Test:
             except FileNotFoundError as e:
                 files_content.append(None)
         shutil.rmtree(config.SANDBOX_PATH)
-        return Captured(output, files_content)
+        return Captured(output, process_status.returncode, files_content)

@@ -8,9 +8,11 @@ import config
 from args import parse_args
 from suite import Suite
 import suites.builtin
-import suites.suites
+import suites.cmd
+import suites.preprocess
 import suites.operation
 import suites.parenthesis
+import suites.status
 
 def main():
     if not os.path.exists(config.EXECUTABLES_PATH):

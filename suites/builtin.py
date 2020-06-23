@@ -3,18 +3,26 @@ from suite import suite
 
 @suite
 def suite_echo(test):
+    test("echo")
     test("echo bonjour")
     test("echo lalalala lalalalal alalalalal alalalala")
     test("echo lalalala                lalalalal      alalalalal alalalala")
     test("echo " + config.LOREM)
 
+    test("echo -n")
     test("echo -n bonjour")
     test("echo -n lalalala lalalalal alalalalal alalalala")
     test("echo -n lalalala                lalalalal      alalalalal alalalala")
     test("echo -n " + config.LOREM)
 
+    test("echo bonjour -n")
+    test("echo -n bonjour -n")
+    test("                        echo                     bonjour             je")
+    test("                        echo       -n            bonjour             je")
+
 @suite
 def suite_export(test):
+    test("export")
     test("export A=a; echo $A")
     test("export A=a B=b C=c; echo $A$B$C")
     test("export A=a B=b C=c D=d E=e F=f G=g H=h I=i J=j K=k L=l" +
@@ -56,21 +64,35 @@ def suite_export(test):
 
 @suite
 def suite_cd(test):
-    test("cd .; pwd");
-    test("cd ..; pwd");
-    test("cd ../..; pwd");
-    test("cd ../../..; pwd");
-    test("cd ../../../..; pwd");
-    test("cd ../../../../..; pwd");
-    test("cd ../../../../../..; pwd");
-    test("cd /; pwd");
-    test("cd /etc; pwd");
-    test("cd $HOME; pwd");
-    test("cd ~; pwd");
+    test("cd .; pwd; echo $PWD");
+    test("cd ..; pwd; echo $PWD");
+    test("cd ../..; pwd; echo $PWD");
+    test("cd ../../..; pwd; echo $PWD");
+    test("cd ../../../..; pwd; echo $PWD");
+    test("cd ../../../../..; pwd; echo $PWD");
+    test("cd ../../../../../..; pwd; echo $PWD");
+    test("cd /; pwd; echo $PWD");
+    test("cd /etc; pwd; echo $PWD");
+    test("cd $HOME; pwd; echo $PWD");
+    test("cd ~; pwd; echo $PWD");
+    test("cd ~/..; pwd; echo $PWD");
+    test("cd ~/../..; pwd; echo $PWD");
+    test("cd /; pwd; echo $PWD");
+    test("cd /.; pwd; echo $PWD");
+    test("cd /./; pwd; echo $PWD");
+    test("cd /././././; pwd; echo $PWD");
+    test("cd //; pwd; echo $PWD");
+    test("cd")
 
 @suite
 def suite_unset(test):
+    test("unset")
     test("unset A; echo $A", setup="export A=a")
+    test("unset 'A '; echo $A", setup="export A=a")
+    test("unset 'A='; echo $A", setup="export A=a")
+    test("unset A B C; echo $A$B$C", setup="export A=a B=b C=c")
+    test("unset A; echo $A$B$C", setup="export A=a B=b C=c")
+    test("unset C; echo $A$B$C", setup="export A=a B=b C=c")
 
 @suite
 def suite_pwd(test):
@@ -80,12 +102,14 @@ def suite_pwd(test):
     test("pwd", setup="cd ../../..")
     test("pwd", setup="cd /")
     test("pwd", setup="cd $HOME")
+    test("pwd | cat -e")
 
 @suite
 def suite_env(test):
     test("env")
     test("env", setup="export A=a")
     test("env", setup="export A=a B=b C=c")
+    test("env | cat -e", setup="export A=a B=b C=c")
 
 @suite
 def suite_exit(test):
@@ -93,3 +117,75 @@ def suite_exit(test):
     test("exit 1")
     test("exit 2")
     test("exit 3")
+    test("exit 0")
+    test("exit -0")
+    test("exit -1")
+    test("exit 255")
+    test("exit 256")
+    test("exit 2000000")
+    test("exit -2000000")
+    test("exit 2147483647")
+    test("exit -2147483648")
+    test("exit 2147483648")
+    test("exit -2147483649")
+    test("exit 3147483648")
+    test("exit -3147483649")
+    test("exit 4294967295")
+    test("exit 4294967296")
+    test("exit -9223372036854775808")
+    test("exit 9223372036854775807")
+    test("exit -9223372036854775809")
+    test("exit 9223372036854775808")
+    test("exit 18446744073709551615")
+    test("exit 18446744073709551616")
+
+    test("exit +1")
+    test("exit +2")
+    test("exit +3")
+    test("exit +0")
+    test("exit +255")
+    test("exit +256")
+    test("exit +2000000")
+    test("exit +2147483647")
+
+    test("exit ++1")
+    test("exit ++2")
+    test("exit ++3")
+    test("exit ++0")
+    test("exit ++255")
+    test("exit ++256")
+    test("exit ++2000000")
+    test("exit ++2147483647")
+
+    test("exit --1")
+    test("exit --2")
+    test("exit --3")
+    test("exit --0")
+    test("exit --255")
+    test("exit --256")
+    test("exit --2000000")
+    test("exit --2147483647")
+
+    test("exit bonjour")
+    test("exit 0_")
+    test("exit _0")
+    test("exit 0123456789")
+    test("exit -0123456789")
+    test("exit 00000000000000000000000000000000000000000000001")
+    test("exit 00000000000000000000000000000000000000000000000" +
+            "00000000000000000000000000000000000000000000001")
+    test("exit 00000000000000000000000000000000000000000000000" +
+            "00000000000000000000000000000000000000000000000")
+    test("exit -00000000000000000000000000000000000000000000000" +
+            "00000000000000000000000000000000000000000000001")
+    test("exit -99999999999999999999999999999999999999999999" +
+            "99999999999999999999999999999999999999999999")
+    test("exit 99999999999999999999999999999999999999999999" +
+            "99999999999999999999999999999999999999999999")
+
+    test("exit 0 bonjour")
+    test("exit bonjour 0")
+    test("exit 0 1")
+    test("exit 0 1 2 3 4 5 6 7 8 9")
+
+    test("exit " + config.LOREM)
