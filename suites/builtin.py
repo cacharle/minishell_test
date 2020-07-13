@@ -23,6 +23,7 @@ def suite_echo(test):
 @suite
 def suite_export(test):
     test("export")
+    test("export A=; env | grep A=")
     test("export A=a; echo $A")
     test("export A=a B=b C=c; echo $A$B$C")
     test("export A=a B=b C=c D=d E=e F=f G=g H=h I=i J=j K=k L=l" +

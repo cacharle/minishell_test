@@ -17,6 +17,12 @@ def suite_quote(test):
     test('echo "\\$"')
     test('echo "\\\\"')
 
+    test('ls ""')
+    test("ls ''")
+
+    test('ls "" "" "" \'\' """"')
+    test("ls '' '' '''' ''")
+
 @suite
 def suite_interpolation(test):
     test("echo $TEST", exports={"TEST": "bonjour"})
