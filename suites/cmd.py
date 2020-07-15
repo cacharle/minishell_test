@@ -1,5 +1,20 @@
+# ############################################################################ #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    cmd.py                                             :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/07/15 15:11:46 by charles           #+#    #+#              #
+#    Updated: 2020/07/15 18:21:56 by charles          ###   ########.fr        #
+#                                                                              #
+# ############################################################################ #
+
+import distutils
+
 import config
 from suite import suite
+
 
 @suite
 def suite_redirection(test):
@@ -94,41 +109,108 @@ def suite_cmd_error(test):
 
 @suite
 def suite_cmd_variable(test):
+    test("A=a bash -c 'echo $A'")
+    test("A=a B=b bash -c 'echo $A$B'")
+    test("A=a B=b C=c D=d E=e F=f G=g H=h bash -c 'echo $A$B$C$D$E$F$G$H'")
+    test("A=a A=bonjour bash -c 'echo $A'")
+    test("A=aA=bonjour bash -c 'echo $A'")
+    test("BONJOURJESUIS=a bash -c 'echo $BONJOURJESUIS'")
+    test("bonjourjesuis=a bash -c 'echo $bonjourjesuis'")
+    test("bonjour_je_suis=a bash -c 'echo $bonjour_je_suis'")
+    test("BONJOURJESUIS1=a bash -c 'echo $BONJOURJESUIS1'")
+    test("bO_nJq123o__1ju_je3234sui__a=a bash -c 'echo $bO_nJq123o__1ju_je3234sui__a'")
+    test("a0123456789=a bash -c 'echo $a0123456789")
+    test("abcdefghijklmnopqrstuvwxyz=a bash -c 'echo $abcdefghijklmnopqrstuvwxyz'")
+    test("ABCDEFGHIJKLMNOPQRSTUVWXYZ=a bash -c 'echo $ABCDEFGHIJKLMNOPQRSTUVWXYZ'")
+    test("__________________________=a bash -c 'echo $__________________________'")
+    test("_bonjour_=a bash -c 'echo $_bonjour_'")
+    test("_=a bash -c 'echo $_a'")
+    test("1=a bash -c 'echo $1'")
+    test("BONJOURJESUIS =a bash -c 'echo $BONJOURJESUIS '")
+    test("BONJOURJESUIS= a bash -c 'echo $BONJOURJESUIS'")
+    test(r"BONJOUR\\JESUIS=a bash -c 'echo $BONJOUR\\JESUIS'")
+    test(r"BONJOUR\'JESUIS=a bash -c 'echo $BONJOUR\'JESUIS'")
+    test(r'BONJOUR\"JESUIS=a bash -c "echo $BONJOUR\"JESUIS"')
+    test(r"BONJOUR\$JESUIS=a bash -c 'echo $BONJOUR\$JESUIS'")
+    test(r"BONJOUR\&JESUIS=a bash -c 'echo $BONJOUR\&JESUIS'")
+    test(r"BONJOUR\|JESUIS=a bash -c 'echo $BONJOUR\|JESUIS'")
+    test(r"BONJOUR\;JESUIS=a bash -c 'echo $BONJOUR\;JESUIS'")
+    test(r"BONJOUR\_JESUIS=a bash -c 'echo $BONJOUR\_JESUIS'")
+    test(r"BONJOUR\0JESUIS=a bash -c 'echo $BONJOUR\0JESUIS'")
+    test(r"\B\O\N\ \ \ \ \ \ \ JOURJESUIS=a bash -c 'echo $\B\O\N\ \ \ \ \ \ \ JOURJESUIS'")
+    test(r"A=\B\O\N\ \ \ \ \ \ \ JOURJESUIS bash -c 'echo $A'")
+    test(r"A='bonjour je suis charles' bash -c 'echo $A'")
+    test(r'A="bonjour je suis charles" bash -c "echo $A"')
+    test(r"A==a bash -c 'echo $A'")
+    test(r"A===a bash -c 'echo $A'")
+    test(r"A====a bash -c 'echo $A'")
+    test(r"A=====a bash -c 'echo $A'")
+    test(r"A======a bash -c 'echo $A'")
+    test(r"A=a=a=a=a=a bash -c 'echo $A'")
+
+    test("A=a; echo $A")
+    test("A=a B=b; echo $A$B")
+    test("A=a B=b C=c D=d E=e F=f G=g H=h; echo $A$B$C$D$E$F$G$H")
+    test("A=a A=bonjour; echo $A")
+    test("A=aA=bonjour; echo $A")
+    test("BONJOURJESUIS=a; echo $BONJOURJESUIS")
+    test("bonjourjesuis=a; echo $bonjourjesuis")
+    test("bonjour_je_suis=a; echo $bonjour_je_suis")
+    test("BONJOURJESUIS1=a; echo $BONJOURJESUIS1")
+    test("bO_nJq123o__1ju_je3234sui__a=a; echo $bO_nJq123o__1ju_je3234sui__a")
+    test("a0123456789=a; echo $a0123456789")
+    test("abcdefghijklmnopqrstuvwxyz=a; echo $abcdefghijklmnopqrstuvwxyz")
+    test("ABCDEFGHIJKLMNOPQRSTUVWXYZ=a; echo $ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    test("__________________________=a; echo $__________________________")
+    test("_bonjour_=a; echo $_bonjour_")
+    test("_=a; echo $_a")
+    test("1=a; echo $1")
+    test("BONJOURJESUIS =a; echo $BONJOURJESUIS ")
+    test("BONJOURJESUIS= a; echo $BONJOURJESUIS")
+    test(r"BONJOUR\\JESUIS=a; echo $BONJOUR\\JESUIS")
+    test(r"BONJOUR\'JESUIS=a; echo $BONJOUR\'JESUIS")
+    test(r'BONJOUR\"JESUIS=a; echo $BONJOUR\"JESUIS')
+    test(r"BONJOUR\$JESUIS=a; echo $BONJOUR\$JESUIS")
+    test(r"BONJOUR\&JESUIS=a; echo $BONJOUR\&JESUIS")
+    test(r"BONJOUR\|JESUIS=a; echo $BONJOUR\|JESUIS")
+    test(r"BONJOUR\;JESUIS=a; echo $BONJOUR\;JESUIS")
+    test(r"BONJOUR\_JESUIS=a; echo $BONJOUR\_JESUIS")
+    test(r"BONJOUR\0JESUIS=a; echo $BONJOUR\0JESUIS")
+    test(r"\B\O\N\ \ \ \ \ \ \ JOURJESUIS=a; echo $\B\O\N\ \ \ \ \ \ \ JOURJESUIS")
+    test(r"A=\B\O\N\ \ \ \ \ \ \ JOURJESUIS; echo $A")
+    test(r"A='bonjour je suis charles'; echo $A")
+    test(r'A="bonjour je suis charles"; echo $A')
+    test(r"A==a; echo $A")
+    test(r"A===a; echo $A")
+    test(r"A====a; echo $A")
+    test(r"A=====a; echo $A")
+    test(r"A======a; echo $A")
+    test(r"A=a=a=a=a=a; echo $A")
+
+    test("PATH=a ls")
+    test("PATH=a echo aa")
     test("A=a echo $A")
     test("A=a B=b echo $A$B")
     test("A=a B=b C=c D=d E=e F=f G=g H=h echo $A$B$C$D$E$F$G$H")
-    test("A=a A=bonjour echo $A")
-    test("A=aA=bonjour echo $A")
-    test("BONJOURJESUIS=a echo $BONJOURJESUIS")
-    test("bonjourjesuis=a echo $bonjourjesuis")
-    test("bonjour_je_suis=a echo $bonjour_je_suis")
-    test("BONJOURJESUIS1=a echo $BONJOURJESUIS1")
-    test("bO_nJq123o__1ju_je3234sui__a=a echo $bO_nJq123o__1ju_je3234sui__a")
-    test("a0123456789=a echo $a0123456789")
-    test("abcdefghijklmnopqrstuvwxyz=a echo $abcdefghijklmnopqrstuvwxyz")
-    test("ABCDEFGHIJKLMNOPQRSTUVWXYZ=a echo $ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-    test("__________________________=a echo $__________________________")
-    test("_bonjour_=a echo $_bonjour_")
-    test("_=a echo $_a")
-    test("1=a echo $1")
-    test("BONJOURJESUIS =a echo $BONJOURJESUIS ")
-    test("BONJOURJESUIS= a echo $BONJOURJESUIS")
-    test(r"BONJOUR\\JESUIS=a echo $BONJOUR\\JESUIS")
-    test(r"BONJOUR\'JESUIS=a echo $BONJOUR\'JESUIS")
-    test(r'BONJOUR\"JESUIS=a echo $BONJOUR\"JESUIS')
-    test(r"BONJOUR\$JESUIS=a echo $BONJOUR\$JESUIS")
-    test(r"BONJOUR\&JESUIS=a echo $BONJOUR\&JESUIS")
-    test(r"BONJOUR\|JESUIS=a echo $BONJOUR\|JESUIS")
-    test(r"BONJOUR\;JESUIS=a echo $BONJOUR\;JESUIS")
-    test(r"BONJOUR\_JESUIS=a echo $BONJOUR\_JESUIS")
-    test(r"BONJOUR\0JESUIS=a echo $BONJOUR\0JESUIS")
-    test(r"\B\O\N\ \ \ \ \ \ \ JOURJESUIS=a echo $\B\O\N\ \ \ \ \ \ \ JOURJESUIS")
-    test(r"A=\B\O\N\ \ \ \ \ \ \ JOURJESUIS echo $A")
-    test(r"A='bonjour je suis charles' echo $A")
-    test(r'A="bonjour je suis charles" echo $A')
-    test(r"A==a echo $A")
-    test(r"A===a echo $A")
-    test(r"A====a echo $A")
-    test(r"A=====a echo $A")
-    test(r"A======a echo $A")
-    test(r"A=a=a=a=a=a echo $A")
+    test("A=$PATH bash -c 'echo $A'")
+    test("A=\"$PATH je  suis\" bash -c 'echo $A'")
+    test("A='$PATH je  suis' bash -c 'echo $A'")
+    test("$TEST bash -c 'echo $A'", setup="export TEST='A=a'")
+
+@suite
+def suite_cmd_path(test):
+    ls_path = distutils.spawn.find_executable("ls")
+    cat_path = distutils.spawn.find_executable("cat")
+
+    test(ls_path, setup="touch a b c")
+    test(ls_path + " -l", setup="touch a b c")
+    test("./bonjour", setup="touch a b c; cp {} bonjour".format(ls_path))
+    test("./bonjour -l", setup="touch a b c; cp {} bonjour".format(ls_path))
+    test("./somedir/bonjour -l",
+            setup="mkdir somedir; touch a b c; touch somedir/d somedir/e;" +
+                  "cp {} somedir/bonjour".format(ls_path))
+
+    test("./ls . a b c",
+            setup="touch a b c; echo bonjour > a; cp {} ls".format(cat_path))
+    test("ls . a b c",
+            setup="touch a b c; echo bonjour > a; cp {} ls".format(cat_path))

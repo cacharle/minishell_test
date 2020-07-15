@@ -1,8 +1,21 @@
 #!/usr/bin/python3
 
+# ############################################################################ #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    main.py                                            :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/07/15 15:11:52 by charles           #+#    #+#              #
+#    Updated: 2020/07/15 15:11:52 by charles          ###   ########.fr        #
+#                                                                              #
+# ############################################################################ #
+
 import os
 import sys
 import shutil
+import distutils.spawn
 
 import config
 from args import parse_args
@@ -15,10 +28,11 @@ import suites.parenthesis
 import suites.status
 
 def main():
-    if not os.path.exists(config.EXECUTABLES_PATH):
-        os.mkdir(config.EXECUTABLES_PATH)
+    if os.path.exists(config.EXECUTABLES_PATH):
+        shutil.rmtree(config.EXECUTABLES_PATH)
+    os.mkdir(config.EXECUTABLES_PATH)
     for cmd in config.AVAILABLE_COMMANDS:
-        shutil.copy(os.path.join("/usr/bin", cmd),  # FIXME search whole PATH
+        shutil.copy(distutils.spawn.find_executable(cmd),  # FIXME search whole PATH
                     os.path.join(config.EXECUTABLES_PATH, cmd))
 
     args = parse_args()

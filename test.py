@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/07/15 12:49:46 by charles          ###   ########.fr        #
+#    Updated: 2020/07/15 18:14:28 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -17,21 +17,30 @@ import shutil
 import config
 
 class Captured:
-    def __init__(self, output: str, status: int, files_content: [str]):
+    def __init__(self, output: str, status: int, files_content: [str], is_timeout: bool = False):
         lines = output.split('\n')
         for i, l in enumerate(lines):
             if l.find(config.REFERENCE_ERROR_BEGIN) == 0:
                 lines[i] = l.replace(config.REFERENCE_ERROR_BEGIN, config.MINISHELL_ERROR_BEGIN, 1)
+            elif l.find(config.REFERENCE_PATH + ": ") == 0:
+                lines[i] = l.replace(config.REFERENCE_PATH + ": ", config.MINISHELL_ERROR_BEGIN, 1)
+
         self.output = '\n'.join(lines)
 
-        # self.output = output
         self.status = status
         self.files_content = files_content
+        self.is_timeout = is_timeout
 
     def __eq__(self, other: 'Result') -> bool:
+        if self.is_timeout and other.is_timeout:
+            return True
         return (self.output == other.output and
                 self.status == other.status and
                 all([x == y for x, y in zip(self.files_content, other.files_content)]))
+
+    @staticmethod
+    def timeout():
+        return Captured("", 0, [], is_timeout = True)
 
 class Result:
     RED_CHARS   = "\033[31m"
@@ -123,6 +132,8 @@ class Result:
         return self.bold(self.blue(prefix + " " + title))
 
     def file_diff(self, file_name: str, expected: str, actual: str) -> str:
+        if expected == actual:
+            return ""
         return (
             self.indicator("FILE {}".format(file_name), "|#") + '\n'
             + self.expected_header + '\n'
@@ -135,18 +146,22 @@ class Result:
         return '\n'.join([self.file_diff(n, e, a) for n, e, a in
                           zip(self.file_names,
                               self.expected.files_content,
-                              self.actual.files_content)])
+                              self.actual.files_content)
+                          if e != a])
 
     def output_diff(self) -> str:
-        return (
-            self.indicator("STATUS: expected {} actual {}"
-                .format(self.expected.status, self.actual.status), "| ")
-            + '\n'
-            + self.expected_header + '\n'
-            + self.cat_e(self.expected.output)
-            + self.actual_header + '\n'
-            + self.cat_e(self.actual.output)
-        )
+        out = ""
+        if self.actual.is_timeout:
+            return "TIMEOUT\n"
+        if self.expected.status != self.actual.status:
+            out += self.indicator("STATUS: expected {} actual {}"
+                    .format(self.expected.status, self.actual.status), "| ") + '\n'
+        if self.expected.output != self.actual.output:
+            out += (self.expected_header + '\n'
+                    + self.cat_e(self.expected.output)
+                    + self.actual_header + '\n'
+                    + self.cat_e(self.actual.output))
+        return out
 
     def full_diff(self) -> str:
         return (self.indicator("WITH {}".format(self.cmd), "|>") + '\n'
@@ -190,22 +205,29 @@ class Test:
             pass
         if self.setup != "":
             try:
-                setup_status = subprocess.run(self.setup, shell=True, cwd=config.SANDBOX_PATH, check=True)
+                setup_status = subprocess.run(
+                        self.setup, shell=True, cwd=config.SANDBOX_PATH, check=True)
             except subprocess.CalledProcessError as e:
                 print("Error: `{}` setup command failed for `{}`\n\twith '{}'"
                       .format(setup, cmd, e.stderr.decode().strip()))
                 sys.exit(1)
 
-        # TODO: add timeout
-        # https://docs.python.org/3/library/subprocess.html#using-the-subprocess-module
-        process_status = subprocess.run([shell_path, shell_option, self.cmd],
-                                        stderr=subprocess.STDOUT,
-                                        stdout=subprocess.PIPE,
-                                        cwd=config.SANDBOX_PATH,
-                                        env={'PATH': config.PATH_VARIABLE,
-                                             'TERM': 'xterm-256color',
-                                            **self.exports},
-                                        timeout=1)
+        try:
+            process_status = subprocess.run(
+                [shell_path, shell_option, self.cmd],
+                stderr=subprocess.STDOUT,
+                stdout=subprocess.PIPE,
+                cwd=config.SANDBOX_PATH,
+                env={
+                    'PATH': config.PATH_VARIABLE,
+                    'TERM': 'xterm-256color',
+                    **self.exports
+                },
+                timeout=0.5
+            )
+        except subprocess.TimeoutExpired:
+            return Captured.timeout()
+
         output = process_status.stdout.decode()
 
         # capture watched files content

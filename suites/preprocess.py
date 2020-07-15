@@ -1,3 +1,15 @@
+# ############################################################################ #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    preprocess.py                                      :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
+#    Updated: 2020/07/15 18:25:01 by charles          ###   ########.fr        #
+#                                                                              #
+# ############################################################################ #
+
 import config
 from suite import suite
 
@@ -118,6 +130,15 @@ def suite_glob(test):
     test("echo */*", setup="mkdir d; touch d/a d/b d/c")
     test("echo */a", setup="mkdir d; touch d/a d/b d/c")
     test("echo d/*", setup="mkdir d; touch d/a d/b d/c")
+
+    test("*")
+    test("*", setup="touch a b c")
+    test("*.c", setup="touch a b c foo.c bar.c")
+    test("src/*.c", setup="mkdir src; touch src/a src/b src/c src/foo.c src/bar.c")
+    test("*/*.c", setup="mkdir src; touch src/a src/b src/c src/foo.c src/bar.c")
+    test("*/*.c",
+            setup="mkdir src; touch src/a src/b src/c src/foo.c src/bar.c;\
+                   mkdir inc; touch inc/a inc/b inc/c inc/foo.c inc/bar.c")
 
 @suite
 def suite_escape(test):
