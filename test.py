@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/06/23 09:18:29 by charles          ###   ########.fr        #
+#    Updated: 2020/07/15 12:49:46 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -18,7 +18,13 @@ import config
 
 class Captured:
     def __init__(self, output: str, status: int, files_content: [str]):
-        self.output = output
+        lines = output.split('\n')
+        for i, l in enumerate(lines):
+            if l.find(config.REFERENCE_ERROR_BEGIN) == 0:
+                lines[i] = l.replace(config.REFERENCE_ERROR_BEGIN, config.MINISHELL_ERROR_BEGIN, 1)
+        self.output = '\n'.join(lines)
+
+        # self.output = output
         self.status = status
         self.files_content = files_content
 
@@ -166,12 +172,12 @@ class Test:
         self.result = None
 
     def run(self):
-        expected = self._run_sandboxed(config.REFERENCE_PATH)
-        actual   = self._run_sandboxed(config.MINISHELL_PATH)
+        expected = self._run_sandboxed(config.REFERENCE_PATH, "-c")
+        actual   = self._run_sandboxed(config.MINISHELL_PATH, "-c")
         self.result = Result(self.cmd, self.files, expected, actual)
         self.result.put()
 
-    def _run_sandboxed(self, shell_path: str) -> Captured:
+    def _run_sandboxed(self, shell_path: str, shell_option: str) -> Captured:
         """ run the command in a sandbox environment
 
             capture the output (stdout and stderr)
@@ -192,11 +198,14 @@ class Test:
 
         # TODO: add timeout
         # https://docs.python.org/3/library/subprocess.html#using-the-subprocess-module
-        process_status = subprocess.run([shell_path, "-c", self.cmd],
+        process_status = subprocess.run([shell_path, shell_option, self.cmd],
                                         stderr=subprocess.STDOUT,
                                         stdout=subprocess.PIPE,
                                         cwd=config.SANDBOX_PATH,
-                                        env={'PATH': config.PATH_VARIABLE, **self.exports})
+                                        env={'PATH': config.PATH_VARIABLE,
+                                             'TERM': 'xterm-256color',
+                                            **self.exports},
+                                        timeout=1)
         output = process_status.stdout.decode()
 
         # capture watched files content

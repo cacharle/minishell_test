@@ -18,7 +18,7 @@ def main():
     if not os.path.exists(config.EXECUTABLES_PATH):
         os.mkdir(config.EXECUTABLES_PATH)
     for cmd in config.AVAILABLE_COMMANDS:
-        shutil.copy(os.path.join("/usr/bin", cmd),  # search whole PATH
+        shutil.copy(os.path.join("/usr/bin", cmd),  # FIXME search whole PATH
                     os.path.join(config.EXECUTABLES_PATH, cmd))
 
     args = parse_args()

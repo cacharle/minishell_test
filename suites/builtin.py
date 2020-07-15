@@ -20,10 +20,16 @@ def suite_echo(test):
     test("                        echo                     bonjour             je")
     test("                        echo       -n            bonjour             je")
 
+    test("echo a '' b '' c '' d")
+    test('echo a "" b "" c "" d')
+    test("echo -n a '' b '' c '' d")
+    test('echo -n a "" b "" c "" d')
+
 @suite
 def suite_export(test):
     test("export")
-    test("export A=; env | grep A=")
+    # test("export A=; env | grep A=; echo $A")
+    # test("export A; env | grep A; echo $A")
     test("export A=a; echo $A")
     test("export A=a B=b C=c; echo $A$B$C")
     test("export A=a B=b C=c D=d E=e F=f G=g H=h I=i J=j K=k L=l" +
@@ -62,6 +68,10 @@ def suite_export(test):
     test(r"export A=====a; echo $A")
     test(r"export A======a; echo $A")
     test(r"export A=a=a=a=a=a; echo $A")
+    test("export A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C")
+    test("export 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C")
+    test("export A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '; echo $A$B$C")
+
 
 @suite
 def suite_cd(test):
@@ -92,8 +102,23 @@ def suite_unset(test):
     test("unset 'A '; echo $A", setup="export A=a")
     test("unset 'A='; echo $A", setup="export A=a")
     test("unset A B C; echo $A$B$C", setup="export A=a B=b C=c")
+    test("unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C",
+            setup="export A=a B=b C=c")
+    test("unset 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C",
+            setup="export A=a B=b C=c")
+    test("unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '; echo $A$B$C",
+            setup="export A=a B=b C=c")
     test("unset A; echo $A$B$C", setup="export A=a B=b C=c")
     test("unset C; echo $A$B$C", setup="export A=a B=b C=c")
+
+    test("unset A B C", setup="export A=a B=b C=c")
+    test("unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C",
+            setup="export A=a B=b C=c")
+    test("unset 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C",
+            setup="export A=a B=b C=c")
+    test("unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '",
+            setup="export A=a B=b C=c")
+    test("unset A", setup="export A=a B=b C=c")
 
 @suite
 def suite_pwd(test):
