@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
-#    Updated: 2020/07/15 18:25:01 by charles          ###   ########.fr        #
+#    Updated: 2020/07/17 10:53:43 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -66,6 +66,8 @@ def suite_interpolation(test):
 
     test("$ECHO $ECHO", exports={"ECHO": "echo"})
     test("$A$B bonjour", exports={"A": "ec", "B": "ho"})
+
+    test("$LS", exports={"LS": "ls -l"}, setup="touch a b c")
 
     test("echo $")
 
@@ -146,6 +148,11 @@ def suite_escape(test):
     test(r"\e\c\h\o bonjour")
     test(r"echo charles\ ")
     test(r"echo \ \ jesuis\ \ charles")
+    test(r"echo \ \ jesuis\; \ charles")
+    test(r"echo \ \ jesuis\&\& \ charles")
+    test(r"echo \ \ jesuis\|\| \ charles")
+    test(r"echo \ \ jesuis \|\| \ charles")
+    test(r"echo \ \ jesuis\; \ charles")
     test(r"echo \ \ \ \ \ \ \ \ ")
     test(r"echo \ \ \ \ \ \ \ \               \ \ \ \ \ \ ")
     test(r"echo \$PATH")

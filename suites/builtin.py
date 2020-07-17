@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/07/15 18:24:44 by charles          ###   ########.fr        #
+#    Updated: 2020/07/17 13:42:15 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -84,6 +84,7 @@ def suite_export(test):
     test("export 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C")
     test("export A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '; echo $A$B$C")
 
+    test("export $TEST", exports={"TEST": "A=a"})
 
 @suite
 def suite_cd(test):
@@ -155,6 +156,15 @@ def suite_exit(test):
     test("exit 1")
     test("exit 2")
     test("exit 3")
+    test("exit ' 3'")
+    test("exit '\t3'")
+    test("exit '\t\f\r 3'")
+    test("exit '3 '")
+    test("exit '3\t'")
+    test("exit '3\r'")
+    test("exit '3\t\f\r '")
+    test("exit '3     a'")
+    test("exit '3\t\t\ta'")
     test("exit 0")
     test("exit -0")
     test("exit -1")
