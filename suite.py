@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/07/15 18:24:29 by charles          ###   ########.fr        #
+#    Updated: 2020/07/19 15:29:36 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -99,8 +99,8 @@ def suite(origin):
     name = origin.__name__[len("suite_"):]
     s = Suite(name)
     def test_generator():
-        def test(cmd: str, setup: str = "", files: [str] = [], exports: {str, str} = {}):
-            s.add(Test(cmd, setup, files, exports))
+        def test(*args, **kwargs):
+            s.add(Test(*args, **kwargs))
         origin(test)
     s.add_generator(test_generator)
     Suite.available.append(s)

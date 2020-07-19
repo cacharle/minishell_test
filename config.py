@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2020/07/16 08:55:04 by charles          ###   ########.fr        #
+#    Updated: 2020/07/19 20:29:52 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -27,13 +27,14 @@ REFERENCE_PATH = "/bin/bash"
 LOG_PATH = "result.log"
 
 # path to the sandbox directory
+# WARNING: will be rm -rf so be careful
 SANDBOX_PATH = "sandbox"
 
 # where the availables commands are stored
 EXECUTABLES_PATH = "./bin"
 
 # commands available in test"
-AVAILABLE_COMMANDS = ["cat", "touch", "env", "ls", "grep", "sh"]
+AVAILABLE_COMMANDS = ["rmdir", "env", "cat", "touch", "ls", "grep", "sh"]
 
 # $PATH environment variable passed to the shell
 PATH_VARIABLE = os.path.abspath(EXECUTABLES_PATH)
@@ -55,7 +56,11 @@ Perspiciatis ut maxime et libero quo voluptas consequatur illum. Pariatur porro 
 """
 LOREM = ' '.join(LOREM.split('\n'))
 
+TIMEOUT = 1
+
+###############################################################################
 # do not edit
+###############################################################################
 
 MINISHELL_PATH = os.path.abspath(
     os.path.join(MINISHELL_DIR, MINISHELL_EXEC)

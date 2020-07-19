@@ -6,9 +6,11 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/07/17 13:42:15 by charles          ###   ########.fr        #
+#    Updated: 2020/07/19 20:35:45 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
+
+import os
 
 import config
 from suite import suite
@@ -36,6 +38,7 @@ def suite_echo(test):
     test('echo a "" b "" c "" d')
     test("echo -n a '' b '' c '' d")
     test('echo -n a "" b "" c "" d')
+    test("echo '' '' ''")
 
 @suite
 def suite_export(test):
@@ -97,16 +100,76 @@ def suite_cd(test):
     test("cd ../../../../../..; pwd; echo $PWD");
     test("cd /; pwd; echo $PWD");
     test("cd /etc; pwd; echo $PWD");
+    test("cd ''; pwd; echo $PWD");
+    test("cd '' ''; pwd; echo $PWD");
+    test("cd '' '' ''; pwd; echo $PWD");
+    test("cd ' '; pwd; echo $PWD");
+    test("cd '\t'; pwd; echo $PWD");
+    test("cd '\t   \t\t\t    '; pwd; echo $PWD");
+    test("cd d ''; pwd; echo $PWD", setup="mkdir d")
+    test("cd d d; pwd; echo $PWD", setup="mkdir d")
+    test("cd d ' '; pwd; echo $PWD", setup="mkdir d")
     test("cd $HOME; pwd; echo $PWD");
-    test("cd ~; pwd; echo $PWD");
-    test("cd ~/..; pwd; echo $PWD");
-    test("cd ~/../..; pwd; echo $PWD");
+    test("cd $HOME; pwd; echo $PWD", exports={"HOME": os.getenv("HOME")});
+    # test("cd ~; pwd; echo $PWD"); # do we have to handle ~ ?
+    # test("cd ~/..; pwd; echo $PWD");
+    # test("cd ~/../..; pwd; echo $PWD");
     test("cd /; pwd; echo $PWD");
     test("cd /.; pwd; echo $PWD");
     test("cd /./; pwd; echo $PWD");
     test("cd /././././; pwd; echo $PWD");
     test("cd //; pwd; echo $PWD");
+    test("cd ///; pwd; echo $PWD");
+    test("cd ////; pwd; echo $PWD");
+    test("cd //////////////////////////////////////////////////////; pwd; echo $PWD");
     test("cd")
+
+    test("cd d", setup="mkdir -m=000 d")
+    test("cd d", setup="mkdir -m=001 d")
+    test("cd d", setup="mkdir -m=002 d")
+    test("cd d", setup="mkdir -m=003 d")
+    test("cd d", setup="mkdir -m=004 d")
+    test("cd d", setup="mkdir -m=005 d")
+    test("cd d", setup="mkdir -m=006 d")
+    test("cd d", setup="mkdir -m=007 d")
+    test("cd d", setup="mkdir -m=010 d")
+    test("cd d", setup="mkdir -m=020 d")
+    test("cd d", setup="mkdir -m=030 d")
+    test("cd d", setup="mkdir -m=040 d")
+    test("cd d", setup="mkdir -m=050 d")
+    test("cd d", setup="mkdir -m=060 d")
+    test("cd d", setup="mkdir -m=070 d")
+    test("cd d", setup="mkdir -m=100 d")
+    test("cd d", setup="mkdir -m=200 d")
+    test("cd d", setup="mkdir -m=300 d")
+    test("cd d", setup="mkdir -m=400 d")
+    test("cd d", setup="mkdir -m=500 d")
+    test("cd d", setup="mkdir -m=600 d")
+    test("cd d", setup="mkdir -m=700 d")
+
+    test("cd d", setup="mkdir -m=755 d")
+    test("cd d", setup="mkdir -m=644 d")
+    test("cd d", setup="mkdir -m=311 d")
+    test("cd d", setup="mkdir -m=111 d")
+    test("cd d", setup="mkdir -m=222 d")
+    test("cd d", setup="mkdir -m=333 d")
+
+    test("cd d", setup="mkdir -m=0777 d")
+    test("cd d", setup="mkdir -m=1000 d")
+    test("cd d", setup="mkdir -m=2000 d")
+    test("cd d", setup="mkdir -m=3000 d")
+    test("cd d", setup="mkdir -m=4000 d")
+    test("cd d", setup="mkdir -m=5000 d")
+    test("cd d", setup="mkdir -m=6000 d")
+    test("cd d", setup="mkdir -m=7000 d")
+    test("cd d", setup="mkdir -m=1777 d")
+    test("cd d", setup="mkdir -m=2777 d")
+    test("cd d", setup="mkdir -m=3777 d")
+    test("cd d", setup="mkdir -m=4777 d")
+    test("cd d", setup="mkdir -m=5777 d")
+    test("cd d", setup="mkdir -m=6777 d")
+    test("cd d", setup="mkdir -m=7777 d")
+    test("cd d", setup="mkdir -m=0000 d")
 
 @suite
 def suite_unset(test):
@@ -142,10 +205,11 @@ def suite_pwd(test):
     test("pwd", setup="cd /")
     test("pwd", setup="cd $HOME")
     test("pwd | cat -e")
+    test("cd lnk; rmdir ../d; pwd", setup="mkdir d; ln -s d lnk")
 
 @suite
 def suite_env(test):
-    test("env")
+    test("env") # TODO ordering doesn't mater flag
     test("env", setup="export A=a")
     test("env", setup="export A=a B=b C=c")
     test("env | cat -e", setup="export A=a B=b C=c")

@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/07/15 18:14:28 by charles          ###   ########.fr        #
+#    Updated: 2020/07/19 15:27:54 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -14,6 +14,8 @@ import os
 import sys
 import subprocess
 import shutil
+import glob
+
 import config
 
 class Captured:
@@ -179,17 +181,28 @@ class Result:
 
 
 class Test:
-    def __init__(self, cmd: str, setup: str = "", files: [str] = [], exports: {str: str} = {}):
+    def __init__(self,
+                 cmd: str,
+                 setup: str = "",
+                 files: [str] = [],
+                 exports: {str: str} = {},
+                 timeout: float = config.TIMEOUT):
         self.cmd = cmd
         self.setup = setup
         self.files = files
         self.exports = exports
         self.result = None
+        self.timeout = timeout
 
     def run(self):
         expected = self._run_sandboxed(config.REFERENCE_PATH, "-c")
         actual   = self._run_sandboxed(config.MINISHELL_PATH, "-c")
-        self.result = Result(self.cmd, self.files, expected, actual)
+        s = ""
+        if self.setup == "":
+            s = self.cmd
+        else:
+            s = "[{}] {}".format(self.setup, self.cmd)
+        self.result = Result(s, self.files, expected, actual)
         self.result.put()
 
     def _run_sandboxed(self, shell_path: str, shell_option: str) -> Captured:
@@ -206,10 +219,18 @@ class Test:
         if self.setup != "":
             try:
                 setup_status = subprocess.run(
-                        self.setup, shell=True, cwd=config.SANDBOX_PATH, check=True)
+                    self.setup,
+                    shell=True,
+                    cwd=config.SANDBOX_PATH,
+                    stderr=subprocess.STDOUT,
+                    stdout=subprocess.PIPE,
+                    check=True
+                )
             except subprocess.CalledProcessError as e:
                 print("Error: `{}` setup command failed for `{}`\n\twith '{}'"
-                      .format(setup, cmd, e.stderr.decode().strip()))
+                      .format(self.setup,
+                              self.cmd,
+                              "no stderr" if e.stdout is None else e.stdout.decode().strip()))
                 sys.exit(1)
 
         try:
@@ -223,7 +244,7 @@ class Test:
                     'TERM': 'xterm-256color',
                     **self.exports
                 },
-                timeout=0.5
+                timeout=self.timeout
             )
         except subprocess.TimeoutExpired:
             return Captured.timeout()
@@ -238,5 +259,9 @@ class Test:
                     files_content.append(f.read().decode())
             except FileNotFoundError as e:
                 files_content.append(None)
-        shutil.rmtree(config.SANDBOX_PATH)
+        try:
+            shutil.rmtree(config.SANDBOX_PATH)
+        except:
+            subprocess.check_output(["chmod", "777", *glob.glob(config.SANDBOX_PATH + "/*")])
+            subprocess.check_output(["rm", "-rf", config.SANDBOX_PATH])
         return Captured(output, process_status.returncode, files_content)

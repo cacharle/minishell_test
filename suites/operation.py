@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2020/07/15 18:24:53 by charles          ###   ########.fr        #
+#    Updated: 2020/07/19 10:23:22 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -41,9 +41,9 @@ def suite_and(test):
     test("echo bonjour &&echo je")
     test("echo bonjour && echo je")
     test("echo bonjour&&")
-    test("echo&& ")
-    test("echo && ")
-    test("echo &&")
+    # test("echo&& ")
+    # test("echo && ")
+    # test("echo &&")
     test("&&echo")
     test("&& echo")
     test(" && echo")
@@ -64,9 +64,9 @@ def suite_or(test):
     test("echo bonjour ||echo je")
     test("echo bonjour || echo je")
     test("echo bonjour||")
-    test("echo|| ")
-    test("echo || ")
-    test("echo ||")
+    # test("echo|| ")
+    # test("echo || ")
+    # test("echo ||")
     test("||echo")
     test("|| echo")
     test(" || echo")
@@ -91,9 +91,15 @@ def suite_pipe(test):
     test("ls -l | cat -e | cat -e | cat -e | cat -e", setup="touch a b c d; mkdir m1 m2 m3")
     test("ls -l | cat -e < a", setup="touch a b c d; mkdir m1 m2 m3; echo bonjour > a")
 
-    test("echo|")
-    test("echo |")
-    test("echo | ")
+    # TODO special test for potential segfault
+    # test("echo|")
+    # test("echo |")
+    # test("echo | ")
     test("|cat")
     test("| cat")
     test(" | cat")
+
+    test("echo a | export A=a; echo $A")
+    test("export A=a | cat; echo $A")
+    test("echo a | A=a; echo $A")
+    test("A=a | cat; echo $A")

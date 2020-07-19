@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 15:11:46 by charles           #+#    #+#              #
-#    Updated: 2020/07/16 09:06:19 by charles          ###   ########.fr        #
+#    Updated: 2020/07/19 18:55:52 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -74,17 +74,6 @@ def suite_redirection(test):
     test("> file", files=["file"])
     test("< file", setup="echo bonjour > file")
 
-@suite
-def suite_edgecases(test):
-    test('echo "\\"" >>a"b""c"  ', files=["abc"])
-    test("echo " + ''.join([chr(i) for i in range(1, 127) if chr(i) not in '\n`"\'()|&><']))
-    test("echo foo>bar", files=["bar"])
-    test("echo foo >bar", files=["bar"])
-    test("echo foo> bar", files=["bar"])
-    test("echo foo > bar", files=["bar"])
-
-@suite
-def suite_cmd_error(test):
     test(">")
     test(">>")
     test("<")
@@ -104,6 +93,21 @@ def suite_cmd_error(test):
     test("cat <<<< bar", setup="echo bonjour > bar")
     test("cat <<<<< bar", setup="echo bonjour > bar")
 
+    test("cat < doesnotexist")
+
+
+
+@suite
+def suite_edgecases(test):
+    test('echo "\\"" >>a"b""c"  ', files=["abc"])
+    test("echo " + ''.join([chr(i) for i in range(1, 127) if chr(i) not in '\n`"\'()|&><']))
+    test("echo foo>bar", files=["bar"])
+    test("echo foo >bar", files=["bar"])
+    test("echo foo> bar", files=["bar"])
+    test("echo foo > bar", files=["bar"])
+
+@suite
+def suite_cmd(test):
     test("notfound")
     test("notfound a b c")
 
@@ -215,3 +219,103 @@ def suite_cmd_path(test):
             setup="touch a b c; echo bonjour > a; cp {} ls".format(cat_path))
     test("ls . a b c",
             setup="touch a b c; echo bonjour > a; cp {} ls".format(cat_path))
+
+    test("./somefile", setup="touch somefile; chmod 000 somefile")
+    test("./somefile", setup="touch somefile; chmod 001 somefile")
+    test("./somefile", setup="touch somefile; chmod 002 somefile")
+    test("./somefile", setup="touch somefile; chmod 003 somefile")
+    test("./somefile", setup="touch somefile; chmod 004 somefile")
+    test("./somefile", setup="touch somefile; chmod 005 somefile")
+    test("./somefile", setup="touch somefile; chmod 006 somefile")
+    test("./somefile", setup="touch somefile; chmod 007 somefile")
+    test("./somefile", setup="touch somefile; chmod 010 somefile")
+    test("./somefile", setup="touch somefile; chmod 020 somefile")
+    test("./somefile", setup="touch somefile; chmod 030 somefile")
+    test("./somefile", setup="touch somefile; chmod 040 somefile")
+    test("./somefile", setup="touch somefile; chmod 050 somefile")
+    test("./somefile", setup="touch somefile; chmod 060 somefile")
+    test("./somefile", setup="touch somefile; chmod 070 somefile")
+    test("./somefile", setup="touch somefile; chmod 100 somefile")
+    test("./somefile", setup="touch somefile; chmod 200 somefile")
+    test("./somefile", setup="touch somefile; chmod 300 somefile")
+    test("./somefile", setup="touch somefile; chmod 400 somefile")
+    test("./somefile", setup="touch somefile; chmod 500 somefile")
+    test("./somefile", setup="touch somefile; chmod 600 somefile")
+    test("./somefile", setup="touch somefile; chmod 700 somefile")
+
+    test("./somefile", setup="touch somefile; chmod 755 somefile")
+    test("./somefile", setup="touch somefile; chmod 644 somefile")
+    test("./somefile", setup="touch somefile; chmod 311 somefile")
+    test("./somefile", setup="touch somefile; chmod 111 somefile")
+    test("./somefile", setup="touch somefile; chmod 222 somefile")
+    test("./somefile", setup="touch somefile; chmod 333 somefile")
+
+    test("somedir/",   setup="mkdir somedir")
+    test("./somedir/", setup="mkdir somedir")
+    test("somedir",    setup="mkdir somedir")
+    test("./somedir",  setup="mkdir somedir")
+    test("somedir",    setup="mkdir somedir")
+
+    test("somedirsoftlink/",   setup="mkdir somedir; ln -s somedir somedirsoftlink")
+    test("./somedirsoftlink/", setup="mkdir somedir; ln -s somedir somedirsoftlink")
+    test("somedirsoftlink",    setup="mkdir somedir; ln -s somedir somedirsoftlink")
+    test("./somedirsoftlink",  setup="mkdir somedir; ln -s somedir somedirsoftlink")
+    test("somedirsoftlink",    setup="mkdir somedir; ln -s somedir somedirsoftlink")
+
+    test("./someremovedlink",  setup="touch somefile; ln -s somefile someremovedlink; rm -f somefile")
+
+    test("./somelink2", setup="touch somefile; ln -s somefile somelink1; ln -s somelink1 somelink2")
+    test("./somelink3", setup="touch somefile; ln -s somefile somelink1; ln -s somelink1 somelink2;" +
+                                               "ln -s somelink2 somelink3")
+    test("./somelink4", setup="touch somefile; ln -s somefile somelink1; ln -s somelink1 somelink2;" +
+                                               "ln -s somelink2 somelink3; ln -s somelink3 somelink4")
+
+    test("./somelink2ls", setup="cp " + ls_path + " somefile;" +
+                                "ln -s somefile somelink1; ln -s somelink1 somelink2")
+    test("./somelink3ls", setup="cp " + ls_path + " somefile;" +
+                                "ln -s somefile somelink1; ln -s somelink1 somelink2;" +
+                                "ln -s somelink2 somelink3")
+    test("./somelink4ls", setup="cp " + ls_path + " somefile;" +
+                                "ln -s somefile somelink1; ln -s somelink1 somelink2;" +
+                                "ln -s somelink2 somelink3; ln -s somelink3 somelink4")
+
+    test("_", setup="touch _")
+    test("'-'", setup="touch -")
+    test("./_", setup="touch _")
+    test("./-", setup="touch -")
+    test("./.", setup="touch .")
+    test("./..", setup="touch ..")
+
+    test("./somefile", setup='touch somefile && chmod 0777 somefile')
+    test("./somefile", setup='touch somefile && chmod 1000 somefile')
+    test("./somefile", setup='touch somefile && chmod 2000 somefile')
+    test("./somefile", setup='touch somefile && chmod 3000 somefile')
+    test("./somefile", setup='touch somefile && chmod 4000 somefile')
+    test("./somefile", setup='touch somefile && chmod 5000 somefile')
+    test("./somefile", setup='touch somefile && chmod 6000 somefile')
+    test("./somefile", setup='touch somefile && chmod 7000 somefile')
+    test("./somefile", setup='touch somefile && chmod 1777 somefile')
+    test("./somefile", setup='touch somefile && chmod 2777 somefile')
+    test("./somefile", setup='touch somefile && chmod 3777 somefile')
+    test("./somefile", setup='touch somefile && chmod 4777 somefile')
+    test("./somefile", setup='touch somefile && chmod 5777 somefile')
+    test("./somefile", setup='touch somefile && chmod 6777 somefile')
+    test("./somefile", setup='touch somefile && chmod 7777 somefile')
+    test("./somefile", setup='touch somefile && chmod 0000 somefile')
+
+    test("./somedir", setup='mkdir somedir && chmod 0777 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 1000 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 2000 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 3000 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 4000 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 5000 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 6000 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 7000 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 1777 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 2777 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 3777 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 4777 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 5777 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 6777 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 0000 somedir')
+    test("./somedir", setup='mkdir somedir && chmod 0000 somedir')
