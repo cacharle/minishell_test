@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/07/19 15:27:54 by charles          ###   ########.fr        #
+#    Updated: 2020/08/19 16:09:55 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -197,11 +197,11 @@ class Test:
     def run(self):
         expected = self._run_sandboxed(config.REFERENCE_PATH, "-c")
         actual   = self._run_sandboxed(config.MINISHELL_PATH, "-c")
-        s = ""
-        if self.setup == "":
-            s = self.cmd
-        else:
-            s = "[{}] {}".format(self.setup, self.cmd)
+        s = self.cmd
+        if self.setup != "":
+            s = "[SETUP {}] {}".format(self.setup, s)
+        if len(self.exports) != 0:
+            s = "[EXPORTS {}] {}".format(' '.join(["{}='{:.20}'".format(k, v) for k, v in self.exports.items()]), s)
         self.result = Result(s, self.files, expected, actual)
         self.result.put()
 
@@ -249,7 +249,10 @@ class Test:
         except subprocess.TimeoutExpired:
             return Captured.timeout()
 
-        output = process_status.stdout.decode()
+        try:
+            output = process_status.stdout.decode()
+        except UnicodeDecodeError:
+            output = "UNICODE ERROR: {}".format(process_status.stdout)
 
         # capture watched files content
         files_content = []
