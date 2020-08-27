@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/08/19 16:09:55 by charles          ###   ########.fr        #
+#    Updated: 2020/08/27 21:02:56 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -34,8 +34,8 @@ class Captured:
         self.is_timeout = is_timeout
 
     def __eq__(self, other: 'Result') -> bool:
-        if self.is_timeout and other.is_timeout:
-            return True
+        if self.is_timeout:
+            return self.is_timeout == other.is_timeout
         return (self.output == other.output and
                 self.status == other.status and
                 all([x == y for x, y in zip(self.files_content, other.files_content)]))
