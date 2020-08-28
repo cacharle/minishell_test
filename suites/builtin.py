@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/07/20 10:06:47 by charles          ###   ########.fr        #
+#    Updated: 2020/08/28 17:36:12 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -86,6 +86,7 @@ def suite_export(test):
     test("export A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C")
     test("export 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C")
     test("export A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '; echo $A$B$C")
+    test("export A B C; echo $A$B$C")
 
     test("export $TEST", exports={"TEST": "A=a"})
 

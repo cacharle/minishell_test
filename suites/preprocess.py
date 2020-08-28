@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
-#    Updated: 2020/08/19 17:08:59 by charles          ###   ########.fr        #
+#    Updated: 2020/08/28 17:28:35 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -132,6 +132,38 @@ def suite_interpolation(test):
 
     test("echo $\A $\B", exports={"A": "a", "B": "b"})
     test("echo $\A$\B", exports={"A": "a", "B": "b"})
+
+    test("echo $A", exports={"A": " "})
+    test("echo $A", exports={"A": "  "})
+    test("echo $A", exports={"A": "   "})
+    test("echo $A", exports={"A": "    "})
+    test("echo $A", exports={"A": "  a "})
+    test("echo $A", exports={"A": "                                "})
+    test("echo $A", exports={"A": "                     a          "})
+
+    test("echo @$A@", exports={"A": " "})
+    test("echo @ $A@", exports={"A": " "})
+    test("echo @$A @", exports={"A": " "})
+    test("echo @$A@", exports={"A": "       "})
+    test("echo '@'$A'@'", exports={"A": " "})
+    test("echo '@' $A'@'", exports={"A": " "})
+    test("echo '@'$A '@'", exports={"A": " "})
+    test('echo "@"$A"@"', exports={"A": " "})
+    test('echo "@" $A"@"', exports={"A": " "})
+    test('echo "@"$A "@"', exports={"A": " "})
+
+    test('echo @"$A"@', exports={"A": " "})
+    test('echo @ "$A"@', exports={"A": " "})
+    test('echo @"$A" @', exports={"A": " "})
+    test('echo @"$A"@', exports={"A": "       "})
+    test("echo '@'\"$A\"'@'", exports={"A": " "})
+    test("echo '@' \"$A\"'@'", exports={"A": " "})
+    test("echo '@'\"$A\" '@'", exports={"A": " "})
+    test('echo "@""$A""@"', exports={"A": " "})
+    test('echo "@" "$A""@"', exports={"A": " "})
+    test('echo "@""$A" "@"', exports={"A": " "})
+
+    test('echo $A$B$C', exports={"A": "", "B": "", "C": ""})
 
 
 @suite
