@@ -26,6 +26,7 @@ import suites.preprocess
 import suites.operation
 import suites.parenthesis
 import suites.status
+import suites.path
 
 def main():
     if os.path.exists(config.EXECUTABLES_PATH):

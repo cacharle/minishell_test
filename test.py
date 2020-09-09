@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/08/27 21:02:56 by charles          ###   ########.fr        #
+#    Updated: 2020/09/09 15:18:27 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -43,6 +43,7 @@ class Captured:
     @staticmethod
     def timeout():
         return Captured("", 0, [], is_timeout = True)
+
 
 class Result:
     RED_CHARS   = "\033[31m"
@@ -201,7 +202,8 @@ class Test:
         if self.setup != "":
             s = "[SETUP {}] {}".format(self.setup, s)
         if len(self.exports) != 0:
-            s = "[EXPORTS {}] {}".format(' '.join(["{}='{:.20}'".format(k, v) for k, v in self.exports.items()]), s)
+            s = "[EXPORTS {}] {}".format(
+                    ' '.join(["{}='{:.20}'".format(k, v) for k, v in self.exports.items()]), s)
         self.result = Result(s, self.files, expected, actual)
         self.result.put()
 

@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
-#    Updated: 2020/08/28 17:28:35 by charles          ###   ########.fr        #
+#    Updated: 2020/09/09 12:50:34 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -83,6 +83,11 @@ def suite_interpolation(test):
 
     test('echo $A"$B"$C"A"$B"$C"', exports={"A": "foo ", "B": " bar  ", "C": "baz "})
     test("echo $A'$B'$C'A'$B'$C'", exports={"A": "foo ", "B": " bar  ", "C": "baz "})
+
+    test("echo $A")
+    test("echo $A$B")
+    test("echo $A$B$C")
+    test("echo $A$B$C$D")
 
     test("echo [$A]", exports={"A": r"bonjour\je"})
     test("echo [$A]", exports={"A": r"\b\\o\\\nj\\\\\\\our\\je\\\\"})

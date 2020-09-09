@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/08/28 17:36:12 by charles          ###   ########.fr        #
+#    Updated: 2020/09/09 13:28:02 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -124,6 +124,16 @@ def suite_cd(test):
     test("cd ////; pwd; echo $PWD");
     test("cd //////////////////////////////////////////////////////; pwd; echo $PWD");
     test("cd")
+
+    test("cd ' /'; pwd; echo $PWD")
+    test("cd ' / '; pwd; echo $PWD")
+    test("cd '                  /'; pwd; echo $PWD")
+    test("cd '                  /              '; pwd; echo $PWD")
+    test("cd ' // '; pwd; echo $PWD")
+
+    test("cd //home; pwd; echo $PWD")
+    test("cd ' //home'; pwd; echo $PWD")
+    test("cd '     //home    '; pwd; echo $PWD")
 
     test("cd d", setup="mkdir -m 000 d")
     test("cd d", setup="mkdir -m 001 d")
