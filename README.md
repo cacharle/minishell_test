@@ -4,12 +4,12 @@ Test for the minishell project of school 42.
 
 ![screenshot](./screenshot.png)
 
-# Usage
+## Usage
 
 The default path to your project is `..` but you can change it the the [configuration](config.py).
 
-* `> ./main.py --help`
-* `> ./main.py`
+* `> ./run --help`
+* `> ./run`
 
 ## Test compatibility
 
@@ -27,17 +27,19 @@ README.md test.sh
 README.md test.sh
 ```
 
-The reasons for this:
-1. You're free to set the prompt to whatever you want
-2. Termcaps would be a nightmare to test
+This allows you to set the prompt to whatever you want.
 
-# Configuration
+## Python Version
+
+This test works with python >= 3.4. The timeout detection only works with python >= 3.8.
+
+## Configuration
 
 The default configuration can be changed in [config.py](config.py)
 
-# Add new tests
+## Add new tests
 
-## Add individual test
+### Add individual test
 
 In your suite function you can use the `test` function. With the following arguments:
 
@@ -55,7 +57,7 @@ test("cat < somefile > otherfile",
      files=["otherfile"])
 ```
 
-## Add Suite
+### Add Suite
 
 A test suite is a group of related tests.
 

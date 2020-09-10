@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2020/09/09 15:17:58 by charles          ###   ########.fr        #
+#    Updated: 2020/09/10 13:52:37 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -23,8 +23,8 @@ def parse_args():
         help="increase verbosity level (e.g -vv == 2)"
     )
     parser.add_argument(
-        "-g", "--generate", metavar="NUMBER", type=int,
-        help="number of new random test to generate"
+        "-b", "--build", action="store_true",
+        help="build minishell and exit"
     )
     parser.add_argument(
         "-l", "--list", action="store_true",

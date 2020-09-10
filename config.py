@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2020/07/19 20:29:52 by charles          ###   ########.fr        #
+#    Updated: 2020/09/10 13:54:27 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -18,6 +18,9 @@ MINISHELL_DIR = ".."
 
 # minishell executable
 MINISHELL_EXEC = "minishell"
+
+# build minishell before executing the test if set to True
+MINISHELL_BUILD = True
 
 # path to reference shell (shell which will be compared minishell)
 # has to support the -c option (sh, bash and zsh support it)

@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 15:11:46 by charles           #+#    #+#              #
-#    Updated: 2020/07/19 18:55:52 by charles          ###   ########.fr        #
+#    Updated: 2020/09/10 14:25:40 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -89,7 +89,7 @@ def suite_redirection(test):
     test("echo foo >>>> bar")
     test("echo foo >>>>> bar")
 
-    test("cat <<< bar", setup="echo bonjour > bar")
+    test("cat << < bar", setup="echo bonjour > bar")
     test("cat <<<< bar", setup="echo bonjour > bar")
     test("cat <<<<< bar", setup="echo bonjour > bar")
 

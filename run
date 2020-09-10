@@ -16,6 +16,7 @@ import os
 import sys
 import shutil
 import distutils.spawn
+import subprocess
 
 import config
 from args import parse_args
@@ -29,6 +30,19 @@ import suites.status
 import suites.path
 
 def main():
+    args = parse_args()
+    if args.list:
+        print("The available suites are:")
+        print('\n'.join([" - " + s.name for s in Suite.available]))
+        sys.exit(0)
+
+    if config.MINISHELL_BUILD or args.build:
+        try:
+            subprocess.run(["make", "-C", config.MINISHELL_DIR], check=True)
+        except subprocess.CalledProcessError:
+            sys.exit(1)
+        if args.build:
+            sys.exit(0)
     if os.path.exists(config.EXECUTABLES_PATH):
         shutil.rmtree(config.EXECUTABLES_PATH)
     os.mkdir(config.EXECUTABLES_PATH)
@@ -36,11 +50,6 @@ def main():
         shutil.copy(distutils.spawn.find_executable(cmd),  # FIXME search whole PATH
                     os.path.join(config.EXECUTABLES_PATH, cmd))
 
-    args = parse_args()
-    if args.list:
-        print("The available suites are:")
-        print('\n'.join([" - " + s.name for s in Suite.available]))
-        sys.exit(0)
 
     config.VERBOSE_LEVEL = args.verbose
     Suite.setup(args.suites)
