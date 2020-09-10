@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/09/09 15:18:27 by charles          ###   ########.fr        #
+#    Updated: 2020/09/10 09:38:26 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -101,7 +101,7 @@ class Result:
         if config.VERBOSE_LEVEL == 0:
             return self.green('.') if self.passed else self.red('!')
         elif config.VERBOSE_LEVEL == 1:
-            printed = self.cmd[:]
+            printed = self.escaped_cmd[:]
             if len(printed) > 70:
                 printed = printed[:67] + "..."
             fmt = self.green("{:74} [PASS]") if self.passed else self.red("{:74} [FAIL]")
@@ -167,7 +167,7 @@ class Result:
         return out
 
     def full_diff(self) -> str:
-        return (self.indicator("WITH {}".format(self.cmd), "|>") + '\n'
+        return (self.indicator("WITH {}".format(self.escaped_cmd), "|>") + '\n'
                 + self.output_diff()
                 + self.files_diff()
                 + "=" * 80 + '\n')
@@ -179,6 +179,16 @@ class Result:
         if s[-1] != '\n':
             s += '\n'
         return s
+
+    @property
+    def escaped_cmd(self):
+        return (self.cmd
+            .replace("\t", "\\t")
+            .replace("\n", "\\n")
+            .replace("\v", "\\v")
+            .replace("\r", "\\r")
+            .replace("\f", "\\f")
+        )
 
 
 class Test:
