@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:16:25 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 20:08:00 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 20:42:05 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -15,6 +15,12 @@ import config
 
 class Captured:
     def __init__(self, output: str, status: int, files_content: [str], is_timeout: bool = False):
+        """Captured class
+           output:        captured content
+           status:        command status
+           files_content: content of the files altered by the command
+           is_timeout:    the command has timed out
+        """
         lines = output.split('\n')
         for i, l in enumerate(lines):
             if l.find(config.REFERENCE_ERROR_BEGIN) == 0:
@@ -37,4 +43,5 @@ class Captured:
 
     @staticmethod
     def timeout():
+        """Create a new captured timeout"""
         return Captured("", 0, [], is_timeout=True)

@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 13:48:07 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 19:53:13 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 20:25:38 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -19,6 +19,7 @@ import config
 
 
 def create():
+    """Create a new sandbox directory"""
     try:
         os.mkdir(config.SANDBOX_PATH)
     except OSError:
@@ -26,6 +27,9 @@ def create():
 
 
 def remove():
+    """Remove the sandbox directory
+       Brute force rm -rf if clean removal doesn't work due to permissions.
+    """
     try:
         shutil.rmtree(config.SANDBOX_PATH)
     except PermissionError:

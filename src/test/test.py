@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 20:00:52 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 20:39:52 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -30,6 +30,15 @@ class Test:
                  timeout: float = config.TIMEOUT,
                  signal=None,
                  hook=None):
+        """Test class
+           cmd: command to execute
+           setup: command to execute before tested command
+           files: files to watch (check content after test)
+           exports: exported variables
+           timeout: maximum amount of time taken by the test
+           signal: signal to send to the test
+           hook: function to execute on the output of the test
+        """
         self.cmd = cmd
         self.setup = setup
         self.files = files
@@ -40,6 +49,7 @@ class Test:
         self.hook = hook
 
     def run(self):
+        """Run the test for minishell and the reference shell and print the result out"""
         expected = self._run_sandboxed(config.REFERENCE_PATH, "-c")
         actual   = self._run_sandboxed(config.MINISHELL_PATH, "-c")
         s = self.cmd
@@ -52,12 +62,12 @@ class Test:
         self.result.put()
 
     def _run_sandboxed(self, shell_path: str, shell_option: str) -> Captured:
-        """ run the command in a sandbox environment
-
-            capture the output (stdout and stderr)
-            capture the content of the watched files after the command is run
+        """ Run the command in a sandbox environment
+            Capture the output (stdout and stderr)
+            Capture the content of the watched files after the command is run
         """
 
+        # create and setup sandbox
         sandbox.create()
         if self.setup != "":
             try:
@@ -76,6 +86,7 @@ class Test:
                               "no stderr" if e.stdout is None else e.stdout.decode().strip()))
                 sys.exit(1)
 
+        # run the command in the sandbox
         process = subprocess.Popen(
             [shell_path, shell_option, self.cmd],
             stderr=subprocess.STDOUT,
@@ -96,6 +107,7 @@ class Test:
             except subprocess.TimeoutExpired:
                 return Captured.timeout()
 
+        # get command output
         try:
             stdout, _ = process.communicate()
             output = stdout.decode()
@@ -110,6 +122,7 @@ class Test:
                     files_content.append(f.read().decode())
             except FileNotFoundError:
                 files_content.append(None)
+
         sandbox.remove()
         if self.hook is not None:
             output = self.hook(output)

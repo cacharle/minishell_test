@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 14:22:47 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 22:09:04 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -14,6 +14,8 @@ import argparse
 
 
 def parse_args():
+    """Parse command line arguments"""
+
     parser = argparse.ArgumentParser(
         description="Minishell test",
         epilog="Make sure read README.md"

@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:28:00 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 20:08:27 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 22:08:36 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -16,8 +16,10 @@ import inspect
 
 
 def suite(groups: [str] = [], bonus: bool = False):
+    """Decorator generator for suites arguments"""
+
     def suite_wrapper(origin):
-        """ decorator for a suite function (fmt: suite_[name]) """
+        """Decorator for a suite function (fmt: suite_[name]) """
 
         mod_name = inspect.getmodule(origin).__name__[len("suites."):]
         # print(mod_name)
@@ -30,7 +32,7 @@ def suite(groups: [str] = [], bonus: bool = False):
                 s.add(Test(*args, **kwargs))
             origin(test)
 
-        s.add_generator(test_generator)
+        s.generator_func = test_generator
         Suite.available.append(s)
         return test_generator
 
