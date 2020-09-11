@@ -6,7 +6,7 @@ Test for the minishell project of school 42.
 
 ## Usage
 
-The default path to your project is `..` but you can change it the the [configuration](config.py).
+The default path to your project is `..` but you can change it the the [configuration](src/config.py).
 
 * `> ./run --help`
 * `> ./run`
@@ -31,11 +31,11 @@ This allows you to set the prompt to whatever you want.
 
 ## Python Version
 
-This test works with python >= 3.4. The timeout detection only works with python >= 3.8.
+This test works with python >= 3.5.
 
 ## Configuration
 
-The default configuration can be changed in [config.py](config.py)
+The default configuration can be changed in [config.py](src/config.py)
 
 ## Add new tests
 

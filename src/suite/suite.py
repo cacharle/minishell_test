@@ -6,12 +6,13 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/07/19 15:29:36 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 12:27:47 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import config
 from test import Test
+
 
 class Suite:
     available = []
@@ -91,17 +92,3 @@ class Suite:
                         t.result.colored = False
                         t.result.set_colors()
                         log_file.write(t.result.full_diff() + '\n')
-
-
-def suite(origin):
-    """ decorator for a suite function (fmt: suite_[name]) """
-
-    name = origin.__name__[len("suite_"):]
-    s = Suite(name)
-    def test_generator():
-        def test(*args, **kwargs):
-            s.add(Test(*args, **kwargs))
-        origin(test)
-    s.add_generator(test_generator)
-    Suite.available.append(s)
-    return test_generator

@@ -6,12 +6,19 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2020/09/10 13:54:27 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 12:21:14 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-# Minishell configuration file
+
+################################################################################
+# Minishell configuration file                                                 #
+################################################################################
+
 import os
+
+# run the bonus tests
+BONUS = False
 
 # minishell dir path
 MINISHELL_DIR = ".."
@@ -42,6 +49,9 @@ AVAILABLE_COMMANDS = ["rmdir", "env", "cat", "touch", "ls", "grep", "sh"]
 # $PATH environment variable passed to the shell
 PATH_VARIABLE = os.path.abspath(EXECUTABLES_PATH)
 
+# default test timeout
+TIMEOUT = 1
+
 LOREM = """
 Mollitia asperiores assumenda excepturi et ipsa. Nihil corporis facere aut a rem consequatur.
 Quas molestiae corporis et quibusdam maiores. Molestiae sed unde aut at sed.
@@ -58,8 +68,6 @@ Consequuntur quae corrupti atque. Numquam enim ut ut.
 Perspiciatis ut maxime et libero quo voluptas consequatur illum. Pariatur porro dolor cumque molestiae harum.
 """
 LOREM = ' '.join(LOREM.split('\n'))
-
-TIMEOUT = 1
 
 ###############################################################################
 # do not edit
