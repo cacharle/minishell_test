@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 17:53:52 by juligonz         ###   ########.fr        #
+#    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -218,6 +218,16 @@ def suite_unset(test):
     test("unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '",
             setup="export A=a B=b C=c")
     test("unset A", setup="export A=a B=b C=c")
+
+    test("unset 'AH@'=nop")
+    test("unset \"AH'\"=nop")
+    test("unset 'AH\"'=nop")
+    test("unset 'AH$'=nop")
+    test("unset 'AH!'=nop")
+    test("unset 'AH|'=nop")
+    test("unset 'AH;'=nop")
+    test("unset 'AH&'=nop")
+    test("unset 'AH\\'=nop")
 
 @suite()
 def suite_pwd(test):
