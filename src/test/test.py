@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 16:08:07 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 17:00:25 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -113,5 +113,4 @@ class Test:
         sandbox.remove()
         if self.hook is not None:
             output = self.hook(output)
-            output = '\n'.join(sorted(output.split('\n')))
         return Captured(output, process.returncode, files_content)
