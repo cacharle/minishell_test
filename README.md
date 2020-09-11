@@ -62,7 +62,7 @@ test("cat < somefile > otherfile",
 A test suite is a group of related tests.
 
 ```
-@suite
+@suite()
 def suite_yoursuitename(test):
     test(...)
     test(...)

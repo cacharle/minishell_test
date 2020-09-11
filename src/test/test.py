@@ -6,19 +6,19 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 12:24:33 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 13:50:16 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import os
 import sys
 import subprocess
-import shutil
-import glob
+import time
 
 import config
 from test.captured import Captured
 from test.result import Result
+import sandbox
 
 
 class Test:
@@ -27,13 +27,15 @@ class Test:
                  setup: str = "",
                  files: [str] = [],
                  exports: {str: str} = {},
-                 timeout: float = config.TIMEOUT):
+                 timeout: float = config.TIMEOUT,
+                 signal = None):
         self.cmd = cmd
         self.setup = setup
         self.files = files
         self.exports = exports
         self.result = None
         self.timeout = timeout
+        self.signal = signal
 
     def run(self):
         expected = self._run_sandboxed(config.REFERENCE_PATH, "-c")
@@ -54,10 +56,7 @@ class Test:
             capture the content of the watched files after the command is run
         """
 
-        try:
-            os.mkdir(config.SANDBOX_PATH)
-        except OSError:
-            pass
+        sandbox.create()
         if self.setup != "":
             try:
                 setup_status = subprocess.run(
@@ -86,10 +85,14 @@ class Test:
                 **self.exports,
             },
         )
-        try:
-            process.wait(timeout=self.timeout)
-        except subprocess.TimeoutExpired:
-            return Captured.timeout()
+        if self.signal is not None:
+            time.sleep(0.2)
+            process.send_signal(self.signal)
+        else:
+            try:
+                process.wait(timeout=self.timeout)
+            except subprocess.TimeoutExpired:
+                return Captured.timeout()
 
         try:
             stdout, _ = process.communicate()
@@ -105,9 +108,5 @@ class Test:
                     files_content.append(f.read().decode())
             except FileNotFoundError as e:
                 files_content.append(None)
-        try:
-            shutil.rmtree(config.SANDBOX_PATH)
-        except:
-            subprocess.run(["chmod", "777", *glob.glob(config.SANDBOX_PATH + "/*")], check=True)
-            subprocess.run(["rm", "-rf", config.SANDBOX_PATH], check=True)
+        sandbox.remove()
         return Captured(output, process.returncode, files_content)

@@ -13,7 +13,7 @@
 import config
 from suite import suite
 
-@suite
+@suite()
 def suite_path(test):
     test("a", setup="mkdir path && cp /bin/ls ./path/a && chmod 000 ./path/a", exports={"PATH": "path"})
     test("a", setup="mkdir path && cp /bin/ls ./path/a && chmod 001 ./path/a", exports={"PATH": "path"})

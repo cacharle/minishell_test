@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2020/09/10 13:52:37 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 14:22:47 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -23,16 +23,24 @@ def parse_args():
         help="increase verbosity level (e.g -vv == 2)"
     )
     parser.add_argument(
-        "-b", "--build", action="store_true",
-        help="build minishell and exit"
+        "-b", "--bonus", action="store_true",
+        help="enable bonus tests"
+    )
+    parser.add_argument(
+        "-n", "--no-bonus", action="store_true",
+        help="disable bonus tests"
     )
     parser.add_argument(
         "-l", "--list", action="store_true",
         help="print available test suites"
     )
     parser.add_argument(
+        "-m", "--make", action="store_true",
+        help="make minishell and exit"
+    )
+    parser.add_argument(
         "suites", nargs='*', metavar="suite",
-        help="test suites to run (-h for more information)"
+        help="test suites/group to run"
     )
     tmp = parser.parse_args()
     if tmp.verbose is None:

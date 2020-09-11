@@ -6,14 +6,14 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
-#    Updated: 2020/09/09 12:50:34 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 14:24:47 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import config
 from suite import suite
 
-@suite
+@suite()
 def suite_quote(test):
     test("'echo' 'bonjour'")
     test("'echo' 'je' 'suis' 'charles'")
@@ -56,7 +56,7 @@ def suite_quote(test):
     test("'''''''e''''''''''c''''''''''''h''''''''o''''''''''''''''''''' bonjour")
     test('"""""""e""""""""""c""""""""""""h""""""""o""""""""""""""""""""" bonjour')
 
-@suite
+@suite()
 def suite_interpolation(test):
     test("echo $TEST", exports={"TEST": "bonjour"})
     test("echo $TES", exports={"TEST": "bonjour"})
@@ -171,7 +171,7 @@ def suite_interpolation(test):
     test('echo $A$B$C', exports={"A": "", "B": "", "C": ""})
 
 
-@suite
+@suite()
 def suite_escape(test):
     test(r"echo \a")
     test(r"\e\c\h\o bonjour")
@@ -193,24 +193,8 @@ def suite_escape(test):
     test(r" \                 echo bonjour")
     test(r"                 \                    echo bonjour")
 
-# @suite
-# def suite_preprocess(test):
-#     test(r"echo \*", setup="touch a b c")
-#     test(r"echo \*\*", setup="touch a b c")
-#     test(r"echo \ *", setup="touch a b c")
-#     test(r"echo *\.c", setup="touch a.c b.c c.c")
-#     test(r"echo *.\c", setup="touch a.c b.c c.c")
-#     test(r"echo *.c\ ", setup="touch a.c b.c c.c")
-#     test("echo $A$B",
-#             setup="mkdir src; touch src/a src/b src/c src/foo.c src/bar.c;\
-#                    mkdir inc; touch inc/a inc/b inc/c inc/foo.c inc/bar.c",
-#             exports={"A": "*", "B": "/*.c"})
-#     test("echo $A$B",
-#             setup="mkdir src; touch src/a src/b src/c src/foo.c src/bar.c;\
-#                    mkdir inc; touch inc/a inc/b inc/c inc/foo.c inc/bar.c",
-#             exports={"A": "*/.", "B": "*.c"})
 
-# @suite
+# @suite(bonus=True)
 # def suite_glob(test):
 #     test("echo *")
 #     test("echo *", setup="touch a b c")
@@ -404,3 +388,17 @@ def suite_escape(test):
 #     test("echo *", setup="touch a; ln -s a b; ln -s b c; ln -s c d")
 #     test("echo d/*", setup="mkdir d; touch a b c d/d d/e d/f")
 #     test("echo d/*", setup="mkdir d; touch a b c d/d d/e d/f; chmod 000 d")
+#     test(r"echo \*", setup="touch a b c")
+#     test(r"echo \*\*", setup="touch a b c")
+#     test(r"echo \ *", setup="touch a b c")
+#     test(r"echo *\.c", setup="touch a.c b.c c.c")
+#     test(r"echo *.\c", setup="touch a.c b.c c.c")
+#     test(r"echo *.c\ ", setup="touch a.c b.c c.c")
+#     test("echo $A$B",
+#             setup="mkdir src; touch src/a src/b src/c src/foo.c src/bar.c;\
+#                    mkdir inc; touch inc/a inc/b inc/c inc/foo.c inc/bar.c",
+#             exports={"A": "*", "B": "/*.c"})
+#     test("echo $A$B",
+#             setup="mkdir src; touch src/a src/b src/c src/foo.c src/bar.c;\
+#                    mkdir inc; touch inc/a inc/b inc/c inc/foo.c inc/bar.c",
+#             exports={"A": "*/.", "B": "*.c"})

@@ -6,12 +6,11 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 12:27:47 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 14:18:01 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import config
-from test import Test
 
 
 class Suite:
@@ -26,7 +25,12 @@ class Suite:
     def setup(cls, asked_names: [str]):
         if len(asked_names) == 0:
             asked_names = [s.name for s in cls.available]
-        cls.available = [s for s in cls.available if s.name in asked_names]
+        if not config.BONUS:
+            cls.available = [s for s in cls.available if not s.bonus]
+        cls.available = list(set(
+            [s for s in cls.available if s.name in asked_names] +
+            [s for s in cls.available if any([g for g in s.groups if g in asked_names])]
+        ))
         for s in cls.available:
             s.generate()
 
@@ -34,8 +38,10 @@ class Suite:
     def available_names(cls) -> [str]:
         return [s.name for s in cls.available]
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, groups: [str], bonus: bool = False):
         self.name = name
+        self.groups = groups
+        self.bonus = bonus
         self.generator_func = None
         self.tests = []
 

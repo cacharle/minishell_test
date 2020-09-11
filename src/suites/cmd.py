@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 15:11:46 by charles           #+#    #+#              #
-#    Updated: 2020/09/10 14:25:40 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 14:25:04 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -16,7 +16,7 @@ import config
 from suite import suite
 
 
-@suite
+@suite()
 def suite_redirection(test):
     test("echo bonjour > test", setup="", files=["test"])
     test("echo > test bonjour", setup="", files=["test"])
@@ -96,9 +96,10 @@ def suite_redirection(test):
     test("cat < doesnotexist")
 
 
-
-@suite
-def suite_edgecases(test):
+@suite()
+def suite_cmd(test):
+    test("notfound")
+    test("notfound a b c")
     test('echo "\\"" >>a"b""c"  ', files=["abc"])
     test("echo " + ''.join([chr(i) for i in range(1, 127) if chr(i) not in '\n`"\'()|&><']))
     test("echo foo>bar", files=["bar"])
@@ -106,12 +107,7 @@ def suite_edgecases(test):
     test("echo foo> bar", files=["bar"])
     test("echo foo > bar", files=["bar"])
 
-@suite
-def suite_cmd(test):
-    test("notfound")
-    test("notfound a b c")
-
-@suite
+@suite(bonus=True)
 def suite_cmd_variable(test):
     test("A=a sh -c 'echo $A'")
     test("A=a B=b sh -c 'echo $A$B'")
@@ -202,7 +198,7 @@ def suite_cmd_variable(test):
     test("'BONJOURJESUIS''=''a' sh -c 'echo $BONJOURJESUIS'")
     test('"BONJOURJESUIS""=""a" sh -c "echo $BONJOURJESUIS"')
 
-@suite
+@suite()
 def suite_cmd_path(test):
     ls_path = distutils.spawn.find_executable("ls")
     cat_path = distutils.spawn.find_executable("cat")

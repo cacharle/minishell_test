@@ -6,13 +6,13 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2020/07/19 10:23:22 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 14:19:14 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 from suite import suite
 
-@suite
+@suite()
 def suite_end(test):
     test("echo bonjour; echo je")
     test("echo bonjour ;echo je")
@@ -35,7 +35,30 @@ def suite_end(test):
     test("ls doesnotexists; echo bonjour")
     test("echo bonjour; ls doesnotexists")
 
-@suite
+@suite()
+def suite_pipe(test):
+    test("echo bonjour | cat")
+    test("echo bonjour | cat -e")
+    test("ls | cat -e", setup="touch a b c d; mkdir m1 m2 m3")
+    test("ls -l | cat -e", setup="touch a b c d; mkdir m1 m2 m3")
+    test("ls -l | cat -e | cat | cat | cat", setup="touch a b c d; mkdir m1 m2 m3")
+    test("ls -l | cat -e | cat -e | cat -e | cat -e", setup="touch a b c d; mkdir m1 m2 m3")
+    test("ls -l | cat -e < a", setup="touch a b c d; mkdir m1 m2 m3; echo bonjour > a")
+
+    # TODO special test for potential segfault
+    # test("echo|")
+    # test("echo |")
+    # test("echo | ")
+    test("|cat")
+    test("| cat")
+    test(" | cat")
+
+    test("echo a | export A=a; echo $A")
+    test("export A=a | cat; echo $A")
+    test("echo a | A=a; echo $A")
+    test("A=a | cat; echo $A")
+
+@suite(bonus=True)
 def suite_and(test):
     test("echo bonjour&& echo je")
     test("echo bonjour &&echo je")
@@ -58,7 +81,7 @@ def suite_and(test):
     test("ls doesnotexists&& echo bonjour")
     test("echo bonjour&& ls doesnotexists")
 
-@suite
+@suite(bonus=True)
 def suite_or(test):
     test("echo bonjour|| echo je")
     test("echo bonjour ||echo je")
@@ -80,26 +103,3 @@ def suite_or(test):
     test("ls doesnotexists || echo bonjour")
     test("ls doesnotexists|| echo bonjour")
     test("echo bonjour|| ls doesnotexists")
-
-@suite
-def suite_pipe(test):
-    test("echo bonjour | cat")
-    test("echo bonjour | cat -e")
-    test("ls | cat -e", setup="touch a b c d; mkdir m1 m2 m3")
-    test("ls -l | cat -e", setup="touch a b c d; mkdir m1 m2 m3")
-    test("ls -l | cat -e | cat | cat | cat", setup="touch a b c d; mkdir m1 m2 m3")
-    test("ls -l | cat -e | cat -e | cat -e | cat -e", setup="touch a b c d; mkdir m1 m2 m3")
-    test("ls -l | cat -e < a", setup="touch a b c d; mkdir m1 m2 m3; echo bonjour > a")
-
-    # TODO special test for potential segfault
-    # test("echo|")
-    # test("echo |")
-    # test("echo | ")
-    test("|cat")
-    test("| cat")
-    test(" | cat")
-
-    test("echo a | export A=a; echo $A")
-    test("export A=a | cat; echo $A")
-    test("echo a | A=a; echo $A")
-    test("A=a | cat; echo $A")

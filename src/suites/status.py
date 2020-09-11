@@ -12,7 +12,7 @@
 
 from suite import suite
 
-@suite
+@suite()
 def suite_status(test):
     test("echo $?")
     test("echo; echo $?")

@@ -6,13 +6,13 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:57 by charles           #+#    #+#              #
-#    Updated: 2020/07/15 18:24:57 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 14:23:35 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 from suite import suite
 
-@suite
+@suite(bonus=True)
 def suite_parenthesis(test):
     test("(echo bonjour)")
     test("(echo bonjour )")

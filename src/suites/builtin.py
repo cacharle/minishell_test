@@ -15,7 +15,7 @@ import os
 import config
 from suite import suite
 
-@suite
+@suite()
 def suite_echo(test):
     test("echo")
     test("echo bonjour")
@@ -40,7 +40,7 @@ def suite_echo(test):
     test('echo -n a "" b "" c "" d')
     test("echo '' '' ''")
 
-@suite
+@suite()
 def suite_export(test):
     test("export")
     # test("export A=; env | grep A=; echo $A")
@@ -90,7 +90,7 @@ def suite_export(test):
 
     test("export $TEST", exports={"TEST": "A=a"})
 
-@suite
+@suite()
 def suite_cd(test):
     test("cd .; pwd; echo $PWD");
     test("cd ..; pwd; echo $PWD");
@@ -182,7 +182,7 @@ def suite_cd(test):
     test("cd d", setup="mkdir -m 7777 d")
     test("cd d", setup="mkdir -m 0000 d")
 
-@suite
+@suite()
 def suite_unset(test):
     test("unset")
     test("unset A; echo $A", setup="export A=a")
@@ -207,7 +207,7 @@ def suite_unset(test):
             setup="export A=a B=b C=c")
     test("unset A", setup="export A=a B=b C=c")
 
-@suite
+@suite()
 def suite_pwd(test):
     test("pwd")
     test("pwd", setup="cd ..")
@@ -218,14 +218,14 @@ def suite_pwd(test):
     test("pwd | cat -e")
     test("cd lnk; rmdir ../d; pwd", setup="mkdir d; ln -s d lnk")
 
-@suite
+@suite()
 def suite_env(test):
     test("env") # TODO ordering doesn't mater flag
     test("env", setup="export A=a")
     test("env", setup="export A=a B=b C=c")
     test("env | cat -e", setup="export A=a B=b C=c")
 
-@suite
+@suite()
 def suite_exit(test):
     test("exit")
     test("exit 1")

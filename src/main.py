@@ -19,29 +19,26 @@ import distutils.spawn
 import subprocess
 
 import config
+import sandbox
 from args import parse_args
 from suite import Suite
-import suites.builtin
-import suites.cmd
-import suites.preprocess
-import suites.operation
-import suites.parenthesis
-import suites.status
-import suites.path
+from suites import *
 
 def main():
     args = parse_args()
     if args.list:
         print("The available suites are:")
         print('\n'.join([" - " + s.name for s in Suite.available]))
+        print("Groups:")
+        print('\n'.join([" - " + ', '.join(s.groups) for s in Suite.available]))
         sys.exit(0)
 
-    if config.MINISHELL_BUILD or args.build:
+    if config.MINISHELL_MAKE or args.make:
         try:
             subprocess.run(["make", "-C", config.MINISHELL_DIR], check=True)
         except subprocess.CalledProcessError:
             sys.exit(1)
-        if args.build:
+        if args.make:
             sys.exit(0)
     if os.path.exists(config.EXECUTABLES_PATH):
         shutil.rmtree(config.EXECUTABLES_PATH)
@@ -52,11 +49,15 @@ def main():
 
 
     config.VERBOSE_LEVEL = args.verbose
+    if args.bonus:
+        config.BONUS = True
+    if args.no_bonus:
+        config.BONUS = False
     Suite.setup(args.suites)
     try:
         Suite.run_all()
     except KeyboardInterrupt:
-        shutil.rmtree(config.SANDBOX_PATH)
+        sandbox.remove()
 
     Suite.summarize()
     Suite.save_log()
