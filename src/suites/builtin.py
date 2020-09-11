@@ -1,14 +1,15 @@
-# ############################################################################ #
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    builtin.py                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
+#    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 18:26:11 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 18:45:03 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
-# ############################################################################ #
+# **************************************************************************** #
 
 import os
 
@@ -88,6 +89,15 @@ def suite_export(test):
     test("export 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C")
     test("export A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '; echo $A$B$C")
     test("export A B C; echo $A$B$C")
+    test("export 'AH@'=nop")
+    test("export \"AH'\"=nop")
+    test("export 'AH\"'=nop")
+    test("export 'AH$'=nop")
+    test("export 'AH!'=nop")
+    test("export 'AH|'=nop")
+    test("export 'AH;'=nop")
+    test("export 'AH&'=nop")
+    test("export 'AH\\'=nop")
     test("export $TEST", exports={"TEST": "A=a"})
     test(r"export BONJOUR\\JESUIS")
     test(r"export BONJOUR\'JESUIS")
@@ -211,6 +221,16 @@ def suite_unset(test):
     test("unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '",
             exports={"A": "a", "B": "b", "C": "c"})
     test("unset A", exports={"A": "a", "B": "b", "C": "c"})
+
+    test("unset 'AH@'=nop")
+    test("unset \"AH'\"=nop")
+    test("unset 'AH\"'=nop")
+    test("unset 'AH$'=nop")
+    test("unset 'AH!'=nop")
+    test("unset 'AH|'=nop")
+    test("unset 'AH;'=nop")
+    test("unset 'AH&'=nop")
+    test("unset 'AH\\'=nop")
 
 @suite()
 def suite_pwd(test):
