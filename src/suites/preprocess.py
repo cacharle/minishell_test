@@ -1,14 +1,14 @@
-# ############################################################################ #
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    preprocess.py                                      :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
+#    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 14:24:47 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 19:35:26 by juligonz         ###   ########.fr        #
 #                                                                              #
-# ############################################################################ #
+# **************************************************************************** #
 
 import config
 from suite import suite
@@ -193,6 +193,38 @@ def suite_escape(test):
     test(r" \                 echo bonjour")
     test(r"                 \                    echo bonjour")
 
+    test(r'/bin/echo " \  "')
+    test(r'/bin/echo " \" "')
+    test(r'/bin/echo " \' "')
+    test(r'/bin/echo " \a "')
+    test(r'/bin/echo " \b "')
+    test(r'/bin/echo " \| "')
+    test(r'/bin/echo " \! "')
+    test(r'/bin/echo " \@ "')
+    test(r'/bin/echo " \$ "')
+    test(r'/bin/echo " \$LESS "')
+    test(r'/bin/echo " \$? "')
+    test(r'/bin/echo " \\ "')
+    test(r'/bin/echo " \\\ "')
+    test(r'/bin/echo " \\\\ "')
+    test(r'/bin/echo " \\\\\ "')
+    test(r'/bin/echo " \\\\\\ "')
+    test(r'/bin/echo " \\\\\\\ "')
+    test(r'/bin/echo " \\\\\\\\ "')
+  
+    test(r"/bin/echo ' \  '")
+    test(r"/bin/echo ' \" '")
+    test(r"/bin/echo ' \a '")
+    test(r"/bin/echo ' \b '")
+    test(r"/bin/echo ' \| '")
+    test(r"/bin/echo ' \! '")
+    test(r"/bin/echo ' \@ '")
+    test(r"/bin/echo ' \$ '")
+    test(r"/bin/echo ' $LESS '")
+    test(r"/bin/echo ' \$? '")
+    test(r"/bin/echo ' \\ '")
+    test(r"/bin/echo ' \\\ '")
+ 
 
 # @suite(bonus=True)
 # def suite_glob(test):
