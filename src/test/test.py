@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 17:00:25 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 20:00:52 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -28,8 +28,8 @@ class Test:
                  files: [str] = [],
                  exports: {str: str} = {},
                  timeout: float = config.TIMEOUT,
-                 signal = None,
-                 hook = None):
+                 signal=None,
+                 hook=None):
         self.cmd = cmd
         self.setup = setup
         self.files = files
@@ -47,7 +47,7 @@ class Test:
             s = "[SETUP {}] {}".format(self.setup, s)
         if len(self.exports) != 0:
             s = "[EXPORTS {}] {}".format(
-                    ' '.join(["{}='{:.20}'".format(k, v) for k, v in self.exports.items()]), s)
+                ' '.join(["{}='{:.20}'".format(k, v) for k, v in self.exports.items()]), s)
         self.result = Result(s, self.files, expected, actual)
         self.result.put()
 
@@ -61,7 +61,7 @@ class Test:
         sandbox.create()
         if self.setup != "":
             try:
-                setup_status = subprocess.run(
+                subprocess.run(
                     self.setup,
                     shell=True,
                     cwd=config.SANDBOX_PATH,
@@ -108,7 +108,7 @@ class Test:
             try:
                 with open(os.path.join(config.SANDBOX_PATH, file_name), "rb") as f:
                     files_content.append(f.read().decode())
-            except FileNotFoundError as e:
+            except FileNotFoundError:
                 files_content.append(None)
         sandbox.remove()
         if self.hook is not None:

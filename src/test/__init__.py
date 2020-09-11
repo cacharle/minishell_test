@@ -6,8 +6,8 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:18:14 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 12:26:30 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 20:18:10 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-from test.test import Test
+from test.test import Test  # noqa: F401

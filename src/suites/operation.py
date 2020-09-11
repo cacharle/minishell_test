@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 17:43:58 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 20:12:54 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -26,11 +26,11 @@ def suite_end(test):
     test("; echo", hook=hooks.error_line0)
     test(" ;echo", hook=hooks.error_line0)
     test(" ; echo", hook=hooks.error_line0)
-    test("echo a; echo b; echo c; echo d; echo e; echo f; echo g; echo h; echo i;" +
-         "echo j; echo k; echo l; echo m; echo c; echo c; echo c; echo c; echo c;" +
+    test("echo a; echo b; echo c; echo d; echo e; echo f; echo g; echo h; echo i;"
+         "echo j; echo k; echo l; echo m; echo c; echo c; echo c; echo c; echo c;"
          "echo c; echo c; echo c; echo v; echo w; echo x; echo y; echo z")
-    test("echo a ; echo b; echo c ;echo d     ;   echo e   ;echo f;        echo g  ;echo h; echo i;" +
-         "echo j  ; echo k; echo l; echo m; echo c    ; echo c; echo c    ; echo c; echo c;" +
+    test("echo a ; echo b; echo c ;echo d     ;   echo e   ;echo f;        echo g  ;echo h; echo i;"
+         "echo j  ; echo k; echo l; echo m; echo c    ; echo c; echo c    ; echo c; echo c;"
          "echo c; echo c   ; echo c; echo v   ; echo w;    echo x; echo y    ; echo z")
     test("ls doesnotexists ; echo bonjour")
     test("ls doesnotexists; echo bonjour")
@@ -70,11 +70,11 @@ def suite_and(test):
     test("&&echo", hook=hooks.error_line0)
     test("&& echo", hook=hooks.error_line0)
     test(" && echo", hook=hooks.error_line0)
-    test("echo a&& echo b&& echo c&& echo d&& echo e&& echo f&& echo g&& echo h&& echo i&&" +
-         "echo j&& echo k&& echo l&& echo m&& echo c&& echo c&& echo c&& echo c&& echo c&&" +
+    test("echo a&& echo b&& echo c&& echo d&& echo e&& echo f&& echo g&& echo h&& echo i&&"
+         "echo j&& echo k&& echo l&& echo m&& echo c&& echo c&& echo c&& echo c&& echo c&&"
          "echo c&& echo c&& echo c&& echo v&& echo w&& echo x&& echo y&& echo z")
-    test("echo a && echo b&& echo c &&echo d     &&   echo e   &&echo f&&        echo g  &&echo h&& echo i&&" +
-         "echo j  && echo k&& echo l&& echo m&& echo c    && echo c&& echo c    && echo c&& echo c&&" +
+    test("echo a && echo b&& echo c &&echo d     &&   echo e   &&echo f&&        echo g  &&echo h&& echo i&&"
+         "echo j  && echo k&& echo l&& echo m&& echo c    && echo c&& echo c    && echo c&& echo c&&"
          "echo c&& echo c   && echo c&& echo v   && echo w&&    echo x&& echo y    && echo z")
     test("ls doesnotexists && echo bonjour")
     test("ls doesnotexists&& echo bonjour")
@@ -93,11 +93,11 @@ def suite_or(test):
     test("||echo", hook=hooks.error_line0)
     test("|| echo", hook=hooks.error_line0)
     test(" || echo", hook=hooks.error_line0)
-    test("echo a|| echo b|| echo c|| echo d|| echo e|| echo f|| echo g|| echo h|| echo i||" +
-         "echo j|| echo k|| echo l|| echo m|| echo c|| echo c|| echo c|| echo c|| echo c||" +
+    test("echo a|| echo b|| echo c|| echo d|| echo e|| echo f|| echo g|| echo h|| echo i||"
+         "echo j|| echo k|| echo l|| echo m|| echo c|| echo c|| echo c|| echo c|| echo c||"
          "echo c|| echo c|| echo c|| echo v|| echo w|| echo x|| echo y|| echo z")
-    test("echo a || echo b|| echo c ||echo d     ||   echo e   ||echo f||        echo g  ||echo h|| echo i||" +
-         "echo j  || echo k|| echo l|| echo m|| echo c    || echo c|| echo c    || echo c|| echo c||" +
+    test("echo a || echo b|| echo c ||echo d     ||   echo e   ||echo f||        echo g  ||echo h|| echo i||"
+         "echo j  || echo k|| echo l|| echo m|| echo c    || echo c|| echo c    || echo c|| echo c||"
          "echo c|| echo c   || echo c|| echo v   || echo w||    echo x|| echo y    || echo z")
     test("ls doesnotexists || echo bonjour")
     test("ls doesnotexists|| echo bonjour")

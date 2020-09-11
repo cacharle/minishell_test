@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:57 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 17:43:34 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 20:12:27 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -27,23 +27,23 @@ def suite_parenthesis(test):
     test("(echo bonjour > f1)", files=["f1"])
     test("(echo bonjour > f1 > f2 > f3)", files=["f1", "f2", "f3"])
     test("(echo bonjour > f1 > f2 > f3 > f4 > f5 > f6 > f7 > f8 > f9)",
-            files=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9"])
+         files=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9"])
     test("(echo bonjour) > f1", files=["f1"])
     test("(echo bonjour) > f1 > f2 > f3", files=["f1", "f2", "f3"])
     test("(echo bonjour) > f1 > f2 > f3 > f4 > f5 > f6 > f7 > f8 > f9",
-            files=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9"])
+         files=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9"])
     test("(cat -e < f1)", setup="echo bonjour > f1")
     test("(cat -e < f1 < f2 < f3)", setup="touch f1 f2 f3 f4; echo bonjour > f3")
     test("(cat -e < f1 < f2 < f3 < f4 < f5 < f6 < f7 < f8 < f9)",
-            setup="touch f1 f2 f3 f4 f5 f6 f7 f8 f9; echo bonjour > f9")
+         setup="touch f1 f2 f3 f4 f5 f6 f7 f8 f9; echo bonjour > f9")
     test("(cat -e) < f1", setup="echo bonjour > f1")
     test("(cat -e) < f1 < f2 < f3", setup="touch f1 f2 f3 f4; echo bonjour > f3")
     test("(cat -e) < f1 < f2 < f3 < f4 < f5 < f6 < f7 < f8 < f9",
-            setup="touch f1 f2 f3 f4 f5 f6 f7 f8 f9; echo bonjour > f9")
+         setup="touch f1 f2 f3 f4 f5 f6 f7 f8 f9; echo bonjour > f9")
     test("(echo bonjour > f1 > f2 > f3 > f4) > f5 > f6 > f7 > f8 > f9",
-            files=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9"])
+         files=["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9"])
     test("(cat -e < f1 < f2 < f3 < f4) < f5 < f6 < f7 < f8 < f9",
-            setup="touch f1 f2 f3 f4 f5 f6 f7 f8 f9; echo bonjour > f4")
+         setup="touch f1 f2 f3 f4 f5 f6 f7 f8 f9; echo bonjour > f4")
     test("(echo bonjour > f1) > f2", files=["f1", "f2"])
     test("(cat -e > f1) < f2", setup="ls -l / > f2", files=["f1"])
     test("(exit); echo bonjour")

@@ -6,12 +6,15 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 12:24:57 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 20:06:31 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
+import sys
+
 import config
 from test.captured import Captured
+
 
 class Result:
     RED_CHARS   = "\033[31m"
@@ -125,8 +128,10 @@ class Result:
         if self.actual.is_timeout:
             return "TIMEOUT\n"
         if self.expected.status != self.actual.status:
-            out += self.indicator("STATUS: expected {} actual {}"
-                    .format(self.expected.status, self.actual.status), "| ") + '\n'
+            out += self.indicator(
+                "STATUS: expected {} actual {}"
+                .format(self.expected.status, self.actual.status), "| "
+            ) + '\n'
         if self.expected.output != self.actual.output:
             out += (self.expected_header + '\n'
                     + self.cat_e(self.expected.output)
@@ -151,9 +156,8 @@ class Result:
     @property
     def escaped_cmd(self):
         return (self.cmd
-            .replace("\t", "\\t")
-            .replace("\n", "\\n")
-            .replace("\v", "\\v")
-            .replace("\r", "\\r")
-            .replace("\f", "\\f")
-        )
+                .replace("\t", "\\t")
+                .replace("\n", "\\n")
+                .replace("\v", "\\v")
+                .replace("\r", "\\r")
+                .replace("\f", "\\f"))

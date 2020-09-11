@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 18:45:03 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 19:56:44 by charles          ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -16,6 +16,7 @@ import os
 import config
 import hooks
 from suite import suite
+
 
 @suite()
 def suite_echo(test):
@@ -39,6 +40,7 @@ def suite_echo(test):
     test('echo -n a "" b "" c "" d')
     test("echo '' '' ''")
 
+
 @suite()
 def suite_export(test):
     test("export", hook=hooks.export_singleton)
@@ -49,9 +51,9 @@ def suite_export(test):
     test("export", exports={"A": "a"}, hook=hooks.export_singleton)
     test("export A=a; echo $A")
     test("export A=a B=b C=c; echo $A$B$C")
-    test("export A=a B=b C=c D=d E=e F=f G=g H=h I=i J=j K=k L=l" +
-            "M=m N=n O=o P=p Q=q R=r S=s T=t U=u V=v W=w X=x Y=y Z=z" +
-            "; echo $A$B$C$D$E$F$G$H$I$J$K$L$M$N$O$P$Q$R$S$T$U$V$W$X$Y$Z")
+    test("export A=a B=b C=c D=d E=e F=f G=g H=h I=i J=j K=k L=l"
+         "M=m N=n O=o P=p Q=q R=r S=s T=t U=u V=v W=w X=x Y=y Z=z"
+         "; echo $A$B$C$D$E$F$G$H$I$J$K$L$M$N$O$P$Q$R$S$T$U$V$W$X$Y$Z")
     test("export BONJOURJESUIS=a; echo $BONJOURJESUIS")
     test("export bonjourjesuis=a; echo $bonjourjesuis")
     test("export bonjour_je_suis=a; echo $bonjour_je_suis")
@@ -112,32 +114,32 @@ def suite_export(test):
 
 @suite()
 def suite_cd(test):
-    test("cd .; pwd; echo $PWD");
-    test("cd ..; pwd; echo $PWD");
-    test("cd ../..; pwd; echo $PWD");
-    test("cd ../../..; pwd; echo $PWD");
-    test("cd ../../../..; pwd; echo $PWD");
-    test("cd ../../../../..; pwd; echo $PWD");
-    test("cd ../../../../../..; pwd; echo $PWD");
-    test("cd /; pwd; echo $PWD");
-    test("cd /etc; pwd; echo $PWD");
-    test("cd ''; pwd; echo $PWD");
-    test("cd '' ''; pwd; echo $PWD");
-    test("cd '' '' ''; pwd; echo $PWD");
-    test("cd ' '; pwd; echo $PWD");
+    test("cd .; pwd; echo $PWD")
+    test("cd ..; pwd; echo $PWD")
+    test("cd ../..; pwd; echo $PWD")
+    test("cd ../../..; pwd; echo $PWD")
+    test("cd ../../../..; pwd; echo $PWD")
+    test("cd ../../../../..; pwd; echo $PWD")
+    test("cd ../../../../../..; pwd; echo $PWD")
+    test("cd /; pwd; echo $PWD")
+    test("cd /etc; pwd; echo $PWD")
+    test("cd ''; pwd; echo $PWD")
+    test("cd '' ''; pwd; echo $PWD")
+    test("cd '' '' ''; pwd; echo $PWD")
+    test("cd ' '; pwd; echo $PWD")
     test("cd d ''; pwd; echo $PWD", setup="mkdir d")
     test("cd d d; pwd; echo $PWD", setup="mkdir d")
     test("cd d ' '; pwd; echo $PWD", setup="mkdir d")
-    test("cd $HOME; pwd; echo $PWD");
-    test("cd $HOME; pwd; echo $PWD", exports={"HOME": os.getenv("HOME")});
-    test("cd /; pwd; echo $PWD");
-    test("cd /.; pwd; echo $PWD");
-    test("cd /./; pwd; echo $PWD");
-    test("cd /././././; pwd; echo $PWD");
-    test("cd //; pwd; echo $PWD");
-    test("cd ///; pwd; echo $PWD");
-    test("cd ////; pwd; echo $PWD");
-    test("cd //////////////////////////////////////////////////////; pwd; echo $PWD");
+    test("cd $HOME; pwd; echo $PWD")
+    test("cd $HOME; pwd; echo $PWD", exports={"HOME": os.getenv("HOME")})
+    test("cd /; pwd; echo $PWD")
+    test("cd /.; pwd; echo $PWD")
+    test("cd /./; pwd; echo $PWD")
+    test("cd /././././; pwd; echo $PWD")
+    test("cd //; pwd; echo $PWD")
+    test("cd ///; pwd; echo $PWD")
+    test("cd ////; pwd; echo $PWD")
+    test("cd //////////////////////////////////////////////////////; pwd; echo $PWD")
     test("cd")
     test("cd ' /'; pwd; echo $PWD")
     test("cd ' / '; pwd; echo $PWD")
@@ -206,22 +208,21 @@ def suite_unset(test):
     test("unset 'A='; echo $A", exports={"A": "a"})
     test("unset A B C; echo $A$B$C", exports={"A": "a", "B": "b", "C": "c"})
     test("unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C",
-            exports={"A": "a", "B": "b", "C": "c"})
+         exports={"A": "a", "B": "b", "C": "c"})
     test("unset 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C",
-            exports={"A": "a", "B": "b", "C": "c"})
+         exports={"A": "a", "B": "b", "C": "c"})
     test("unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '; echo $A$B$C",
-            exports={"A": "a", "B": "b", "C": "c"})
+         exports={"A": "a", "B": "b", "C": "c"})
     test("unset A; echo $A$B$C", exports={"A": "a", "B": "b", "C": "c"})
     test("unset C; echo $A$B$C", exports={"A": "a", "B": "b", "C": "c"})
     test("unset A B C", exports={"A": "a", "B": "b", "C": "c"})
     test("unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C",
-            exports={"A": "a", "B": "b", "C": "c"})
+         exports={"A": "a", "B": "b", "C": "c"})
     test("unset 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C",
-            exports={"A": "a", "B": "b", "C": "c"})
+         exports={"A": "a", "B": "b", "C": "c"})
     test("unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '",
-            exports={"A": "a", "B": "b", "C": "c"})
+         exports={"A": "a", "B": "b", "C": "c"})
     test("unset A", exports={"A": "a", "B": "b", "C": "c"})
-
     test("unset 'AH@'=nop")
     test("unset \"AH'\"=nop")
     test("unset 'AH\"'=nop")
@@ -231,6 +232,7 @@ def suite_unset(test):
     test("unset 'AH;'=nop")
     test("unset 'AH&'=nop")
     test("unset 'AH\\'=nop")
+
 
 @suite()
 def suite_pwd(test):
@@ -243,12 +245,14 @@ def suite_pwd(test):
     test("pwd | cat -e")
     # test("cd lnk; rmdir ../d; pwd", setup="mkdir d; ln -s d lnk")
 
+
 @suite()
 def suite_env(test):
     test("env", hook=hooks.sort_lines)
     test("env", setup="export A=a", hook=hooks.sort_lines)
     test("env", setup="export A=a B=b C=c", hook=hooks.sort_lines)
     test("env | cat -e", setup="export A=a B=b C=c", hook=hooks.sort_lines)
+
 
 @suite()
 def suite_exit(test):
@@ -316,16 +320,16 @@ def suite_exit(test):
     test("exit 0123456789")
     test("exit -0123456789")
     test("exit 00000000000000000000000000000000000000000000001")
-    test("exit 00000000000000000000000000000000000000000000000" +
-            "00000000000000000000000000000000000000000000001")
-    test("exit 00000000000000000000000000000000000000000000000" +
-            "00000000000000000000000000000000000000000000000")
-    test("exit -00000000000000000000000000000000000000000000000" +
-            "00000000000000000000000000000000000000000000001")
-    test("exit -99999999999999999999999999999999999999999999" +
-            "99999999999999999999999999999999999999999999")
-    test("exit 99999999999999999999999999999999999999999999" +
-            "99999999999999999999999999999999999999999999")
+    test("exit 00000000000000000000000000000000000000000000000"
+         "00000000000000000000000000000000000000000000001")
+    test("exit 00000000000000000000000000000000000000000000000"
+         "00000000000000000000000000000000000000000000000")
+    test("exit -00000000000000000000000000000000000000000000000"
+         "00000000000000000000000000000000000000000000001")
+    test("exit -99999999999999999999999999999999999999999999"
+         "99999999999999999999999999999999999999999999")
+    test("exit 99999999999999999999999999999999999999999999"
+         "99999999999999999999999999999999999999999999")
     test("exit 0 bonjour")
     test("exit bonjour 0")
     test("exit 0 1")

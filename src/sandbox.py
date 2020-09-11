@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 13:48:07 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 13:50:08 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 19:53:13 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -16,6 +16,7 @@ import shutil
 import subprocess
 
 import config
+
 
 def create():
     try:
@@ -27,6 +28,6 @@ def create():
 def remove():
     try:
         shutil.rmtree(config.SANDBOX_PATH)
-    except:
+    except PermissionError:
         subprocess.run(["chmod", "777", *glob.glob(config.SANDBOX_PATH + "/*")], check=True)
         subprocess.run(["rm", "-rf", config.SANDBOX_PATH], check=True)

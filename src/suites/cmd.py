@@ -6,13 +6,12 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 15:11:46 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 18:29:06 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 20:12:16 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import distutils
 
-import config
 import hooks
 from suite import suite
 
@@ -60,11 +59,11 @@ def suite_redirection(test):
     test("echo bonjour>>test>je>>suis", setup="", files=["test", "je", "suis"])
     test("cat<test<je", setup="echo bonjour > test; echo salut > je")
     test("echo bonjour > a'b'c'd'e'f'g'h'i'j'k'l'm'n'o'p'q'r's't'u'v'w'x'y'z'",
-            files=["abcdefghijklmnopqrstuvwxyz"])
+         files=["abcdefghijklmnopqrstuvwxyz"])
     test('echo bonjour > a"b"c"d"e"f"g"h"i"j"k"l"m"n"o"p"q"r"s"t"u"v"w"x"y"z"',
-            files=["abcdefghijklmnopqrstuvwxyz"])
+         files=["abcdefghijklmnopqrstuvwxyz"])
     test('echo bonjour > a\'b\'c"d"e\'f\'g"h"i\'j\'k"l"m\'n\'o"p\'q\'r"s\'t\'u"v"w"x"y\'z\'',
-            files=["abcdefghijklmnopqrstuvwxyz"])
+         files=["abcdefghijklmnopqrstuvwxyz"])
     test("> file", files=["file"])
     test("< file", setup="echo bonjour > file")
     test(">", hook=hooks.error_line0)
@@ -119,12 +118,12 @@ def suite_cmd_path(test):
     test("./bonjour", setup="touch a b c; cp {} bonjour".format(ls_path))
     test("./bonjour -l", setup="touch a b c; cp {} bonjour".format(ls_path))
     test("./somedir/bonjour -l",
-            setup="mkdir somedir; touch a b c; touch somedir/d somedir/e;" +
-                  "cp {} somedir/bonjour".format(ls_path))
+         setup="mkdir somedir; touch a b c; touch somedir/d somedir/e;"
+               "cp {} somedir/bonjour".format(ls_path))
     test("./ls . a b c",
-            setup="touch a b c; echo bonjour > a; cp {} ls".format(cat_path))
+         setup="touch a b c; echo bonjour > a; cp {} ls".format(cat_path))
     test("ls . a b c",
-            setup="touch a b c; echo bonjour > a; cp {} ls".format(cat_path))
+         setup="touch a b c; echo bonjour > a; cp {} ls".format(cat_path))
     test("./somefile", setup="touch somefile; chmod 000 somefile")
     test("./somefile", setup="touch somefile; chmod 001 somefile")
     test("./somefile", setup="touch somefile; chmod 002 somefile")
@@ -165,17 +164,17 @@ def suite_cmd_path(test):
     test("somedirsoftlink",    setup="mkdir somedir; ln -s somedir somedirsoftlink")
     test("./someremovedlink",  setup="touch somefile; ln -s somefile someremovedlink; rm -f somefile")
     test("./somelink2", setup="touch somefile; ln -s somefile somelink1; ln -s somelink1 somelink2")
-    test("./somelink3", setup="touch somefile; ln -s somefile somelink1; ln -s somelink1 somelink2;" +
-                                               "ln -s somelink2 somelink3")
-    test("./somelink4", setup="touch somefile; ln -s somefile somelink1; ln -s somelink1 somelink2;" +
-                                               "ln -s somelink2 somelink3; ln -s somelink3 somelink4")
-    test("./somelink2ls", setup="cp " + ls_path + " somefile;" +
+    test("./somelink3", setup="touch somefile; ln -s somefile somelink1; ln -s somelink1 somelink2;"
+                              "ln -s somelink2 somelink3")
+    test("./somelink4", setup="touch somefile; ln -s somefile somelink1; ln -s somelink1 somelink2;"
+                              "ln -s somelink2 somelink3; ln -s somelink3 somelink4")
+    test("./somelink2ls", setup="cp " + ls_path + " somefile;"
                                 "ln -s somefile somelink1; ln -s somelink1 somelink2")
-    test("./somelink3ls", setup="cp " + ls_path + " somefile;" +
-                                "ln -s somefile somelink1; ln -s somelink1 somelink2;" +
+    test("./somelink3ls", setup="cp " + ls_path + " somefile;"
+                                "ln -s somefile somelink1; ln -s somelink1 somelink2;"
                                 "ln -s somelink2 somelink3")
-    test("./somelink4ls", setup="cp " + ls_path + " somefile;" +
-                                "ln -s somefile somelink1; ln -s somelink1 somelink2;" +
+    test("./somelink4ls", setup="cp " + ls_path + " somefile;"
+                                "ln -s somefile somelink1; ln -s somelink1 somelink2;"
                                 "ln -s somelink2 somelink3; ln -s somelink3 somelink4")
     test("_", setup="touch _")
     test("'-'", setup="touch -")

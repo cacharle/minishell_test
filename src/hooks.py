@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 18:26:58 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 19:53:43 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -35,6 +35,6 @@ def discard(output):
 
 def export_singleton(output):
     return sort_lines(
-        '\n'.join([l for l in output.split('\n')
-                   if regex.match("^declare -x .+=\".*\"$", l) is not None])
+        '\n'.join([line for line in output.split('\n')
+                   if regex.match("^declare -x .+=\".*\"$", line) is not None])
     )

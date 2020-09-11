@@ -6,12 +6,12 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/09 15:12:58 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 17:43:14 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 20:13:09 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-import config
 from suite import suite
+
 
 @suite()
 def suite_path(test):

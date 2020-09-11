@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 17:48:25 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 20:08:39 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -28,8 +28,8 @@ class Suite:
         if not config.BONUS:
             cls.available = [s for s in cls.available if not s.bonus]
         cls.available = list(set(
-            [s for s in cls.available if s.name in asked_names] +
-            [s for s in cls.available if any([g for g in s.groups if g in asked_names])]
+            [s for s in cls.available if s.name in asked_names]
+            + [s for s in cls.available if any([g for g in s.groups if g in asked_names])]
         ))
         for s in cls.available:
             s.generate()
@@ -85,9 +85,9 @@ class Suite:
             pass_sum += pass_total
             fail_sum += fail_total
             print("{:<30} \033[32m{:3} [PASS]\033[0m  \033[31m{:3} [FAIL]\033[0m"
-                    .format(s.name, pass_total, fail_total))
+                  .format(s.name, pass_total, fail_total))
         print("{:<30} \033[32m{:3} [PASS]\033[0m  \033[31m{:3} [FAIL]\033[0m"
-                .format("TOTAL", pass_sum, fail_sum))
+              .format("TOTAL", pass_sum, fail_sum))
 
     @classmethod
     def save_log(cls):

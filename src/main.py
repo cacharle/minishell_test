@@ -22,7 +22,8 @@ import config
 import sandbox
 from args import parse_args
 from suite import Suite
-from suites import *
+from suites import *  # noqa: F403,F401
+
 
 def main():
     args = parse_args()
@@ -46,7 +47,6 @@ def main():
     for cmd in config.AVAILABLE_COMMANDS:
         shutil.copy(distutils.spawn.find_executable(cmd),  # FIXME search whole PATH
                     os.path.join(config.EXECUTABLES_PATH, cmd))
-
 
     config.VERBOSE_LEVEL = args.verbose
     if args.bonus:
