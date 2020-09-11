@@ -6,13 +6,14 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/09/09 13:28:02 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 16:13:26 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import os
 
 import config
+import hooks
 from suite import suite
 
 @suite()
@@ -42,7 +43,7 @@ def suite_echo(test):
 
 @suite()
 def suite_export(test):
-    test("export")
+    test("export", hook=hooks.sort_lines)
     # test("export A=; env | grep A=; echo $A")
     # test("export A; env | grep A; echo $A")
     test("export A=a; echo $A")
@@ -105,8 +106,8 @@ def suite_cd(test):
     test("cd '' ''; pwd; echo $PWD");
     test("cd '' '' ''; pwd; echo $PWD");
     test("cd ' '; pwd; echo $PWD");
-    test("cd '\t'; pwd; echo $PWD");
-    test("cd '\t   \t\t\t    '; pwd; echo $PWD");
+    # test("cd '\t'; pwd; echo $PWD");
+    # test("cd '\t   \t\t\t    '; pwd; echo $PWD");
     test("cd d ''; pwd; echo $PWD", setup="mkdir d")
     test("cd d d; pwd; echo $PWD", setup="mkdir d")
     test("cd d ' '; pwd; echo $PWD", setup="mkdir d")
@@ -220,10 +221,10 @@ def suite_pwd(test):
 
 @suite()
 def suite_env(test):
-    test("env") # TODO ordering doesn't mater flag
-    test("env", setup="export A=a")
-    test("env", setup="export A=a B=b C=c")
-    test("env | cat -e", setup="export A=a B=b C=c")
+    test("env", hook=hooks.sort_lines)
+    test("env", setup="export A=a", hook=hooks.sort_lines)
+    test("env", setup="export A=a B=b C=c", hook=hooks.sort_lines)
+    test("env | cat -e", setup="export A=a B=b C=c", hook=hooks.sort_lines)
 
 @suite()
 def suite_exit(test):

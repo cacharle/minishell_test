@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 15:11:46 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 14:25:04 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 16:14:18 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -315,3 +315,17 @@ def suite_cmd_path(test):
     test("./somedir", setup='mkdir somedir && chmod 6777 somedir')
     test("./somedir", setup='mkdir somedir && chmod 0000 somedir')
     test("./somedir", setup='mkdir somedir && chmod 0000 somedir')
+
+
+@suite()
+def suite_status(test):
+    test("echo $?")
+    test("echo; echo $?")
+    test("notfound; echo $?")
+    test("cat < doesntexist; echo $?")
+    test("cat < noperm; echo $?", setup="echo bonjour > noperm; chmod 000 noperm")
+
+    test("echo")
+    test("notfound")
+    test("cat < doesntexist")
+    test("cat < noperm", setup="echo bonjour > noperm; chmod 000 noperm")

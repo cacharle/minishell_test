@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:57 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 14:23:35 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 16:13:54 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -55,3 +55,8 @@ def suite_parenthesis(test):
 
     test("(exit); echo bonjour")
     test("(echo bonjour; exit; echo aurevoir)")
+
+    test("(ls && ls)")
+    test("(ls doesntexist || ls)")
+    test("(ls doesntexist && ls)")
+    test("(ls && ls) && echo $?")

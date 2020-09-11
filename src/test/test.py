@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 13:50:16 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 16:08:07 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -28,7 +28,8 @@ class Test:
                  files: [str] = [],
                  exports: {str: str} = {},
                  timeout: float = config.TIMEOUT,
-                 signal = None):
+                 signal = None,
+                 hook = None):
         self.cmd = cmd
         self.setup = setup
         self.files = files
@@ -36,6 +37,7 @@ class Test:
         self.result = None
         self.timeout = timeout
         self.signal = signal
+        self.hook = hook
 
     def run(self):
         expected = self._run_sandboxed(config.REFERENCE_PATH, "-c")
@@ -109,4 +111,7 @@ class Test:
             except FileNotFoundError as e:
                 files_content.append(None)
         sandbox.remove()
+        if self.hook is not None:
+            output = self.hook(output)
+            output = '\n'.join(sorted(output.split('\n')))
         return Captured(output, process.returncode, files_content)
