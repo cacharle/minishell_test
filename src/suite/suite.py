@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 14:18:01 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 17:48:25 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -84,9 +84,9 @@ class Suite:
                 continue
             pass_sum += pass_total
             fail_sum += fail_total
-            print("{:<15} \033[32m{:3} [PASS]\033[0m  \033[31m{:3} [FAIL]\033[0m"
+            print("{:<30} \033[32m{:3} [PASS]\033[0m  \033[31m{:3} [FAIL]\033[0m"
                     .format(s.name, pass_total, fail_total))
-        print("{:<15} \033[32m{:3} [PASS]\033[0m  \033[31m{:3} [FAIL]\033[0m"
+        print("{:<30} \033[32m{:3} [PASS]\033[0m  \033[31m{:3} [FAIL]\033[0m"
                 .format("TOTAL", pass_sum, fail_sum))
 
     @classmethod

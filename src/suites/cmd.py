@@ -6,13 +6,14 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 15:11:46 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 16:34:19 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 18:29:06 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import distutils
 
 import config
+import hooks
 from suite import suite
 
 
@@ -26,7 +27,6 @@ def suite_redirection(test):
     test(">> test echo bonjour", setup="", files=["test"])
     test("cat < test", setup="echo bonjour > test")
     test("echo bonjour > test", setup="", files=["test"])
-
     test("echo > test'sticked' bonjour", setup="", files=["teststicked"])
     test("> test'sticked' echo bonjour", setup="", files=["teststicked"])
     test("echo bonjour >> test'sticked'", setup="", files=["teststicked"])
@@ -34,7 +34,6 @@ def suite_redirection(test):
     test(">> test'sticked' echo bonjour", setup="", files=["teststicked"])
     test("cat < test'sticked'", setup="echo bonjour > test'sticked'")
     test("< test'sticked' cat", setup="echo bonjour > test'sticked'")
-
     test("echo > test\"sticked\" bonjour", setup="", files=["teststicked"])
     test("> test\"sticked\" echo bonjour", setup="", files=["teststicked"])
     test("echo bonjour >> test\"sticked\"", setup="", files=["teststicked"])
@@ -42,7 +41,6 @@ def suite_redirection(test):
     test(">> test\"sticked\" echo bonjour", setup="", files=["teststicked"])
     test("cat < test\"sticked\"", setup="echo bonjour > test\"sticked\"")
     test("< test\"sticked\" cat", setup="echo bonjour > test\"sticked\"")
-
     test("echo > test'yo'\"sticked\" bonjour", setup="", files=["testyosticked"])
     test("> test'yo'\"sticked\" echo bonjour", setup="", files=["testyosticked"])
     test("echo bonjour >> test'yo'\"sticked\"", setup="", files=["testyosticked"])
@@ -50,7 +48,6 @@ def suite_redirection(test):
     test(">> test'yo'\"sticked\" echo bonjour", setup="", files=["testyosticked"])
     test("cat < test'yo'\"sticked\"", setup="echo bonjour > test'yo'\"sticked\"")
     test("< test'yo'\"sticked\" cat", setup="echo bonjour > test'yo'\"sticked\"")
-
     test("echo bonjour > test > je > suis", setup="", files=["test", "je", "suis"])
     test("echo > test > je bonjour > suis", setup="", files=["test", "je", "suis"])
     test("> test echo bonjour > je > suis", setup="", files=["test", "je", "suis"])
@@ -58,41 +55,33 @@ def suite_redirection(test):
     test("echo >> test bonjour > je > suis", setup="", files=["test", "je", "suis"])
     test(">> test echo > je bonjour > suis", setup="", files=["test", "je", "suis"])
     test("cat < test < je", setup="echo bonjour > test; echo salut > je")
-
     test("echo bonjour>test>je>suis", setup="", files=["test", "je", "suis"])
     test(">test echo bonjour>je>suis", setup="", files=["test", "je", "suis"])
     test("echo bonjour>>test>je>>suis", setup="", files=["test", "je", "suis"])
     test("cat<test<je", setup="echo bonjour > test; echo salut > je")
-
     test("echo bonjour > a'b'c'd'e'f'g'h'i'j'k'l'm'n'o'p'q'r's't'u'v'w'x'y'z'",
             files=["abcdefghijklmnopqrstuvwxyz"])
     test('echo bonjour > a"b"c"d"e"f"g"h"i"j"k"l"m"n"o"p"q"r"s"t"u"v"w"x"y"z"',
             files=["abcdefghijklmnopqrstuvwxyz"])
     test('echo bonjour > a\'b\'c"d"e\'f\'g"h"i\'j\'k"l"m\'n\'o"p\'q\'r"s\'t\'u"v"w"x"y\'z\'',
             files=["abcdefghijklmnopqrstuvwxyz"])
-
     test("> file", files=["file"])
     test("< file", setup="echo bonjour > file")
-
-    test(">")
-    test(">>")
-    test("<")
-    test("echo >")
-    test("echo >>")
-    test("echo <")
-
+    test(">", hook=hooks.error_line0)
+    test(">>", hook=hooks.error_line0)
+    test("<", hook=hooks.error_line0)
+    test("echo >", hook=hooks.error_line0)
+    test("echo >>", hook=hooks.error_line0)
+    test("echo <", hook=hooks.error_line0)
     test("> test", files=["test"])
     test(">> test", files=["test"])
     test("< test", setup="touch test")
-
-    test("echo foo >>> bar")
-    test("echo foo >>>> bar")
-    test("echo foo >>>>> bar")
-
-    test("cat << < bar", setup="echo bonjour > bar")
-    test("cat <<<< bar", setup="echo bonjour > bar")
-    test("cat <<<<< bar", setup="echo bonjour > bar")
-
+    test("echo foo >>> bar", hook=hooks.error_line0)
+    test("echo foo >>>> bar", hook=hooks.error_line0)
+    test("echo foo >>>>> bar", hook=hooks.error_line0)
+    test("cat << < bar", setup="echo bonjour > bar", hook=hooks.error_line0)
+    test("cat << << bar", setup="echo bonjour > bar", hook=hooks.error_line0)
+    test("cat <<<<< bar", setup="echo bonjour > bar", hook=hooks.error_line0)
     test("cat < doesnotexist")
 
 
@@ -115,7 +104,6 @@ def suite_status(test):
     test("notfound; echo $?")
     test("cat < doesntexist; echo $?")
     test("cat < noperm; echo $?", setup="echo bonjour > noperm; chmod 000 noperm")
-
     test("echo")
     test("notfound")
     test("cat < doesntexist")
@@ -126,7 +114,6 @@ def suite_status(test):
 def suite_cmd_path(test):
     ls_path = distutils.spawn.find_executable("ls")
     cat_path = distutils.spawn.find_executable("cat")
-
     test(ls_path, setup="touch a b c")
     test(ls_path + " -l", setup="touch a b c")
     test("./bonjour", setup="touch a b c; cp {} bonjour".format(ls_path))
@@ -134,12 +121,10 @@ def suite_cmd_path(test):
     test("./somedir/bonjour -l",
             setup="mkdir somedir; touch a b c; touch somedir/d somedir/e;" +
                   "cp {} somedir/bonjour".format(ls_path))
-
     test("./ls . a b c",
             setup="touch a b c; echo bonjour > a; cp {} ls".format(cat_path))
     test("ls . a b c",
             setup="touch a b c; echo bonjour > a; cp {} ls".format(cat_path))
-
     test("./somefile", setup="touch somefile; chmod 000 somefile")
     test("./somefile", setup="touch somefile; chmod 001 somefile")
     test("./somefile", setup="touch somefile; chmod 002 somefile")
@@ -162,34 +147,28 @@ def suite_cmd_path(test):
     test("./somefile", setup="touch somefile; chmod 500 somefile")
     test("./somefile", setup="touch somefile; chmod 600 somefile")
     test("./somefile", setup="touch somefile; chmod 700 somefile")
-
     test("./somefile", setup="touch somefile; chmod 755 somefile")
     test("./somefile", setup="touch somefile; chmod 644 somefile")
     test("./somefile", setup="touch somefile; chmod 311 somefile")
     test("./somefile", setup="touch somefile; chmod 111 somefile")
     test("./somefile", setup="touch somefile; chmod 222 somefile")
     test("./somefile", setup="touch somefile; chmod 333 somefile")
-
     test("somedir/",   setup="mkdir somedir")
     test("./somedir/", setup="mkdir somedir")
     test("somedir",    setup="mkdir somedir")
     test("./somedir",  setup="mkdir somedir")
     test("somedir",    setup="mkdir somedir")
-
     test("somedirsoftlink/",   setup="mkdir somedir; ln -s somedir somedirsoftlink")
     test("./somedirsoftlink/", setup="mkdir somedir; ln -s somedir somedirsoftlink")
     test("somedirsoftlink",    setup="mkdir somedir; ln -s somedir somedirsoftlink")
     test("./somedirsoftlink",  setup="mkdir somedir; ln -s somedir somedirsoftlink")
     test("somedirsoftlink",    setup="mkdir somedir; ln -s somedir somedirsoftlink")
-
     test("./someremovedlink",  setup="touch somefile; ln -s somefile someremovedlink; rm -f somefile")
-
     test("./somelink2", setup="touch somefile; ln -s somefile somelink1; ln -s somelink1 somelink2")
     test("./somelink3", setup="touch somefile; ln -s somefile somelink1; ln -s somelink1 somelink2;" +
                                                "ln -s somelink2 somelink3")
     test("./somelink4", setup="touch somefile; ln -s somefile somelink1; ln -s somelink1 somelink2;" +
                                                "ln -s somelink2 somelink3; ln -s somelink3 somelink4")
-
     test("./somelink2ls", setup="cp " + ls_path + " somefile;" +
                                 "ln -s somefile somelink1; ln -s somelink1 somelink2")
     test("./somelink3ls", setup="cp " + ls_path + " somefile;" +
@@ -198,14 +177,12 @@ def suite_cmd_path(test):
     test("./somelink4ls", setup="cp " + ls_path + " somefile;" +
                                 "ln -s somefile somelink1; ln -s somelink1 somelink2;" +
                                 "ln -s somelink2 somelink3; ln -s somelink3 somelink4")
-
     test("_", setup="touch _")
     test("'-'", setup="touch -")
     test("./_", setup="touch _")
     test("./-", setup="touch -")
     test("./.", setup="touch .")
     test("./..", setup="touch ..")
-
     test("./somefile", setup='touch somefile && chmod 0777 somefile')
     test("./somefile", setup='touch somefile && chmod 1000 somefile')
     test("./somefile", setup='touch somefile && chmod 2000 somefile')
@@ -222,7 +199,6 @@ def suite_cmd_path(test):
     test("./somefile", setup='touch somefile && chmod 6777 somefile')
     test("./somefile", setup='touch somefile && chmod 7777 somefile')
     test("./somefile", setup='touch somefile && chmod 0000 somefile')
-
     test("./somedir", setup='mkdir somedir && chmod 0777 somedir')
     test("./somedir", setup='mkdir somedir && chmod 1000 somedir')
     test("./somedir", setup='mkdir somedir && chmod 2000 somedir')
@@ -238,6 +214,7 @@ def suite_cmd_path(test):
     test("./somedir", setup='mkdir somedir && chmod 5777 somedir')
     test("./somedir", setup='mkdir somedir && chmod 6777 somedir')
     test("./somedir", setup='mkdir somedir && chmod 0000 somedir')
+
 
 # @suite(bonus=True)
 # def suite_cmd_variable(test):

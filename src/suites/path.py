@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/09 15:12:58 by charles           #+#    #+#              #
-#    Updated: 2020/09/09 15:39:17 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 17:43:14 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -59,9 +59,7 @@ def suite_path(test):
     test("a", setup="mkdir path && cp /bin/ls ./path/a && chmod 6777 ./path/a", exports={"PATH": "path"})
     test("a", setup="mkdir path && cp /bin/ls ./path/a && chmod 7777 ./path/a", exports={"PATH": "path"})
     test("a", setup="mkdir path && cp /bin/ls ./path/a && chmod 0000 ./path/a", exports={"PATH": "path"})
-
     test("b", setup="mkdir path && cp /bin/ls ./path/a && ln -s ./path/a ./path/b", exports={"PATH": "path"})
-
     test("ls", exports={"PATH": "doesnotexits"})
     test("ls", exports={"PATH": "doesnotexits:asdfasdfas"})
     test("ls", exports={"PATH": "a:b:c:d:e:f:g:h:i:j:k:l:m:n:o:p:q:r:s:t:u:v:w:x:y:z"})

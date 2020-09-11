@@ -6,40 +6,35 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 14:24:47 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 18:30:34 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import config
+import hooks
 from suite import suite
+
 
 @suite()
 def suite_quote(test):
     test("'echo' 'bonjour'")
     test("'echo' 'je' 'suis' 'charles'")
-
     test('"echo" "bonjour"')
     test('"echo" "je" "suis" "charles"')
-
     test('echo je\'suis\'"charles"')
     test('echo "je"suis\'charles\'')
     test('echo \'je\'"suis"charles')
-
     test('echo "\\""')
     test('echo "\\$"')
     test('echo "\\\\"')
-
     test('ls ""')
     test("ls ''")
-
     test('ls "" "" "" \'\' """"')
     test("ls '' '' '''' ''")
-
     test("'     echo' bonjour")
     test("'echo     ' bonjour")
     test('"     echo" bonjour')
     test('"echo     " bonjour')
-
     test("''echo bonjour")
     test('""echo bonjour')
     test("''''''''''''''''''''''''''''''''''''''''''''''''''''''''''echo bonjour")
@@ -52,43 +47,41 @@ def suite_quote(test):
     test('ec""ho bonjour')
     test("ec''''''''''''''''''''''''''''''''''''''''''''''''''''''''''ho bonjour")
     test('ec""""""""""""""""""""""""""""""""""""""""""""""""""""""""""ho bonjour')
-
     test("'''''''e''''''''''c''''''''''''h''''''''o''''''''''''''''''''' bonjour")
     test('"""""""e""""""""""c""""""""""""h""""""""o""""""""""""""""""""" bonjour')
+    test("echo '", hook=hooks.error_line0)
+    test('echo "', hook=hooks.error_line0)
+    test("echo '''", hook=hooks.error_line0)
+    test('echo """', hook=hooks.error_line0)
+    test("echo '''''''''''''''''''''''''''''''''''''''''''", hook=hooks.error_line0)
+    test('echo """""""""""""""""""""""""""""""""""""""""""', hook=hooks.error_line0)
+
 
 @suite()
 def suite_interpolation(test):
     test("echo $TEST", exports={"TEST": "bonjour"})
     test("echo $TES", exports={"TEST": "bonjour"})
     test("echo $TEST_", exports={"TEST": "bonjour"})
-
     test('echo "|$TEST|"', exports={"TEST": "bonjour"})
     test('echo "|$TES|"', exports={"TEST": "bonjour"})
     test('echo "|$TEST_|"', exports={"TEST": "bonjour"})
-
     test("echo '|$TEST|'", exports={"TEST": "bonjour"})
     test("echo '|$TES|'", exports={"TEST": "bonjour"})
     test("echo '|$TEST_|'", exports={"TEST": "bonjour"})
-
     test("echo $A$B$C", exports={"A": "foo", "B": "bar", "C": "baz"})
     test('echo "$A$B$C"', exports={"A": "foo", "B": "bar", "C": "baz"})
     test("echo '$A$B$C'", exports={"A": "foo", "B": "bar", "C": "baz"})
-
     test("echo $A,$B,$C", exports={"A": "foo", "B": "bar", "C": "baz"})
     test('echo "$A,$B,$C"', exports={"A": "foo", "B": "bar", "C": "baz"})
     test("echo '$A,$B,$C'", exports={"A": "foo", "B": "bar", "C": "baz"})
-
     test('echo $A"$B"$C"A"$B"$C"', exports={"A": "foo", "B": "bar", "C": "baz"})
     test("echo $A'$B'$C'A'$B'$C'", exports={"A": "foo", "B": "bar", "C": "baz"})
-
     test('echo $A"$B"$C"A"$B"$C"', exports={"A": "foo ", "B": " bar  ", "C": "baz "})
     test("echo $A'$B'$C'A'$B'$C'", exports={"A": "foo ", "B": " bar  ", "C": "baz "})
-
     test("echo $A")
     test("echo $A$B")
     test("echo $A$B$C")
     test("echo $A$B$C$D")
-
     test("echo [$A]", exports={"A": r"bonjour\je"})
     test("echo [$A]", exports={"A": r"\b\\o\\\nj\\\\\\\our\\je\\\\"})
     test("echo [$A]", exports={"A": r"   \b\\o\\\nj\\\\\\\our\\je\\\\"})
@@ -100,11 +93,9 @@ def suite_interpolation(test):
     test("echo [$A]", exports={"A": r"    "})
     test("echo [$A]", exports={"A": r"\ "})
     test("echo [$A]", exports={"A": r" \  "})
-
     test(r"echo \ \ \ \ \ \ \ $A\ \ \ \ \ \ ", exports={"A": "bonjour"})
     test(r"echo \ \ \ \ \ \ \ $A\ \ \ \ \ \ ", exports={"A": "bonjour je suis"})
     test(r"echo \ \ \ \ \ \ \ $A\ \ \ \ \ \ ", exports={"A": "  bonjour je suis  "})
-
     test('echo $A', exports={"A": "bonjour je suis splited"})
     test('echo $A', exports={"A": "bonjour     je     suis    splited"})
     test('echo $A', exports={"A": "   bonjour     je     suis    splited   "})
@@ -124,20 +115,15 @@ def suite_interpolation(test):
     test("echo $A",   exports={"A": "'" + config.LOREM + "'"})
     test('echo "$A"', exports={"A": "'" + config.LOREM + "'"})
     test("echo '$A'", exports={"A": "'" + config.LOREM + "'"})
-
     test("$ECHO $ECHO", exports={"ECHO": "echo"})
     test("$A$B bonjour", exports={"A": "ec", "B": "ho"})
-
     test("$LS", exports={"LS": "ls -l"}, setup="touch a b c")
-
     test("echo $")
     test("echo \$")
     test("echo \$\$\$\$")
     test("echo \$$\$$")
-
     test("echo $\A $\B", exports={"A": "a", "B": "b"})
     test("echo $\A$\B", exports={"A": "a", "B": "b"})
-
     test("echo $A", exports={"A": " "})
     test("echo $A", exports={"A": "  "})
     test("echo $A", exports={"A": "   "})
@@ -145,7 +131,6 @@ def suite_interpolation(test):
     test("echo $A", exports={"A": "  a "})
     test("echo $A", exports={"A": "                                "})
     test("echo $A", exports={"A": "                     a          "})
-
     test("echo @$A@", exports={"A": " "})
     test("echo @ $A@", exports={"A": " "})
     test("echo @$A @", exports={"A": " "})
@@ -156,7 +141,6 @@ def suite_interpolation(test):
     test('echo "@"$A"@"', exports={"A": " "})
     test('echo "@" $A"@"', exports={"A": " "})
     test('echo "@"$A "@"', exports={"A": " "})
-
     test('echo @"$A"@', exports={"A": " "})
     test('echo @ "$A"@', exports={"A": " "})
     test('echo @"$A" @', exports={"A": " "})
@@ -167,7 +151,6 @@ def suite_interpolation(test):
     test('echo "@""$A""@"', exports={"A": " "})
     test('echo "@" "$A""@"', exports={"A": " "})
     test('echo "@""$A" "@"', exports={"A": " "})
-
     test('echo $A$B$C', exports={"A": "", "B": "", "C": ""})
 
 
@@ -192,6 +175,19 @@ def suite_escape(test):
     test(r"                 \ echo bonjour")
     test(r" \                 echo bonjour")
     test(r"                 \                    echo bonjour")
+
+
+@suite()
+def suite_spaces(test):
+    test("echo foo")
+    test("echo                    foo")
+    test("             echo foo")
+    test("echo foo             ")
+    test("         echo           foo             ")
+    test("echo\t\t\t\t\t\t\t\t\t\tfoo")
+    test("\t\t\t\t\t\techo\tfoo")
+    test("echo\tfoo\t\t\t\t\t\t")
+    test("\t\t\t\techo\t\t\t\tfoo\t\t\t\t")
 
 
 # @suite(bonus=True)
