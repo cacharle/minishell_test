@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:28:00 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 14:13:34 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 16:43:00 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -21,7 +21,7 @@ def suite(groups: [str] = [], bonus: bool = False):
         mod_name = inspect.getmodule(origin).__name__[len("suites."):]
         # print(mod_name)
 
-        name = origin.__name__[len("suite_"):]
+        name = "{}/{}".format(mod_name, origin.__name__[len("suite_"):])
         s = Suite(name, groups + [mod_name], bonus)
         def test_generator():
             def test(*args, **kwargs):
