@@ -1,14 +1,14 @@
-# ############################################################################ #
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    builtin.py                                         :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
+#    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 16:13:26 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 17:53:52 by juligonz         ###   ########.fr        #
 #                                                                              #
-# ############################################################################ #
+# **************************************************************************** #
 
 import os
 
@@ -88,6 +88,17 @@ def suite_export(test):
     test("export 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C")
     test("export A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '; echo $A$B$C")
     test("export A B C; echo $A$B$C")
+
+
+    test("export 'AH@'=nop")
+    test("export \"AH'\"=nop")
+    test("export 'AH\"'=nop")
+    test("export 'AH$'=nop")
+    test("export 'AH!'=nop")
+    test("export 'AH|'=nop")
+    test("export 'AH;'=nop")
+    test("export 'AH&'=nop")
+    test("export 'AH\\'=nop")
 
     test("export $TEST", exports={"TEST": "A=a"})
 
