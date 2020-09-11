@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 14:19:14 by charles          ###   ########.fr        #
+#    Updated: 2020/09/11 16:35:25 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -55,8 +55,8 @@ def suite_pipe(test):
 
     test("echo a | export A=a; echo $A")
     test("export A=a | cat; echo $A")
-    test("echo a | A=a; echo $A")
-    test("A=a | cat; echo $A")
+    # test("echo a | A=a; echo $A")
+    # test("A=a | cat; echo $A")
 
 @suite(bonus=True)
 def suite_and(test):
