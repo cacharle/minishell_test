@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 20:39:52 by charles          ###   ########.fr        #
+#    Updated: 2020/09/12 01:35:46 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -50,8 +50,8 @@ class Test:
 
     def run(self):
         """Run the test for minishell and the reference shell and print the result out"""
-        expected = self._run_sandboxed(config.REFERENCE_PATH, "-c")
-        actual   = self._run_sandboxed(config.MINISHELL_PATH, "-c")
+        expected = self._run_sandboxed(config.REFERENCE_PATH, config.REFERENCE_ARGS + ["-c"])
+        actual   = self._run_sandboxed(config.MINISHELL_PATH, ["-c"])
         s = self.cmd
         if self.setup != "":
             s = "[SETUP {}] {}".format(self.setup, s)
@@ -61,7 +61,7 @@ class Test:
         self.result = Result(s, self.files, expected, actual)
         self.result.put()
 
-    def _run_sandboxed(self, shell_path: str, shell_option: str) -> Captured:
+    def _run_sandboxed(self, shell_path: str, shell_options: str) -> Captured:
         """ Run the command in a sandbox environment
             Capture the output (stdout and stderr)
             Capture the content of the watched files after the command is run
@@ -88,7 +88,7 @@ class Test:
 
         # run the command in the sandbox
         process = subprocess.Popen(
-            [shell_path, shell_option, self.cmd],
+            [shell_path, *shell_options, self.cmd],
             stderr=subprocess.STDOUT,
             stdout=subprocess.PIPE,
             cwd=config.SANDBOX_PATH,

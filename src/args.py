@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 22:09:04 by charles          ###   ########.fr        #
+#    Updated: 2020/09/12 02:21:51 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -18,7 +18,7 @@ def parse_args():
 
     parser = argparse.ArgumentParser(
         description="Minishell test",
-        epilog="Make sure read README.md"
+        epilog="Make sure read the README.md"
     )
     parser.add_argument(
         "-v", "--verbose", action="count",
@@ -42,7 +42,9 @@ def parse_args():
     )
     parser.add_argument(
         "suites", nargs='*', metavar="suite",
-        help="test suites/group to run"
+        help="test suites/group to run, "
+             "It tries to be smart and auto complete the suite name "
+             "you put in (e.g ./run int -> ./run preprocess/interpolation)"
     )
     tmp = parser.parse_args()
     if tmp.verbose is None:

@@ -36,7 +36,9 @@ def main():
 
     if config.MINISHELL_MAKE or args.make:
         try:
+            print("========================================MAKE====================================")
             subprocess.run(["make", "-C", config.MINISHELL_DIR], check=True)
+            print("================================================================================")
         except subprocess.CalledProcessError:
             sys.exit(1)
         if args.make:
@@ -45,7 +47,7 @@ def main():
         shutil.rmtree(config.EXECUTABLES_PATH)
     os.mkdir(config.EXECUTABLES_PATH)
     for cmd in config.AVAILABLE_COMMANDS:
-        shutil.copy(distutils.spawn.find_executable(cmd),  # FIXME search whole PATH
+        shutil.copy(distutils.spawn.find_executable(cmd),
                     os.path.join(config.EXECUTABLES_PATH, cmd))
 
     config.VERBOSE_LEVEL = args.verbose

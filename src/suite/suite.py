@@ -6,9 +6,11 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 20:35:13 by charles          ###   ########.fr        #
+#    Updated: 2020/09/12 02:14:58 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
+
+import sys
 
 import config
 
@@ -27,14 +29,38 @@ class Suite:
         """Remove not asked suite from available suites"""
         if len(asked_names) == 0:
             asked_names = [s.name for s in cls.available]
+
         if not config.BONUS:
             cls.available = [s for s in cls.available if not s.bonus]
+
+        names = []
+        for i, name in enumerate(asked_names):
+            matches = [s.name for s in cls.available
+                       if s.name.find("/") != -1
+                          and s.name[s.name.find("/") + 1:].startswith(name)
+                          or s.name.startswith(name)]
+            if len(matches) == 1:
+                names.append(matches[0])
+            elif all([n.startswith(name) for n in matches]):
+                names.extend(matches)
+            elif len(matches) > 2:
+                print(("Ambiguous name `{}` match the following suites\n\t{}\n"
+                      "Try to run with -l to see the available suites")
+                      .format(name, ', '.join(matches)))
+                sys.exit(1)
+            elif len(matches) == 0:
+                print(("No suite named `{}` found\n\t{}\n"
+                      "Try to run with -l to see the available suites")
+                      .format(name, ', '.join(matches)))
+                sys.exit(1)
+
         cls.available = list(set(
-            [s for s in cls.available if s.name in asked_names]
-            + [s for s in cls.available if any([g for g in s.groups if g in asked_names])]
+            [s for s in cls.available if s.name in names]
+            + [s for s in cls.available if any([g for g in s.groups if g in names])]
         ))
         for s in cls.available:
             s.generator_func()
+
 
     @classmethod
     def available_names(cls) -> [str]:

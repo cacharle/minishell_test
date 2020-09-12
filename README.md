@@ -8,8 +8,11 @@ Test for the minishell project of school 42.
 
 The default path to your project is `..` but you can change it the the [configuration](src/config.py).
 
-* `> ./run --help`
-* `> ./run`
+* `> ./run` - run all tests
+* `> ./run [suite]...` - run specific test suites (e.g `./run builtin/echo`)
+  It tries to autocomplete your suite name so `./run int` -> `./run preprocess/interpolation`
+* `> ./run --help` - show the help
+* `> ./run -l` - list all suites and suites group
 
 ## Test compatibility
 

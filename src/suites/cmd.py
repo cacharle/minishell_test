@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 15:11:46 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 20:12:16 by charles          ###   ########.fr        #
+#    Updated: 2020/09/12 01:31:00 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -179,7 +179,7 @@ def suite_cmd_path(test):
     test("_", setup="touch _")
     test("'-'", setup="touch -")
     test("./_", setup="touch _")
-    test("./-", setup="touch -")
+    test("./-", setup="touch a; mv a -- -")
     test("./.", setup="touch .")
     test("./..", setup="touch ..")
     test("./somefile", setup='touch somefile && chmod 0777 somefile')
