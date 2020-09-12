@@ -2,7 +2,7 @@
 
 Test for the minishell project of school 42.
 
-![screenshot](recording.gif)
+![preview](preview.gif)
 
 ## Usage
 

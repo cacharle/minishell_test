@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 01:33:18 by charles          ###   ########.fr        #
+#    Updated: 2020/09/12 16:56:23 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -50,7 +50,7 @@ AVAILABLE_COMMANDS = ["rmdir", "env", "cat", "touch", "ls", "grep", "sh"]
 PATH_VARIABLE = os.path.abspath(EXECUTABLES_PATH)
 
 # default test timeout
-TIMEOUT = 1
+TIMEOUT = 0.5
 
 LOREM = """
 Mollitia asperiores assumenda excepturi et ipsa. Nihil corporis facere aut a rem consequatur.

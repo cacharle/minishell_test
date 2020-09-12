@@ -6,14 +6,14 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 01:35:46 by charles          ###   ########.fr        #
+#    Updated: 2020/09/12 17:07:22 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import os
 import sys
 import subprocess
-import time
+# import time
 
 import config
 from test.captured import Captured
@@ -62,30 +62,31 @@ class Test:
         self.result.put()
 
     def _run_sandboxed(self, shell_path: str, shell_options: str) -> Captured:
-        """ Run the command in a sandbox environment
-            Capture the output (stdout and stderr)
+        """ Run the command in a sandbox environment """
+        with sandbox.context():
+            if self.setup != "":
+                try:
+                    subprocess.run(
+                        self.setup,
+                        shell=True,
+                        cwd=config.SANDBOX_PATH,
+                        stderr=subprocess.STDOUT,
+                        stdout=subprocess.PIPE,
+                        check=True
+                    )
+                except subprocess.CalledProcessError as e:
+                    print("Error: `{}` setup command failed for `{}`\n\twith '{}'"
+                          .format(self.setup,
+                                  self.cmd,
+                                  "no stderr" if e.stdout is None
+                                  else e.stdout.decode().strip()))
+                    sys.exit(1)
+            return self._run_capture(shell_path, shell_options)
+
+    def _run_capture(self, shell_path: str, shell_options: str) -> Captured:
+        """ Capture the output (stdout and stderr)
             Capture the content of the watched files after the command is run
         """
-
-        # create and setup sandbox
-        sandbox.create()
-        if self.setup != "":
-            try:
-                subprocess.run(
-                    self.setup,
-                    shell=True,
-                    cwd=config.SANDBOX_PATH,
-                    stderr=subprocess.STDOUT,
-                    stdout=subprocess.PIPE,
-                    check=True
-                )
-            except subprocess.CalledProcessError as e:
-                print("Error: `{}` setup command failed for `{}`\n\twith '{}'"
-                      .format(self.setup,
-                              self.cmd,
-                              "no stderr" if e.stdout is None else e.stdout.decode().strip()))
-                sys.exit(1)
-
         # run the command in the sandbox
         process = subprocess.Popen(
             [shell_path, *shell_options, self.cmd],
@@ -98,18 +99,19 @@ class Test:
                 **self.exports,
             },
         )
-        if self.signal is not None:
-            time.sleep(0.2)
-            process.send_signal(self.signal)
-        else:
-            try:
-                process.wait(timeout=self.timeout)
-            except subprocess.TimeoutExpired:
-                return Captured.timeout()
+        # if self.signal is not None:
+        #     time.sleep(0.2)
+        #     process.send_signal(self.signal)
+        # else:
 
-        # get command output
+        # https://docs.python.org/3/library/subprocess.html#subprocess.Popen.communicate
         try:
-            stdout, _ = process.communicate()
+            stdout, _ = process.communicate(timeout=self.timeout)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            # _, _ = process.communicate(timeout=2)
+            return Captured.timeout()
+        try:
             output = stdout.decode()
         except UnicodeDecodeError:
             output = "UNICODE ERROR: {}".format(process.stdout)
@@ -123,7 +125,7 @@ class Test:
             except FileNotFoundError:
                 files_content.append(None)
 
-        sandbox.remove()
+        # sandbox.remove()
         if self.hook is not None:
             output = self.hook(output)
         return Captured(output, process.returncode, files_content)

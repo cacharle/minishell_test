@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 13:48:07 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 20:25:38 by charles          ###   ########.fr        #
+#    Updated: 2020/09/12 17:06:28 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -14,6 +14,7 @@ import os
 import glob
 import shutil
 import subprocess
+from contextlib import contextmanager
 
 import config
 
@@ -35,3 +36,11 @@ def remove():
     except PermissionError:
         subprocess.run(["chmod", "777", *glob.glob(config.SANDBOX_PATH + "/*")], check=True)
         subprocess.run(["rm", "-rf", config.SANDBOX_PATH], check=True)
+
+
+@contextmanager
+def context():
+    """Sandbox context manager"""
+    create()
+    yield
+    remove()

@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 10:53:42 by charles          ###   ########.fr        #
+#    Updated: 2020/09/12 17:07:00 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -40,8 +40,8 @@ class Suite:
                 continue
             matches = [n for n in suite_names
                        if n.find("/") != -1
-                          and n[n.find("/") + 1:].startswith(name)
-                          or n.startswith(name)]
+                       and n[n.find("/") + 1:].startswith(name)
+                       or n.startswith(name)]
             if len(matches) == 1:
                 names.append(matches[0])
             elif len(matches) != 0 and all([n.startswith(name) for n in matches]):
@@ -61,9 +61,9 @@ class Suite:
             [s for s in cls.available if s.name in names]
             + [s for s in cls.available if any([g for g in s.groups if g in names])]
         ))
+        cls.available.sort(key=lambda s: s.name)
         for s in cls.available:
             s.generator_func()
-
 
     @classmethod
     def available_names(cls) -> [str]:
