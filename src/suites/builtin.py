@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 01:40:08 by charles          ###   ########.fr        #
+#    Updated: 2020/09/12 10:37:05 by charles          ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -43,12 +43,12 @@ def suite_echo(test):
 
 @suite()
 def suite_export(test):
-    test("export")#, hook=hooks.export_singleton)
-    test("export", exports={"A": ""})#, hook=hooks.export_singleton)
-    test("export", exports={"A": "\""})#, hook=hooks.export_singleton)
-    test("export", exports={"A": "\t"})#, hook=hooks.export_singleton)
-    test("export", exports={"A": "'"})#, hook=hooks.export_singleton)
-    test("export", exports={"A": "a"})#, hook=hooks.export_singleton)
+    test("export", hook=hooks.export_singleton)
+    test("export", exports={"A": ""}, hook=hooks.export_singleton)
+    test("export", exports={"A": "\""}, hook=hooks.export_singleton)
+    test("export", exports={"A": "\t"}, hook=hooks.export_singleton)
+    test("export", exports={"A": "'"}, hook=hooks.export_singleton)
+    test("export", exports={"A": "a"}, hook=hooks.export_singleton)
     test("export A=a; echo $A")
     test("export A=a B=b C=c; echo $A$B$C")
     test("export A=a B=b C=c D=d E=e F=f G=g H=h I=i J=j K=k L=l"

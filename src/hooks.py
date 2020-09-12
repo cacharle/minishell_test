@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 22:11:21 by charles          ###   ########.fr        #
+#    Updated: 2020/09/12 10:37:16 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -38,7 +38,8 @@ def discard(output):
 
 def export_singleton(output):
     """Remove variable that are not set to anything in a call to export without arguments"""
+    prefix = "export " if ("--posix" in config.REFERENCE_ARGS) else "declare -x "
     return sort_lines(
         '\n'.join([line for line in output.split('\n')
-                   if regex.match("^declare -x .+=\".*\"$", line) is not None])
+                   if regex.match("^{}.+=\".*\"$".format(prefix), line) is not None])
     )

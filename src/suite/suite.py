@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 02:14:58 by charles          ###   ########.fr        #
+#    Updated: 2020/09/12 10:38:16 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -27,11 +27,10 @@ class Suite:
     @classmethod
     def setup(cls, asked_names: [str]):
         """Remove not asked suite from available suites"""
-        if len(asked_names) == 0:
-            asked_names = [s.name for s in cls.available]
-
         if not config.BONUS:
             cls.available = [s for s in cls.available if not s.bonus]
+        if len(asked_names) == 0:
+            asked_names = [s.name for s in cls.available]
 
         names = []
         for i, name in enumerate(asked_names):
@@ -41,7 +40,7 @@ class Suite:
                           or s.name.startswith(name)]
             if len(matches) == 1:
                 names.append(matches[0])
-            elif all([n.startswith(name) for n in matches]):
+            elif len(matches) != 0 and all([n.startswith(name) for n in matches]):
                 names.extend(matches)
             elif len(matches) > 2:
                 print(("Ambiguous name `{}` match the following suites\n\t{}\n"
@@ -49,9 +48,9 @@ class Suite:
                       .format(name, ', '.join(matches)))
                 sys.exit(1)
             elif len(matches) == 0:
-                print(("No suite named `{}` found\n\t{}\n"
+                print(("Name `{}` doesn't match any suite/group name\n\t"
                       "Try to run with -l to see the available suites")
-                      .format(name, ', '.join(matches)))
+                      .format(name))
                 sys.exit(1)
 
         cls.available = list(set(
