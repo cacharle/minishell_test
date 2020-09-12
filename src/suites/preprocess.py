@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 20:15:08 by charles          ###   ########.fr        #
+#    Updated: 2020/09/12 10:48:04 by charles          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,8 @@ def suite_quote(test):
     test('echo "\\""')
     test('echo "\\$"')
     test('echo "\\\\"')
+    test('echo "\\a"')
+    test('echo "\\A"')
     test('ls ""')
     test("ls ''")
     test('ls "" "" "" \'\' """"')
@@ -49,6 +51,10 @@ def suite_quote(test):
     test('ec""""""""""""""""""""""""""""""""""""""""""""""""""""""""""ho bonjour')
     test("'''''''e''''''''''c''''''''''''h''''''''o''''''''''''''''''''' bonjour")
     test('"""""""e""""""""""c""""""""""""h""""""""o""""""""""""""""""""" bonjour')
+    test("echo '\"'")
+    test("echo '\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"'")
+    test('echo "\'"')
+    test('echo "\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'"')
     test("echo '", hook=hooks.error_line0)
     test('echo "', hook=hooks.error_line0)
     test("echo '''", hook=hooks.error_line0)

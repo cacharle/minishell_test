@@ -6,13 +6,14 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 15:11:46 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 01:31:00 by charles          ###   ########.fr        #
+#    Updated: 2020/09/12 10:51:19 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import distutils
 
 import hooks
+import config
 from suite import suite
 
 
@@ -94,6 +95,12 @@ def suite_cmd(test):
     test("echo foo >bar", files=["bar"])
     test("echo foo> bar", files=["bar"])
     test("echo foo > bar", files=["bar"])
+    test("echo a as df sad f as df qw e  qwe  as df asd f as df as d fas d f"
+         "asd f asd f asdf asdf  asdf  asd f asd f asd f asd f as df as df a"
+         "asd f asd f asdf asdf  asdf  asd f asd f asd f asd f as df as df a"
+         "asd f asd f asdf asdf  asdf  asd f asd f asd f asd f as df as df a")
+    test("echo " + config.LOREM * 10)
+    test("echo " + config.LOREM * 20)
 
 
 @suite()
