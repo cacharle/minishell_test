@@ -9,7 +9,7 @@ Test for the minishell project of school 42.
 The default path to your project is `..` but you can change it the the [configuration](src/config.py).
 
 * `> ./run` - run all tests
-* `> ./run [suite]...` - run specific test suites (e.g `./run builtin/echo`)
+* `> ./run [suite]...` - run specific test suites (e.g `./run builtin/echo`)  
   It tries to autocomplete your suite name so `./run int` -> `./run preprocess/interpolation`
 * `> ./run --help` - show the help
 * `> ./run -l` - list all suites and suites group
@@ -31,6 +31,15 @@ README.md test.sh
 ```
 
 This allows you to set the prompt to whatever you want.
+
+## Bonus
+
+Their is 3 different method to enable the bonus tests:
+
+* Force the bonus tests with `./run -b`
+* Change the `BONUS` variable in [config.py](src/config.py) to True
+* Set the environment variable `MINISHELL_TEST_BONUS` to `yes`  
+  (e.g `echo 'export MINISHELL_TEST_BONUS=yes' >> ~/.zshrc`)
 
 ## Python Version
 

@@ -51,7 +51,7 @@ def main():
                     os.path.join(config.EXECUTABLES_PATH, cmd))
 
     config.VERBOSE_LEVEL = args.verbose
-    if args.bonus:
+    if args.bonus or os.environ.get("MINISHELL_TEST_BONUS") == "yes":
         config.BONUS = True
     if args.no_bonus:
         config.BONUS = False
