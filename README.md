@@ -9,9 +9,9 @@ Test for the minishell project of school 42.
 The default path to your project is `..` but you can change it the the [configuration](src/config.py).
 
 ```sh
-$ ./run`  # run all tests
+$ ./run  # run all tests
 
-$ ./run --help`
+$ ./run --help
 usage: run [-h] [-v] [-b] [-n] [-l] [-m] [-p] [suite [suite ...]]
 
 Minishell test

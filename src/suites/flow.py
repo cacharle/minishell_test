@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 15:30:37 by charles          ###   ########.fr        #
+#    Updated: 2020/09/13 17:19:09 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -35,6 +35,7 @@ def suite_end(test):
     test("ls doesnotexists ; echo bonjour")
     test("ls doesnotexists; echo bonjour")
     test("echo bonjour; ls doesnotexists")
+    test("echo a ; ;", hook=hooks.error_line0)
 
 
 @suite()
@@ -61,6 +62,11 @@ def suite_pipe(test):
     test("export A=a | cat; echo $A")
     # test("echo a | A=a; echo $A")
     # test("A=a | cat; echo $A")
+    test("ls " + 40 * " | ls")
+    test("ls " + 80 * " | ls")
+    test("echo bonjour " + 40 * " | cat -e")
+    test("echo bonjour " + 80 * " | cat -e")
+    test("echo bonjour | | cat -e", hook=hooks.error_line0)
 
 
 @suite(bonus=True)
@@ -148,3 +154,7 @@ def suite_parenthesis(test):
     test("(ls doesntexist || ls)")
     test("(ls doesntexist && ls)")
     test("(ls && ls) && echo $?")
+    test("(echo a; echo b) | cat -e")
+    test("echo bonjour | (cat -e; echo a)")
+    test("echo bonjour | (echo a; cat -e)")
+    test("(echo bonjour ; echo aurevoir) | (cat -e | cat -e) | cat -e")
