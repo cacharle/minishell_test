@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 10:37:05 by charles          ###   ########.fr        #
+#    Updated: 2020/09/13 13:57:13 by charles          ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -130,7 +130,6 @@ def suite_cd(test):
     test("cd d ''; pwd; echo $PWD", setup="mkdir d")
     test("cd d d; pwd; echo $PWD", setup="mkdir d")
     test("cd d ' '; pwd; echo $PWD", setup="mkdir d")
-    test("cd $HOME; pwd; echo $PWD")
     test("cd $HOME; pwd; echo $PWD", exports={"HOME": os.getenv("HOME")})
     test("cd /; pwd; echo $PWD")
     test("cd /.; pwd; echo $PWD")
@@ -198,6 +197,7 @@ def suite_cd(test):
     # test("cd ~; pwd; echo $PWD"); # do we have to handle ~ ?
     # test("cd ~/..; pwd; echo $PWD");
     # test("cd ~/../..; pwd; echo $PWD");
+    # test("cd $HOME; pwd; echo $PWD")
 
 
 @suite()

@@ -54,6 +54,10 @@ def main():
     if reference_args is not None:
         config.REFERENCE_ARGS.extend(reference_args.split(','))
 
+    pager = os.environ.get("MINISHELL_TEST_PAGER")
+    if pager is not None:
+        config.PAGER = pager
+
     config.VERBOSE_LEVEL = args.verbose
     if args.bonus or os.environ.get("MINISHELL_TEST_BONUS") == "yes":
         config.BONUS = True
@@ -68,6 +72,9 @@ def main():
     Suite.summarize()
     Suite.save_log()
     print("See", config.LOG_PATH, "for more information")
+
+    if args.pager:
+        subprocess.run([config.PAGER, config.LOG_PATH])
 
 
 if __name__ == "__main__":

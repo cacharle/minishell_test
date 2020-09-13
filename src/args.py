@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 02:21:51 by charles          ###   ########.fr        #
+#    Updated: 2020/09/13 14:45:15 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -22,29 +22,33 @@ def parse_args():
     )
     parser.add_argument(
         "-v", "--verbose", action="count",
-        help="increase verbosity level (e.g -vv == 2)"
+        help="Increase verbosity level (e.g -vv == 2)"
     )
     parser.add_argument(
         "-b", "--bonus", action="store_true",
-        help="enable bonus tests"
+        help="Enable bonus tests"
     )
     parser.add_argument(
         "-n", "--no-bonus", action="store_true",
-        help="disable bonus tests"
+        help="Disable bonus tests"
     )
     parser.add_argument(
         "-l", "--list", action="store_true",
-        help="print available test suites"
+        help="Print available test suites"
     )
     parser.add_argument(
         "-m", "--make", action="store_true",
-        help="make minishell and exit"
+        help="Make minishell and exit"
+    )
+    parser.add_argument(
+        "-p", "--pager", action="store_true",
+        help="After running the test, display the result in a pager of your choice"
     )
     parser.add_argument(
         "suites", nargs='*', metavar="suite",
-        help="test suites/group to run, "
-             "It tries to be smart and auto complete the suite name "
-             "you put in (e.g ./run int -> ./run preprocess/interpolation)"
+        help="Test suites/group to run. "
+             "It tries to be smart and autocomplete the suite name "
+             "(e.g ./run int -> ./run preprocess/interpolation)"
     )
     tmp = parser.parse_args()
     if tmp.verbose is None:
