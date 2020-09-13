@@ -6,11 +6,11 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 10:37:16 by charles          ###   ########.fr        #
+#    Updated: 2020/09/13 09:50:21 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-import regex
+import re
 
 import config
 
@@ -41,5 +41,5 @@ def export_singleton(output):
     prefix = "export " if ("--posix" in config.REFERENCE_ARGS) else "declare -x "
     return sort_lines(
         '\n'.join([line for line in output.split('\n')
-                   if regex.match("^{}.+=\".*\"$".format(prefix), line) is not None])
+                   if re.match("^{}.+=\".*\"$".format(prefix), line) is not None])
     )
