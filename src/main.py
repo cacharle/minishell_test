@@ -50,6 +50,10 @@ def main():
         shutil.copy(distutils.spawn.find_executable(cmd),
                     os.path.join(config.EXECUTABLES_PATH, cmd))
 
+    reference_args = os.environ.get("MINISHELL_TEST_ARGS")
+    if reference_args is not None:
+        config.REFERENCE_ARGS.extend(reference_args.split(','))
+
     config.VERBOSE_LEVEL = args.verbose
     if args.bonus or os.environ.get("MINISHELL_TEST_BONUS") == "yes":
         config.BONUS = True

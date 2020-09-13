@@ -18,7 +18,7 @@ The default path to your project is `..` but you can change it the the [configur
 
 Your executable **must** support the `-c` option which allow to pass command as string.
 
-```
+```sh
 > bash -c 'echo bonjour je suis'
 bonjour je suis
 > ./minishell -c 'echo bonjour je suis'
@@ -32,6 +32,8 @@ README.md test.sh
 
 This allows you to set the prompt to whatever you want.
 
+This test works with python >= 3.5.
+
 ## Bonus
 
 Their is 3 different method to enable the bonus tests:
@@ -41,13 +43,17 @@ Their is 3 different method to enable the bonus tests:
 * Set the environment variable `MINISHELL_TEST_BONUS` to `yes`  
   (e.g `echo 'export MINISHELL_TEST_BONUS=yes' >> ~/.zshrc`)
 
-## Python Version
-
-This test works with python >= 3.5.
-
 ## Configuration
 
 The default configuration can be changed in [config.py](src/config.py)
+
+### Adding flags to reference shell
+
+Add them directly to the variable `REFERENCE_ARGS` in [config.py](src/config.py).  
+Or set the environment variable `MINISHELL_TEST_ARGS` to a comma separated list of arguments
+(e.g `export MINISHELL_TEST_ARGS=--poxix,--someotherarg,etc`).
+
+---
 
 ## Add new tests
 
@@ -59,10 +65,11 @@ In your suite function you can use the `test` function. With the following argum
 2. A command to setup the sandbox directory where the tested command will be run
 3. List of files to watch (the content of each file will be compared)
 
-```
+```python
 test("echo bonjour je suis")                                  # simple command
 test("cat < somefile", setup="echo file content > somefile")  # setup
 test("ls > somefile", setup="", files=["somefile"])           # watch a file
+test("echo $A", exports={"A": "a"})                           # export variables in the environment
 
 test("cat < somefile > otherfile",
      setup="echo file content > somefile",
@@ -73,8 +80,8 @@ test("cat < somefile > otherfile",
 
 A test suite is a group of related tests.
 
-```
-@suite()
+```python
+@suite()  # @suite(bonus=True) if it's a bonus suite
 def suite_yoursuitename(test):
     test(...)
     test(...)

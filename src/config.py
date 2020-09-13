@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 16:56:23 by charles          ###   ########.fr        #
+#    Updated: 2020/09/13 11:48:55 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -31,7 +31,7 @@ MINISHELL_MAKE = True
 # path to reference shell (shell which will be compared minishell)
 # has to support the -c option (sh, bash and zsh support it)
 REFERENCE_PATH = "/bin/bash"
-REFERENCE_ARGS = ["--posix"]
+REFERENCE_ARGS = []  # ["--posix"]
 
 # log file path
 LOG_PATH = "result.log"
