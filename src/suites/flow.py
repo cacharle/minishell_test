@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2020/09/13 17:19:09 by charles          ###   ########.fr        #
+#    Updated: 2020/09/14 21:33:02 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -36,6 +36,10 @@ def suite_end(test):
     test("ls doesnotexists; echo bonjour")
     test("echo bonjour; ls doesnotexists")
     test("echo a ; ;", hook=hooks.error_line0)
+    test("ls " + 40 * " ; ls", setup="touch a b c")
+    test("ls " + 80 * " ; ls", setup="touch a b c")
+    test("ls " + 40 * " ; ls" + ";", setup="touch a b c")
+    test("ls " + 80 * " ; ls" + ";", setup="touch a b c")
 
 
 @suite()
@@ -60,10 +64,8 @@ def suite_pipe(test):
     test(" | cat", hook=hooks.error_line0)
     test("echo a | export A=a; echo $A")
     test("export A=a | cat; echo $A")
-    # test("echo a | A=a; echo $A")
-    # test("A=a | cat; echo $A")
-    test("ls " + 40 * " | ls")
-    test("ls " + 80 * " | ls")
+    test("ls " + 40 * " | ls", setup="touch a b c")
+    test("ls " + 80 * " | ls", setup="touch a b c")
     test("echo bonjour " + 40 * " | cat -e")
     test("echo bonjour " + 80 * " | cat -e")
     test("echo bonjour | | cat -e", hook=hooks.error_line0)
@@ -90,6 +92,8 @@ def suite_and(test):
     test("ls doesnotexists && echo bonjour")
     test("ls doesnotexists&& echo bonjour")
     test("echo bonjour&& ls doesnotexists")
+    test("ls " + 40 * " && ls", setup="touch a b c")
+    test("ls " + 80 * " && ls", setup="touch a b c")
 
 
 @suite(bonus=True)
@@ -113,6 +117,8 @@ def suite_or(test):
     test("ls doesnotexists || echo bonjour")
     test("ls doesnotexists|| echo bonjour")
     test("echo bonjour|| ls doesnotexists")
+    test("ls asdf" + 40 * " || ls asdf", setup="touch a b c")
+    test("ls asdf" + 80 * " || ls asdf", setup="touch a b c")
 
 
 @suite(bonus=True)
@@ -157,4 +163,5 @@ def suite_parenthesis(test):
     test("(echo a; echo b) | cat -e")
     test("echo bonjour | (cat -e; echo a)")
     test("echo bonjour | (echo a; cat -e)")
-    test("(echo bonjour ; echo aurevoir) | (cat -e | cat -e) | cat -e")
+    # test("(echo bonjour ; echo aurevoir) | (cat -e | cat -e) | cat -e")
+    test("(            echo salut && echo bonjours )               ; echo comment ca va")

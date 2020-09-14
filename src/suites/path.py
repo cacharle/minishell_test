@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/09 15:12:58 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 20:13:09 by charles          ###   ########.fr        #
+#    Updated: 2020/09/14 19:28:30 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -67,3 +67,19 @@ def suite_path(test):
     test("ls", exports={"PATH": "        "})
     test("ls", exports={"PATH": "   :    "})
     test("ls", exports={"PATH": "     /bin      "})
+    test("ls", exports={"PATH": "/bin:/bin:/bin:/bin"})
+    test("ls", exports={"PATH": ""})
+    test("ls", exports={"PATH": ":"})
+    test("ls", exports={"PATH": ":::::::::::::::::::"})
+    test("ls", exports={"PATH": "/asdfasdf"})
+    test("ls", exports={"PATH": "/usr/asdf:/usr/lib/asdfasdf"})
+    test("ls", setup="unset PATH")
+    test("somecmd", setup="echo '#!/bin/sh\necho bonjour' > somecmd; chmod +x somecmd", exports={"PATH": ""})
+    test("somecmd", setup="echo '#!/bin/sh\necho bonjour' > somecmd; chmod +x somecmd", exports={"PATH": ":"})
+    test("somecmd", setup="echo '#!/bin/sh\necho bonjour' > somecmd; chmod +x somecmd", exports={"PATH": "::::::::"})
+    test("somecmd", setup="echo '#!/bin/sh\necho bonjour' > somecmd; chmod +x somecmd", exports={"PATH": "/asdfasdf"})
+    test("somecmd", setup="echo '#!/bin/sh\necho bonjour' > somecmd; chmod +x somecmd", exports={"PATH": "/usr/asdf:/usr/lib/asdfasdf"})
+    test("somecmd", setup="echo '#!/bin/sh\necho bonjour' > somecmd; chmod +x somecmd; unset PATH")
+    test("somecmd", setup="echo '#!/bin/sh\necho bonjour' > somecmd; chmod +x somecmd", exports={"PATH": "/bin:"})
+    test("somecmd", setup="echo '#!/bin/sh\necho bonjour' > somecmd; chmod +x somecmd", exports={"PATH": ":/bin"})
+    test("somecmd", setup="echo '#!/bin/sh\necho bonjour' > somecmd; chmod +x somecmd", exports={"PATH": ":/bin:"})

@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
-#    Updated: 2020/09/13 12:20:37 by charles          ###   ########.fr        #
+#    Updated: 2020/09/14 15:15:53 by charles          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,8 @@ def suite_quote(test):
     test('echo """""""""""""""""""""""""""""""""""""""""""', hook=hooks.error_line0)
     test("echo 'AH\\'")
     test('echo "AH\\"')
+    test("echo '\\''")
+    test('echo "\\""')
 
 
 @suite()
