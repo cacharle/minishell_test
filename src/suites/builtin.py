@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/09/13 13:57:13 by charles          ###   ########.fr        #
+#    Updated: 2020/09/15 11:44:48 by charles          ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -135,7 +135,7 @@ def suite_cd(test):
     test("cd /.; pwd; echo $PWD")
     test("cd /./; pwd; echo $PWD")
     test("cd /././././; pwd; echo $PWD")
-    test("cd //; pwd; echo $PWD")
+    test("cd //; pwd; echo $PWD", hook=hooks.replace_double_slash)
     test("cd ///; pwd; echo $PWD")
     test("cd ////; pwd; echo $PWD")
     test("cd //////////////////////////////////////////////////////; pwd; echo $PWD")
@@ -145,7 +145,7 @@ def suite_cd(test):
     test("cd '                  /'; pwd; echo $PWD")
     test("cd '                  /              '; pwd; echo $PWD")
     test("cd ' // '; pwd; echo $PWD")
-    test("cd //home; pwd; echo $PWD")
+    test("cd //home; pwd; echo $PWD", hook=hooks.replace_double_slash)
     test("cd ' //home'; pwd; echo $PWD")
     test("cd '     //home    '; pwd; echo $PWD")
     test("cd d", setup="mkdir -m 000 d")

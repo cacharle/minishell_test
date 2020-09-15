@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2020/09/13 09:50:21 by charles          ###   ########.fr        #
+#    Updated: 2020/09/15 11:44:14 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -43,3 +43,8 @@ def export_singleton(output):
         '\n'.join([line for line in output.split('\n')
                    if re.match("^{}.+=\".*\"$".format(prefix), line) is not None])
     )
+
+
+def replace_double_slash(output):
+    """Replace occurence of double slash by one"""
+    return output.replace("//", "/")
