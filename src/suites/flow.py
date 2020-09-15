@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2020/09/14 21:33:02 by charles          ###   ########.fr        #
+#    Updated: 2020/09/15 16:45:47 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -48,6 +48,9 @@ def suite_pipe(test):
     test("cat -e /etc/shells | head -c 10")
     test("cat -e /etc/shells | cat -e | head -c 10")
     test("cat -e /etc/shells | cat -e | cat -e | head -c 10")
+    test("cat -e /dev/random | head -c 10", hook=hooks.discard)
+    test("cat -e /dev/random | cat -e | head -c 10", hook=hooks.discard)
+    test("cat -e /dev/random | cat -e | cat -e | head -c 10", hook=hooks.discard)
     test("echo bonjour | cat")
     test("echo bonjour | cat -e")
     test("echo bonjour | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e | cat -e")
@@ -163,5 +166,17 @@ def suite_parenthesis(test):
     test("(echo a; echo b) | cat -e")
     test("echo bonjour | (cat -e; echo a)")
     test("echo bonjour | (echo a; cat -e)")
+    test("(echo a) | (cat -e)")
+    test("(echo a; echo b) | (cat -e)")
+    test("(echo a) | (cat -e | cat -e)")
+    test("(echo a; echo b) | (cat -e | cat -e)")
+    test("(echo a; echo b) | cat -e | cat -e")
+    test("(echo a); (echo b) | (cat -e) | (cat -e)")
+    test("echo a | (cat -e | cat -e | cat -e)")
+    test("echo a | (cat -e | cat -e | cat -e) | cat -e")
+    test("(echo a) | (cat -e | cat -e | cat -e) | cat -e")
+    test("(echo a) | (cat -e | cat -e | cat -e) | (cat -e)")
     # test("(echo bonjour ; echo aurevoir) | (cat -e | cat -e) | cat -e")
-    test("(            echo salut && echo bonjours )               ; echo comment ca va")
+    test("(    echo salut && echo bonjours )   ; echo comment ca va")
+    test("(cd /; echo $PWD; pwd); echo $PWD; pwd")
+    test("(export A=a; echo $A); echo $A")

@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/09/15 11:44:48 by charles          ###   ########.fr        #
+#    Updated: 2020/09/15 17:29:35 by charles          ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -91,6 +91,7 @@ def suite_export(test):
     test("export 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C; echo $A$B$C")
     test("export A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '; echo $A$B$C")
     test("export A B C; echo $A$B$C")
+    test("export A B C; env", hook=hooks.sort_lines)
     test("export 'AH@'=nop")
     test("export \"AH'\"=nop")
     test("export 'AH\"'=nop")

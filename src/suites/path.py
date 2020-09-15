@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/09 15:12:58 by charles           #+#    #+#              #
-#    Updated: 2020/09/15 13:37:17 by charles          ###   ########.fr        #
+#    Updated: 2020/09/15 14:10:37 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -64,6 +64,10 @@ def suite_path(test):
     test("b", setup="mkdir path && ln -s /bin/whoami ./path/b", exports={"PATH": "path"})
     test("a", setup="mkdir path && mkfifo path/a")
     test("a", setup="mkdir path && mkfifo path/a && chmod 777 path/a")
+    test("a", setup="mkdir path1 path2 && cp /bin/whoami path1/a"
+         "&& cp /bin/whoami path2/a && chmod 000 path1/a", exports={"PATH": "path1:path2"})
+    test("a", setup="mkdir path1 path2 && cp /bin/whoami path1/a"
+         "&& cp /bin/whoami path2/a && chmod 000 path1/a", exports={"PATH": "path2:path1"})
 
 
 @suite()
