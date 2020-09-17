@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 17:07:22 by charles          ###   ########.fr        #
+#    Updated: 2020/09/17 11:05:46 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -29,7 +29,7 @@ class Test:
                  exports: {str: str} = {},
                  timeout: float = config.TIMEOUT,
                  signal=None,
-                 hook=None):
+                 hook=[]):
         """Test class
            cmd: command to execute
            setup: command to execute before tested command
@@ -47,6 +47,8 @@ class Test:
         self.timeout = timeout
         self.signal = signal
         self.hook = hook
+        if type(self.hook) is not list:
+            self.hook = [self.hook]
 
     def run(self):
         """Run the test for minishell and the reference shell and print the result out"""
@@ -126,6 +128,7 @@ class Test:
                 files_content.append(None)
 
         # sandbox.remove()
-        if self.hook is not None:
-            output = self.hook(output)
+        for h in self.hook:
+            output = h(output)
+
         return Captured(output, process.returncode, files_content)

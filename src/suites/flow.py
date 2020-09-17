@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2020/09/15 16:45:47 by charles          ###   ########.fr        #
+#    Updated: 2020/09/17 11:03:23 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -36,6 +36,16 @@ def suite_end(test):
     test("ls doesnotexists; echo bonjour")
     test("echo bonjour; ls doesnotexists")
     test("echo a ; ;", hook=hooks.error_line0)
+    test("echo a ; ;", hook=hooks.error_line0)
+    test(";", hook=hooks.error_line0)
+    test("; ;", hook=hooks.error_line0)
+    test("; ; ;", hook=hooks.error_line0)
+    test("echo a ; ; echo b", hook=hooks.error_line0)
+    test(";;", hook=[hooks.error_line0, hooks.replace_double_semi_colon])
+    test(";;;", hook=[hooks.error_line0, hooks.replace_double_semi_colon])
+    test(";;;;;", hook=[hooks.error_line0, hooks.replace_double_semi_colon])
+    test("echo a ;; echo b", hook=[hooks.error_line0, hooks.replace_double_semi_colon])
+    test("echo a ;;;;; echo b", hook=[hooks.error_line0, hooks.replace_double_semi_colon])
     test("ls " + 40 * " ; ls", setup="touch a b c")
     test("ls " + 80 * " ; ls", setup="touch a b c")
     test("ls " + 40 * " ; ls" + ";", setup="touch a b c")
@@ -67,11 +77,14 @@ def suite_pipe(test):
     test(" | cat", hook=hooks.error_line0)
     test("echo a | export A=a; echo $A")
     test("export A=a | cat; echo $A")
+    test("echo bonjour | | cat -e", hook=hooks.error_line0)
+    test("echo bonjour | asdf")
+    test("asdf | echo bonjour")
+    test("echo a ||| echo b")
     test("ls " + 40 * " | ls", setup="touch a b c")
     test("ls " + 80 * " | ls", setup="touch a b c")
     test("echo bonjour " + 40 * " | cat -e")
     test("echo bonjour " + 80 * " | cat -e")
-    test("echo bonjour | | cat -e", hook=hooks.error_line0)
 
 
 @suite(bonus=True)
@@ -176,7 +189,7 @@ def suite_parenthesis(test):
     test("echo a | (cat -e | cat -e | cat -e) | cat -e")
     test("(echo a) | (cat -e | cat -e | cat -e) | cat -e")
     test("(echo a) | (cat -e | cat -e | cat -e) | (cat -e)")
-    # test("(echo bonjour ; echo aurevoir) | (cat -e | cat -e) | cat -e")
+    test("(echo bonjour ; echo aurevoir) | (cat -e | cat -e) | cat -e")
     test("(    echo salut && echo bonjours )   ; echo comment ca va")
     test("(cd /; echo $PWD; pwd); echo $PWD; pwd")
     test("(export A=a; echo $A); echo $A")

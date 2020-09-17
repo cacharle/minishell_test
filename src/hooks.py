@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2020/09/15 11:44:14 by charles          ###   ########.fr        #
+#    Updated: 2020/09/17 11:06:52 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -48,3 +48,8 @@ def export_singleton(output):
 def replace_double_slash(output):
     """Replace occurence of double slash by one"""
     return output.replace("//", "/")
+
+
+def replace_double_semi_colon(output):
+    """Replace occurence of double semi-colon by one"""
+    return output.replace(";;", ";")

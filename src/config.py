@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2020/09/13 14:31:21 by charles          ###   ########.fr        #
+#    Updated: 2020/09/16 11:33:54 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -50,7 +50,7 @@ SANDBOX_PATH = "sandbox"
 EXECUTABLES_PATH = "./bin"
 
 # commands available in test"
-AVAILABLE_COMMANDS = ["rmdir", "env", "cat", "touch", "ls", "grep", "sh"]
+AVAILABLE_COMMANDS = ["rmdir", "env", "cat", "touch", "ls", "grep", "sh", "head"]
 
 # $PATH environment variable passed to the shell
 PATH_VARIABLE = os.path.abspath(EXECUTABLES_PATH)
