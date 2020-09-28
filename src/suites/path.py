@@ -6,16 +6,21 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/09 15:12:58 by charles           #+#    #+#              #
-#    Updated: 2020/09/15 14:10:37 by charles          ###   ########.fr        #
+#    Updated: 2020/09/28 10:49:12 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
+
+import distutils.spawn
 
 from suite import suite
 
 
 @suite()
 def suite_path(test):
-    mode_fmt = "mkdir path && cp /bin/whoami ./path/a && chmod {} ./path/a"
+    whoami_path = distutils.spawn.find_executable("which")
+    mode_fmt = ("mkdir path && cp " +
+                whoami_path +
+                " ./path/a && chmod {} ./path/a")
     test("a", setup=mode_fmt.format("000"), exports={"PATH": "path"})
     test("a", setup=mode_fmt.format("001"), exports={"PATH": "path"})
     test("a", setup=mode_fmt.format("002"), exports={"PATH": "path"})
@@ -60,14 +65,14 @@ def suite_path(test):
     test("a", setup=mode_fmt.format("6777"), exports={"PATH": "path"})
     test("a", setup=mode_fmt.format("7777"), exports={"PATH": "path"})
     test("a", setup=mode_fmt.format("0000"), exports={"PATH": "path"})
-    test("b", setup="mkdir path && cp /bin/whoami ./path/a && ln -s ./path/a ./path/b", exports={"PATH": "path"})
-    test("b", setup="mkdir path && ln -s /bin/whoami ./path/b", exports={"PATH": "path"})
+    test("b", setup="mkdir path && cp " + whoami_path + " ./path/a && ln -s ./path/a ./path/b", exports={"PATH": "path"})
+    test("b", setup="mkdir path && ln -s " + whoami_path + " ./path/b", exports={"PATH": "path"})
     test("a", setup="mkdir path && mkfifo path/a")
     test("a", setup="mkdir path && mkfifo path/a && chmod 777 path/a")
-    test("a", setup="mkdir path1 path2 && cp /bin/whoami path1/a"
-         "&& cp /bin/whoami path2/a && chmod 000 path1/a", exports={"PATH": "path1:path2"})
-    test("a", setup="mkdir path1 path2 && cp /bin/whoami path1/a"
-         "&& cp /bin/whoami path2/a && chmod 000 path1/a", exports={"PATH": "path2:path1"})
+    test("a", setup="mkdir path1 path2 && cp " + whoami_path + " path1/a"
+         "&& cp " + whoami_path + " path2/a && chmod 000 path1/a", exports={"PATH": "path1:path2"})
+    test("a", setup="mkdir path1 path2 && cp " + whoami_path + " path1/a"
+         "&& cp " + whoami_path + " path2/a && chmod 000 path1/a", exports={"PATH": "path2:path1"})
 
 
 @suite()
@@ -93,8 +98,8 @@ def suites_path_variable(test):
     test("whoami", exports={"PATH": "________"})
     test("whoami", exports={"PATH": "        "})
     test("whoami", exports={"PATH": "   :    "})
-    test("whoami", exports={"PATH": "     /bin      "})
-    test("whoami", exports={"PATH": "/bin:/bin:/bin:/bin"})
+    test("whoami", exports={"PATH": "     /usr/bin      "})
+    test("whoami", exports={"PATH": "/usr/bin:/usr/bin:/usr/bin:/usr/bin"})
     test("whoami", exports={"PATH": "     /sbin      "})
     test("whoami", exports={"PATH": "/sbin:/sbin:/sbin:/sbin"})
     test("whoami", exports={"PATH": ""})
