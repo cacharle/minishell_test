@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 17:07:00 by charles          ###   ########.fr        #
+#    Updated: 2020/10/06 17:04:25 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -86,12 +86,21 @@ class Suite:
         """Append a test to the suite"""
         self.tests.append(test)
 
+    BLUE_CHARS  = "\033[34m"
+    CLOSE_CHARS = "\033[0m"
+
     def run(self):
         """Run all test in the suite"""
         if config.VERBOSE_LEVEL == 0:
             print(self.name + ": ", end="")
         else:
-            print("{} {:#<41}".format("#" * 39, self.name + " "))
+            print("{}{} {:#<{width}}{}".format(
+                self.BLUE_CHARS,
+                "#" * (config.TERM_COLS // 2 - 1),
+                self.name + " ",
+                self.CLOSE_CHARS,
+                width=config.TERM_COLS // 2
+            ))
         for t in self.tests:
             t.run()
         if config.VERBOSE_LEVEL == 0:
@@ -119,10 +128,10 @@ class Suite:
                 continue
             pass_sum += pass_total
             fail_sum += fail_total
-            print("{:<30} \033[32m{:3} [PASS]\033[0m  \033[31m{:3} [FAIL]\033[0m"
-                  .format(s.name, pass_total, fail_total))
-        print("{:<30} \033[32m{:3} [PASS]\033[0m  \033[31m{:3} [FAIL]\033[0m"
-              .format("TOTAL", pass_sum, fail_sum))
+            print("{:.<{width}} \033[32m{:3} [PASS]\033[0m \033[31m{:3} [FAIL]\033[0m"
+                  .format(s.name + " ", pass_total, fail_total, width=config.TERM_COLS - 22))
+        print("{:.<{width}} \033[32m{:3} [PASS]\033[0m \033[31m{:3} [FAIL]\033[0m"
+              .format("TOTAL ", pass_sum, fail_sum, width=config.TERM_COLS - 22))
 
     @classmethod
     def save_log(cls):

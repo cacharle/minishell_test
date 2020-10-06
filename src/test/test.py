@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/09/17 11:05:46 by charles          ###   ########.fr        #
+#    Updated: 2020/10/06 15:54:12 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -29,15 +29,17 @@ class Test:
                  exports: {str: str} = {},
                  timeout: float = config.TIMEOUT,
                  signal=None,
-                 hook=[]):
-        """Test class
-           cmd: command to execute
-           setup: command to execute before tested command
-           files: files to watch (check content after test)
-           exports: exported variables
-           timeout: maximum amount of time taken by the test
-           signal: signal to send to the test
-           hook: function to execute on the output of the test
+                 hook=[],
+                 hook_status=[]):
+        """ Test class
+            cmd:         command to execute
+            setup:       command to execute before tested command
+            files:       files to watch (check content after test)
+            exports:     exported variables
+            timeout:     maximum amount of time taken by the test
+            signal:      signal to send to the test
+            hook:        function to execute on the output of the test
+            hook_status: function to execute on status code
         """
         self.cmd = cmd
         self.setup = setup
@@ -47,11 +49,12 @@ class Test:
         self.timeout = timeout
         self.signal = signal
         self.hook = hook
+        self.hook_status = hook_status
         if type(self.hook) is not list:
             self.hook = [self.hook]
 
     def run(self):
-        """Run the test for minishell and the reference shell and print the result out"""
+        """ Run the test for minishell and the reference shell and print the result out """
         expected = self._run_sandboxed(config.REFERENCE_PATH, config.REFERENCE_ARGS + ["-c"])
         actual   = self._run_sandboxed(config.MINISHELL_PATH, ["-c"])
         s = self.cmd
@@ -130,5 +133,6 @@ class Test:
         # sandbox.remove()
         for h in self.hook:
             output = h(output)
-
+        for h in self.hook_status:
+            process.returncode = h(process.returncode)
         return Captured(output, process.returncode, files_content)

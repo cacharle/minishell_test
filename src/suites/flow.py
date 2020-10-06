@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2020/09/17 11:03:23 by charles          ###   ########.fr        #
+#    Updated: 2020/10/06 16:16:12 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -80,7 +80,7 @@ def suite_pipe(test):
     test("echo bonjour | | cat -e", hook=hooks.error_line0)
     test("echo bonjour | asdf")
     test("asdf | echo bonjour")
-    test("echo a ||| echo b")
+    test("echo a ||| echo b", hook=hooks.error_line0)
     test("ls " + 40 * " | ls", setup="touch a b c")
     test("ls " + 80 * " | ls", setup="touch a b c")
     test("echo bonjour " + 40 * " | cat -e")

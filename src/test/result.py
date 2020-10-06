@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 22:20:03 by charles          ###   ########.fr        #
+#    Updated: 2020/10/06 16:56:30 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -80,10 +80,10 @@ class Result:
             return self.green('.') if self.passed else self.red('!')
         elif config.VERBOSE_LEVEL == 1:
             printed = self.escaped_cmd[:]
-            if len(printed) > 70:
-                printed = printed[:67] + "..."
-            fmt = self.green("{:74} [PASS]") if self.passed else self.red("{:74} [FAIL]")
-            return fmt.format(printed)
+            if len(printed) > config.TERM_COLS - 7:
+                printed = printed[:config.TERM_COLS - 10] + "..."
+            fmt = self.green("{:{width}} [PASS]") if self.passed else self.red("{:{width}} [FAIL]")
+            return fmt.format(printed, width=config.TERM_COLS - 7)
         elif config.VERBOSE_LEVEL == 2:
             return self.full_diff()
         else:

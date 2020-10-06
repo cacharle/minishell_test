@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2020/09/16 11:33:54 by charles          ###   ########.fr        #
+#    Updated: 2020/10/06 17:06:17 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -15,6 +15,7 @@
 ################################################################################
 
 import os
+import shutil
 
 # run the bonus tests
 # can be changed with `export MINISHELL_TEST_BONUS=yes` in your shell rc file.
@@ -88,3 +89,7 @@ VERBOSE_LEVEL = 1
 
 MINISHELL_ERROR_BEGIN = os.path.basename(MINISHELL_PATH) + ": "
 REFERENCE_ERROR_BEGIN = REFERENCE_PATH + ": line 0: "
+
+TERM_COLS = shutil.get_terminal_size().columns
+if TERM_COLS < 40:
+    raise RuntimeError("You're terminal isn't wide enough")

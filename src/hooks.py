@@ -6,11 +6,13 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2020/09/17 11:06:52 by charles          ###   ########.fr        #
+#    Updated: 2020/10/06 09:12:52 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import re
+import os
+import sys
 
 import config
 
@@ -53,3 +55,17 @@ def replace_double_slash(output):
 def replace_double_semi_colon(output):
     """Replace occurence of double semi-colon by one"""
     return output.replace(";;", ";")
+
+
+def platform_exit_status(darwin_status, linux_status, windows_status=None):
+    def hook(status):
+        name = os.uname().sysname
+        if name == "Darwin":
+            return status
+        elif name == "Linux":
+            return (darwin_status if status == linux_status else status)
+        else:
+            raise RuntimeError("This platform exit codes are not supported yet,"
+                               "feel free to contact me to add it.")
+            sys.exit(2)
+        return status

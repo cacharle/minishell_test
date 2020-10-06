@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
-#    Updated: 2020/09/15 18:34:34 by charles          ###   ########.fr        #
+#    Updated: 2020/10/06 16:31:11 by cacharle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -217,7 +217,7 @@ def suite_escape(test):
     test(r"/bin/echo ' \$? '")
     test(r"/bin/echo ' \\ '")
     test(r"/bin/echo ' \\\ '")
-    test("echo \\")
+    test("echo \\")  # noting on linux
     test("echo \"\\\"\"'bonjour'")
 
 
