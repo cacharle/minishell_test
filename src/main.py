@@ -36,11 +36,11 @@ def main():
 
     if config.MINISHELL_MAKE or args.make:
         try:
-            print("========================================MAKE====================================")
+            print("{:=^{width}}".format("MAKE", width=config.TERM_COLS))
             subprocess.run(["make", "--no-print-directory", "-C", config.MINISHELL_DIR],
                            check=True,
                            env={"MINISHELL_TEST_FLAGS": "-DMINISHELL_TEST", **os.environ})
-            print("================================================================================")
+            print("=" * config.TERM_COLS)
         except subprocess.CalledProcessError:
             sys.exit(1)
         if args.make:

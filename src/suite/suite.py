@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/10/06 17:04:25 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/06 17:10:43 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -94,12 +94,11 @@ class Suite:
         if config.VERBOSE_LEVEL == 0:
             print(self.name + ": ", end="")
         else:
-            print("{}{} {:#<{width}}{}".format(
+            print("{}{:#^{width}}{}".format(
                 self.BLUE_CHARS,
-                "#" * (config.TERM_COLS // 2 - 1),
-                self.name + " ",
+                " " + self.name + " ",
                 self.CLOSE_CHARS,
-                width=config.TERM_COLS // 2
+                width=config.TERM_COLS
             ))
         for t in self.tests:
             t.run()

@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 08:20:48 by charles          ###   ########.fr        #
+#    Updated: 2020/10/07 11:56:46 by cacharle         ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -123,7 +123,9 @@ def suite_cd(test):
     test("cd ../../../../..; pwd; echo $PWD")
     test("cd ../../../../../..; pwd; echo $PWD")
     test("cd /; pwd; echo $PWD")
-    test("cd /etc; pwd; echo $PWD")
+    # /etc is a link to /etc/private
+    # hard and weird to implement with pwd
+    # test("cd /etc; pwd; echo $PWD")
     test("cd ''; pwd; echo $PWD")
     test("cd '' ''; pwd; echo $PWD")
     test("cd '' '' ''; pwd; echo $PWD")
@@ -244,6 +246,7 @@ def suite_pwd(test):
     test("pwd", setup="cd /")
     test("pwd", setup="cd $HOME")
     test("pwd | cat -e")
+    test("pwd", exports={"PWD": "/etc"})
     # test("cd lnk; rmdir ../d; pwd", setup="mkdir d; ln -s d lnk")
 
 

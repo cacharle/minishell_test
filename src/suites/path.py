@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/09 15:12:58 by charles           #+#    #+#              #
-#    Updated: 2020/09/28 10:49:12 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/07 11:12:56 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -76,7 +76,7 @@ def suite_path(test):
 
 
 @suite()
-def suites_path_variable(test):
+def suite_path_variable(test):
     test("echo $PATH", exports={"PATH": "doesnotexits"})
     test("echo $PATH", exports={"PATH": "doesnotexits:asdfasdfas"})
     test("echo $PATH", exports={"PATH": "a:b:c:d:e:f:g:h:i:j:k:l:m:n:o:p:q:r:s:t:u:v:w:x:y:z"})
