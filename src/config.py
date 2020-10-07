@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2020/10/06 17:06:17 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/07 08:07:25 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -93,3 +93,5 @@ REFERENCE_ERROR_BEGIN = REFERENCE_PATH + ": line 0: "
 TERM_COLS = shutil.get_terminal_size().columns
 if TERM_COLS < 40:
     raise RuntimeError("You're terminal isn't wide enough")
+
+PLATFORM = os.uname().sysname

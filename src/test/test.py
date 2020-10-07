@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/10/06 15:54:12 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/07 08:12:00 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -52,6 +52,8 @@ class Test:
         self.hook_status = hook_status
         if type(self.hook) is not list:
             self.hook = [self.hook]
+        if type(self.hook_status) is not list:
+            self.hook_status = [self.hook_status]
 
     def run(self):
         """ Run the test for minishell and the reference shell and print the result out """

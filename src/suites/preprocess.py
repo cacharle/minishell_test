@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
-#    Updated: 2020/10/06 16:31:11 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/07 08:27:57 by charles          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,18 +55,18 @@ def suite_quote(test):
     test("echo '\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"'")
     test('echo "\'"')
     test('echo "\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'"')
-    test("echo '", hook=hooks.error_line0)
-    test('echo "', hook=hooks.error_line0)
-    test("echo '''", hook=hooks.error_line0)
-    test('echo """', hook=hooks.error_line0)
-    test("echo '''''''''''''''''''''''''''''''''''''''''''", hook=hooks.error_line0)
-    test('echo """""""""""""""""""""""""""""""""""""""""""', hook=hooks.error_line0)
+    test("echo '", hook=hooks.error_line0, hook_status=hooks.platform_status(2, 1))
+    test('echo "', hook=hooks.error_line0, hook_status=hooks.platform_status(2, 1))
+    test("echo '''", hook=hooks.error_line0, hook_status=hooks.platform_status(2, 1))
+    test('echo """', hook=hooks.error_line0, hook_status=hooks.platform_status(2, 1))
+    test("echo '''''''''''''''''''''''''''''''''''''''''''", hook=hooks.error_line0, hook_status=hooks.platform_status(2, 1))
+    test('echo """""""""""""""""""""""""""""""""""""""""""', hook=hooks.error_line0, hook_status=hooks.platform_status(2, 1))
     test("echo 'AH\\'")
-    test('echo "AH\\"', hook=hooks.error_line0)
+    test('echo "AH\\"', hook=hooks.error_line0, hook_status=hooks.platform_status(2, 1))
     test('echo "AH\\""')
-    test("echo '\\''", hook=hooks.error_line0)
+    test("echo '\\''", hook=hooks.error_line0, hook_status=hooks.platform_status(2, 1))
     test('echo "\\""')
-    test('echo "\\\\""', hook=hooks.error_line0)
+    test('echo "\\\\""', hook=hooks.error_line0, hook_status=hooks.platform_status(2, 1))
 
 
 @suite()
@@ -217,7 +217,7 @@ def suite_escape(test):
     test(r"/bin/echo ' \$? '")
     test(r"/bin/echo ' \\ '")
     test(r"/bin/echo ' \\\ '")
-    test("echo \\")  # noting on linux
+    test("echo \\", hook=hooks.delete_escape)
     test("echo \"\\\"\"'bonjour'")
 
 

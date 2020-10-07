@@ -37,7 +37,7 @@ def main():
     if config.MINISHELL_MAKE or args.make:
         try:
             print("========================================MAKE====================================")
-            subprocess.run(["make", "-C", config.MINISHELL_DIR],
+            subprocess.run(["make", "--no-print-directory", "-C", config.MINISHELL_DIR],
                            check=True,
                            env={"MINISHELL_TEST_FLAGS": "-DMINISHELL_TEST", **os.environ})
             print("================================================================================")

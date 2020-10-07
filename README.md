@@ -60,6 +60,10 @@ Their is 3 different method to enable the bonus tests:
 * Set the environment variable `MINISHELL_TEST_BONUS` to `yes`  
   (e.g `echo 'export MINISHELL_TEST_BONUS=yes' >> ~/.zshrc`)
 
+## Linux
+
+The tester will try to convert to output/status code of bash on Linux to the one on Mac.
+
 ---
 
 ## Add new tests
