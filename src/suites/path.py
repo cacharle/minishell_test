@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/09 15:12:58 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 11:12:56 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/07 15:16:49 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -65,7 +65,8 @@ def suite_path(test):
     test("a", setup=mode_fmt.format("6777"), exports={"PATH": "path"})
     test("a", setup=mode_fmt.format("7777"), exports={"PATH": "path"})
     test("a", setup=mode_fmt.format("0000"), exports={"PATH": "path"})
-    test("b", setup="mkdir path && cp " + whoami_path + " ./path/a && ln -s ./path/a ./path/b", exports={"PATH": "path"})
+    test("b", setup="mkdir path && cp " + whoami_path + " ./path/a && ln -s ./path/a ./path/b",
+         exports={"PATH": "path"})
     test("b", setup="mkdir path && ln -s " + whoami_path + " ./path/b", exports={"PATH": "path"})
     test("a", setup="mkdir path && mkfifo path/a")
     test("a", setup="mkdir path && mkfifo path/a && chmod 777 path/a")
@@ -102,7 +103,7 @@ def suite_path_variable(test):
     test("whoami", exports={"PATH": "/usr/bin:/usr/bin:/usr/bin:/usr/bin"})
     test("whoami", exports={"PATH": "     /sbin      "})
     test("whoami", exports={"PATH": "/sbin:/sbin:/sbin:/sbin"})
-    test("whoami", exports={"PATH": ""})
+    test("whoami", exports={"PATH": ""})  # error message explicit enough
     test("whoami", exports={"PATH": ":"})
     test("whoami", exports={"PATH": ":::::::::::::::::::"})
     test("whoami", exports={"PATH": "/asdfasdf"})

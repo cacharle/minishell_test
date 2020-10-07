@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 08:07:25 by charles          ###   ########.fr        #
+#    Updated: 2020/10/07 18:21:46 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -16,6 +16,7 @@
 
 import os
 import shutil
+import distutils.spawn
 
 # run the bonus tests
 # can be changed with `export MINISHELL_TEST_BONUS=yes` in your shell rc file.
@@ -59,6 +60,7 @@ PATH_VARIABLE = os.path.abspath(EXECUTABLES_PATH)
 # default test timeout
 TIMEOUT = 0.5
 
+
 LOREM = """
 Mollitia asperiores assumenda excepturi et ipsa. Nihil corporis facere aut a rem consequatur.
 Quas molestiae corporis et quibusdam maiores. Molestiae sed unde aut at sed.
@@ -77,12 +79,22 @@ Perspiciatis ut maxime et libero quo voluptas consequatur illum. Pariatur porro 
 LOREM = ' '.join(LOREM.split('\n'))
 
 ###############################################################################
-# do not edit
+# You probably shouldn't edit after                                           #
 ###############################################################################
 
 MINISHELL_PATH = os.path.abspath(
     os.path.join(MINISHELL_DIR, MINISHELL_EXEC)
 )
+
+VALGRIND_CMD = [
+    distutils.spawn.find_executable("valgrind"),
+    # "valgrind",
+    "--trace-children=no",
+    "--leak-check=yes",
+    "--child-silent-after-fork=yes",
+    "--show-leak-kinds=definite",
+    MINISHELL_PATH,
+]
 
 # 0, 1, 2
 VERBOSE_LEVEL = 1
@@ -95,3 +107,7 @@ if TERM_COLS < 40:
     raise RuntimeError("You're terminal isn't wide enough")
 
 PLATFORM = os.uname().sysname
+
+EXIT_FIRST = False
+
+CHECK_LEAKS = False

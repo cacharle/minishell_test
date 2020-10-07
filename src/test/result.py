@@ -6,11 +6,12 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2020/10/06 16:56:30 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/07 18:53:27 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import sys
+import re
 
 import config
 from test.captured import Captured
@@ -23,50 +24,51 @@ class Result:
     BOLD_CHARS  = "\033[1m"
     CLOSE_CHARS = "\033[0m"
 
-    def __init__(self, cmd: str, file_names: [str], expected: Captured, actual: Captured):
+    def __init__(
+        self,
+        cmd: str,
+        file_names: [str],
+        expected: Captured,
+        actual: Captured,
+        leak_output: str = None
+    ):
         """Result class
-           cmd:        runned command
-           file_names: names of watched files
-           expected:   expected capture
-           actual:     actual capture
+           cmd:         runned command
+           file_names:  names of watched files
+           expected:    expected capture
+           actual:      actual capture
+           leak_output: output of valgrind in check leak mode
         """
         self.cmd = cmd
         self.file_names = file_names
         self.expected = expected
         self.actual = actual
         self.colored = True
+        self.leak_output = leak_output
         self.set_colors()
 
-    def set_colors(self):
-        """Set colors strings on or off based on self.colored"""
-        if self.colored:
-            self.color_red   = self.RED_CHARS
-            self.color_green = self.GREEN_CHARS
-            self.color_blue  = self.BLUE_CHARS
-            self.color_bold  = self.BOLD_CHARS
-            self.color_close = self.CLOSE_CHARS
-        else:
-            self.color_red   = ""
-            self.color_green = ""
-            self.color_blue  = ""
-            self.color_bold  = ""
-            self.color_close = ""
+    @staticmethod
+    def leak(cmd: str, leak_output: str = None):
+        return Result(cmd, None, None, None, leak_output)
 
-    def green(self, s):
-        return self.color_green + s + self.color_close
-
-    def red(self, s):
-        return self.color_red + s + self.color_close
-
-    def blue(self, s):
-        return self.color_blue + s + self.color_close
-
-    def bold(self, s):
-        return self.color_bold + s + self.color_close
+    @property
+    def lost_bytes(self):
+        m = re.search(
+            r"definitely lost: (?P<bytes>[0-9,]+) bytes in [0-9,]+ blocks",
+            self.leak_output
+        )
+        if m is None:
+            raise RuntimeError(
+                "valgrind output parsing failed for `{}`:\n{}"
+                .format(self.cmd, self.leak_output)
+            )
+        return int(m.group("bytes"))
 
     @property
     def passed(self):
         """Check if the result passed"""
+        if self.leak_output is not None:
+            return self.lost_bytes == 0
         return self.actual == self.expected
 
     @property
@@ -153,10 +155,12 @@ class Result:
 
     def full_diff(self) -> str:
         """Concat all difference reports"""
-        return (self.indicator("WITH {}".format(self.escaped_cmd), "|>") + '\n'
-                + self.output_diff()
-                + self.files_diff()
-                + "=" * 80 + '\n')
+        rest = ""
+        if self.leak_output is not None:
+            rest = self.leak_output
+        else:
+            rest = (self.output_diff() + self.files_diff() + "=" * 80 + '\n')
+        return (self.indicator("WITH {}".format(self.escaped_cmd), "|>") + '\n' + rest)
 
     def cat_e(self, s: str) -> str:
         """Pass a string through a cat -e like output"""
@@ -176,3 +180,30 @@ class Result:
                 .replace("\v", "\\v")
                 .replace("\r", "\\r")
                 .replace("\f", "\\f"))
+
+    def set_colors(self):
+        """Set colors strings on or off based on self.colored"""
+        if self.colored:
+            self.color_red   = self.RED_CHARS
+            self.color_green = self.GREEN_CHARS
+            self.color_blue  = self.BLUE_CHARS
+            self.color_bold  = self.BOLD_CHARS
+            self.color_close = self.CLOSE_CHARS
+        else:
+            self.color_red   = ""
+            self.color_green = ""
+            self.color_blue  = ""
+            self.color_bold  = ""
+            self.color_close = ""
+
+    def green(self, s):
+        return self.color_green + s + self.color_close
+
+    def red(self, s):
+        return self.color_red + s + self.color_close
+
+    def blue(self, s):
+        return self.color_blue + s + self.color_close
+
+    def bold(self, s):
+        return self.color_bold + s + self.color_close

@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2020/09/27 11:08:49 by charles          ###   ########.fr        #
+#    Updated: 2020/10/07 18:21:33 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -17,6 +17,14 @@ def parse_args():
     """Parse command line arguments"""
 
     parser = argparse.ArgumentParser(description="Minishell test")
+    parser.add_argument(
+        "-k", "--check-leaks", action="store_true",
+        help="Run valgrind on tests (disable usual comparison with bash)"
+    )
+    parser.add_argument(
+        "-x", "--exit-first", action="store_true",
+        help="Exit on first fail"
+    )
     parser.add_argument(
         "-v", "--verbose", action="count",
         help="Increase verbosity level (e.g -vv == 2)"

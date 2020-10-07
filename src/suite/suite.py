@@ -6,13 +6,27 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/10/06 17:10:43 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/07 18:24:20 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import sys
+import tty
+import termios
 
 import config
+
+
+# # from: https://stackoverflow.com/questions/510357
+# def getchar():
+#     fd = sys.stdin.fileno()
+#     old_settings = termios.tcgetattr(fd)
+#     try:
+#         tty.setraw(sys.stdin.fileno())
+#         char = sys.stdin.read(1)
+#     finally:
+#         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+#     return char
 
 
 class Suite:
@@ -22,7 +36,8 @@ class Suite:
     def run_all(cls):
         """Run all available suites"""
         for s in cls.available:
-            s.run()
+            if not s.run() and config.EXIT_FIRST:
+                break
 
     @classmethod
     def setup(cls, asked_names: [str]):
@@ -39,28 +54,28 @@ class Suite:
                 names.append(name)
                 continue
             matches = [n for n in suite_names
-                       if n.find("/") != -1
-                       and n[n.find("/") + 1:].startswith(name)
-                       or n.startswith(name)]
+                    if n.find("/") != -1
+                    and n[n.find("/") + 1:].startswith(name)
+                    or n.startswith(name)]
             if len(matches) == 1:
                 names.append(matches[0])
             elif len(matches) != 0 and all([n.startswith(name) for n in matches]):
                 names.extend(matches)
             elif len(matches) > 2:
                 print(("Ambiguous name `{}` match the following suites\n\t{}\n"
-                      "Try to run with -l to see the available suites")
-                      .format(name, ', '.join(matches)))
+                    "Try to run with -l to see the available suites")
+                    .format(name, ', '.join(matches)))
                 sys.exit(1)
             elif len(matches) == 0:
                 print(("Name `{}` doesn't match any suite/group name\n\t"
-                      "Try to run with -l to see the available suites")
-                      .format(name))
+                    "Try to run with -l to see the available suites")
+                    .format(name))
                 sys.exit(1)
 
         cls.available = list(set(
             [s for s in cls.available if s.name in names]
             + [s for s in cls.available if any([g for g in s.groups if g in names])]
-        ))
+            ))
         cls.available.sort(key=lambda s: s.name)
         for s in cls.available:
             s.generator_func()
@@ -89,7 +104,7 @@ class Suite:
     BLUE_CHARS  = "\033[34m"
     CLOSE_CHARS = "\033[0m"
 
-    def run(self):
+    def run(self) -> bool:
         """Run all test in the suite"""
         if config.VERBOSE_LEVEL == 0:
             print(self.name + ": ", end="")
@@ -99,11 +114,14 @@ class Suite:
                 " " + self.name + " ",
                 self.CLOSE_CHARS,
                 width=config.TERM_COLS
-            ))
-        for t in self.tests:
-            t.run()
+                ))
+            for t in self.tests:
+                t.run()
+                if config.EXIT_FIRST and t.result.failed:
+                    return False
         if config.VERBOSE_LEVEL == 0:
             print()
+        return True
 
     def total(self) -> (int, int):
         """Returns the total of passed and failed tests"""
@@ -128,9 +146,9 @@ class Suite:
             pass_sum += pass_total
             fail_sum += fail_total
             print("{:.<{width}} \033[32m{:3} [PASS]\033[0m \033[31m{:3} [FAIL]\033[0m"
-                  .format(s.name + " ", pass_total, fail_total, width=config.TERM_COLS - 22))
+                    .format(s.name + " ", pass_total, fail_total, width=config.TERM_COLS - 22))
         print("{:.<{width}} \033[32m{:3} [PASS]\033[0m \033[31m{:3} [FAIL]\033[0m"
-              .format("TOTAL ", pass_sum, fail_sum, width=config.TERM_COLS - 22))
+                .format("TOTAL ", pass_sum, fail_sum, width=config.TERM_COLS - 22))
 
     @classmethod
     def save_log(cls):

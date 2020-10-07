@@ -11,24 +11,28 @@ The default path to your project is `..` but you can change it the the [configur
 ```sh
 $ ./run  # run all tests
 
-$ ./run --help
-usage: run [-h] [-v] [-b] [-n] [-l] [-m] [-p] [suite [suite ...]]
+$❯ ./run -h
+usage: run [-h] [-k] [-x] [-v] [-b] [-n] [-l] [-m] [-p] [suite [suite ...]]
 
 Minishell test
 
 positional arguments:
-  suite           Test suites/group to run.
-                  It tries to be smart and autocomplete the suite name
-                  (e.g ./run int -> ./run preprocess/interpolation)
+  suite              Test suites/group to run. It tries to be smart and
+                     autocomplete the suite name (e.g ./run int -> ./run
+                     preprocess/interpolation)
 
 optional arguments:
-  -h, --help      show this help message and exit
-  -v, --verbose   Increase verbosity level (e.g -vv == 2)
-  -b, --bonus     Enable bonus tests
-  -n, --no-bonus  Disable bonus tests
-  -l, --list      Print available test suites
-  -m, --make      Make minishell and exit
-  -p, --pager     After running the test, display the result in a pager of your choice
+  -h, --help         show this help message and exit
+  -k, --check-leaks  Run valgrind on tests (disable usual comparison with
+                     bash)
+  -x, --exit-first   Exit on first fail
+  -v, --verbose      Increase verbosity level (e.g -vv == 2)
+  -b, --bonus        Enable bonus tests
+  -n, --no-bonus     Disable bonus tests
+  -l, --list         Print available test suites
+  -m, --make         Make minishell and exit
+  -p, --pager        After running the test, display the result in a pager of
+                     your choice ./run --help
 ```
 
 ## Test compatibility
@@ -59,6 +63,10 @@ Their is 3 different method to enable the bonus tests:
 * Change the `BONUS` variable in [config.py](src/config.py) to True
 * Set the environment variable `MINISHELL_TEST_BONUS` to `yes`  
   (e.g `echo 'export MINISHELL_TEST_BONUS=yes' >> ~/.zshrc`)
+
+## Memory leaks
+
+`./run -kx`
 
 ## Linux
 

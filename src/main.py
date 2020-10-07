@@ -65,6 +65,9 @@ def main():
         config.BONUS = True
     if args.no_bonus:
         config.BONUS = False
+    config.EXIT_FIRST = args.exit_first
+    config.CHECK_LEAKS = args.check_leaks
+
     Suite.setup(args.suites)
     try:
         Suite.run_all()

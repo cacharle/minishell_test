@@ -6,14 +6,14 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 08:12:00 by charles          ###   ########.fr        #
+#    Updated: 2020/10/07 18:54:13 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import os
 import sys
 import subprocess
-# import time
+#import time
 
 import config
 from test.captured import Captured
@@ -57,8 +57,17 @@ class Test:
 
     def run(self):
         """ Run the test for minishell and the reference shell and print the result out """
-        expected = self._run_sandboxed(config.REFERENCE_PATH, config.REFERENCE_ARGS + ["-c"])
-        actual   = self._run_sandboxed(config.MINISHELL_PATH, ["-c"])
+
+        if config.CHECK_LEAKS:
+            self.hook = []
+            self.hook_status = []
+            captured = self._run_sandboxed([*config.VALGRIND_CMD, "-c"])
+            self.result = Result.leak(self.cmd, captured.output)
+            self.result.put()
+            return
+
+        expected = self._run_sandboxed([config.REFERENCE_PATH, *config.REFERENCE_ARGS, "-c"])
+        actual   = self._run_sandboxed([config.MINISHELL_PATH, "-c"])
         s = self.cmd
         if self.setup != "":
             s = "[SETUP {}] {}".format(self.setup, s)
@@ -68,7 +77,7 @@ class Test:
         self.result = Result(s, self.files, expected, actual)
         self.result.put()
 
-    def _run_sandboxed(self, shell_path: str, shell_options: str) -> Captured:
+    def _run_sandboxed(self, shell_cmd: [str]) -> Captured:
         """ Run the command in a sandbox environment """
         with sandbox.context():
             if self.setup != "":
@@ -88,15 +97,15 @@ class Test:
                                   "no stderr" if e.stdout is None
                                   else e.stdout.decode().strip()))
                     sys.exit(1)
-            return self._run_capture(shell_path, shell_options)
+            return self._run_capture(shell_cmd)
 
-    def _run_capture(self, shell_path: str, shell_options: str) -> Captured:
+    def _run_capture(self, shell_cmd: [str]) -> Captured:
         """ Capture the output (stdout and stderr)
             Capture the content of the watched files after the command is run
         """
         # run the command in the sandbox
         process = subprocess.Popen(
-            [shell_path, *shell_options, self.cmd],
+            [*shell_cmd, self.cmd],
             stderr=subprocess.STDOUT,
             stdout=subprocess.PIPE,
             cwd=config.SANDBOX_PATH,
@@ -107,13 +116,12 @@ class Test:
             },
         )
         # if self.signal is not None:
-        #     time.sleep(0.2)
+        #     time.sleep(0.1)
         #     process.send_signal(self.signal)
-        # else:
 
         # https://docs.python.org/3/library/subprocess.html#subprocess.Popen.communicate
         try:
-            stdout, _ = process.communicate(timeout=self.timeout)
+            stdout, _ = process.communicate(timeout=(self.timeout if not config.CHECK_LEAKS else 10))
         except subprocess.TimeoutExpired:
             process.kill()
             # _, _ = process.communicate(timeout=2)
@@ -132,7 +140,7 @@ class Test:
             except FileNotFoundError:
                 files_content.append(None)
 
-        # sandbox.remove()
+        # apply output/status hooks
         for h in self.hook:
             output = h(output)
         for h in self.hook_status:

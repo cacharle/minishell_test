@@ -6,12 +6,11 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 08:27:49 by charles          ###   ########.fr        #
+#    Updated: 2020/10/07 15:18:13 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import re
-import os
 import sys
 
 import config
