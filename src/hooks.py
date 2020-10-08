@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2020/10/08 11:43:54 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/08 17:32:12 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -99,3 +99,10 @@ def delete_escape(output):
         return output.replace("\\", "")
     else:
         return output
+
+
+def error_eof_to_expected_token(output):
+    return output.replace(
+        "-c: line 1: syntax error: unexpected end of file",
+        "syntax error expected token"
+    )
