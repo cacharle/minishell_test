@@ -64,6 +64,10 @@ def main():
         config.BONUS = False
     config.EXIT_FIRST = args.exit_first
     config.CHECK_LEAKS = args.check_leaks
+    config.RANGE = args.range
+    config.SHOW_RANGE = args.show_range
+    if config.RANGE is not None:
+        config.SHOW_RANGE = True
 
     Suite.setup(args.suites)
     try:

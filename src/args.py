@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2020/10/08 08:13:05 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/08 09:02:52 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -26,11 +26,11 @@ def parse_args():
         help="Exit on first fail"
     )
     parser.add_argument(
-        "-r", "--range", nargs=2, type=int,
-        help="Range of test index to run (--show-index)"
+        "-r", "--range", nargs=2, type=int, metavar=("BEGIN", "END"),
+        help="Range of test index to run (imply --show-index)"
     )
     parser.add_argument(
-        "--show-index", action="store_true",
+        "--show-range", action="store_true",
         help="Show test index (useful with --range)"
     )
     parser.add_argument(

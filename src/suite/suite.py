@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/10/08 08:42:50 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/08 08:55:15 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -29,7 +29,9 @@ class Suite:
 
     @classmethod
     def setup(cls, asked_names: [str]):
-        """Remove not asked suite from available suites"""
+        """ Remove not asked suite from available suites
+            Tries to autocomplete the asked names
+        """
         if not config.BONUS:
             cls.available = [s for s in cls.available if not s.bonus]
         if len(asked_names) == 0:
@@ -126,8 +128,11 @@ class Suite:
                 self.CLOSE_CHARS,
                 width=config.TERM_COLS
                 ))
-            for t in self.tests:
-                t.run()
+            for i, t in enumerate(self.tests):
+                if config.RANGE is not None:
+                    if not (config.RANGE[0] <= i <= config.RANGE[1]):
+                        continue
+                t.run(i)
                 if config.EXIT_FIRST and t.result.failed:
                     return False
         if config.VERBOSE_LEVEL == 0:

@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 18:54:13 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/08 08:45:34 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -55,7 +55,7 @@ class Test:
         if type(self.hook_status) is not list:
             self.hook_status = [self.hook_status]
 
-    def run(self):
+    def run(self, index: int):
         """ Run the test for minishell and the reference shell and print the result out """
 
         if config.CHECK_LEAKS:
@@ -63,7 +63,7 @@ class Test:
             self.hook_status = []
             captured = self._run_sandboxed([*config.VALGRIND_CMD, "-c"])
             self.result = Result.leak(self.cmd, captured.output)
-            self.result.put()
+            self.result.put(index)
             return
 
         expected = self._run_sandboxed([config.REFERENCE_PATH, *config.REFERENCE_ARGS, "-c"])
@@ -75,7 +75,7 @@ class Test:
             s = "[EXPORTS {}] {}".format(
                 ' '.join(["{}='{:.20}'".format(k, v) for k, v in self.exports.items()]), s)
         self.result = Result(s, self.files, expected, actual)
-        self.result.put()
+        self.result.put(index)
 
     def _run_sandboxed(self, shell_cmd: [str]) -> Captured:
         """ Run the command in a sandbox environment """

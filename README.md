@@ -11,28 +11,33 @@ The default path to your project is `..` but you can change it the the [configur
 ```sh
 $ ./run  # run all tests
 
-$❯ ./run -h
-usage: run [-h] [-k] [-x] [-v] [-b] [-n] [-l] [-m] [-p] [suite [suite ...]]
+$ ./run --help
+usage: run [-h] [-k] [-x] [-r BEGIN END] [--show-range] [-v] [-b] [-n] [-l]
+           [-m] [-p]
+           [suite [suite ...]]
 
 Minishell test
 
 positional arguments:
-  suite              Test suites/group to run. It tries to be smart and
-                     autocomplete the suite name (e.g ./run int -> ./run
-                     preprocess/interpolation)
+  suite                 Test suites/group to run. It tries to be smart and
+                        autocomplete the suite name (e.g ./run int -> ./run
+                        preprocess/interpolation)
 
 optional arguments:
-  -h, --help         show this help message and exit
-  -k, --check-leaks  Run valgrind on tests (disable usual comparison with
-                     bash)
-  -x, --exit-first   Exit on first fail
-  -v, --verbose      Increase verbosity level (e.g -vv == 2)
-  -b, --bonus        Enable bonus tests
-  -n, --no-bonus     Disable bonus tests
-  -l, --list         Print available test suites
-  -m, --make         Make minishell and exit
-  -p, --pager        After running the test, display the result in a pager of
-                     your choice ./run --help
+  -h, --help            show this help message and exit
+  -k, --check-leaks     Run valgrind on tests (disable usual comparison with
+                        bash)
+  -x, --exit-first      Exit on first fail
+  -r BEGIN END, --range BEGIN END
+                        Range of test index to run (imply --show-index)
+  --show-range          Show test index (useful with --range)
+  -v, --verbose         Increase verbosity level (e.g -vv == 2)
+  -b, --bonus           Enable bonus tests
+  -n, --no-bonus        Disable bonus tests
+  -l, --list            Print available test suites
+  -m, --make            Make minishell and exit
+  -p, --pager           After running the test, display the result in a pager
+                        of your choice
 ```
 
 ## Test compatibility

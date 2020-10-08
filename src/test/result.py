@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 18:53:27 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/08 08:53:49 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -82,6 +82,8 @@ class Result:
             return self.green('.') if self.passed else self.red('!')
         elif config.VERBOSE_LEVEL == 1:
             printed = self.escaped_cmd[:]
+            if config.SHOW_RANGE:
+                printed = "{:2}: ".format(self.index) + printed
             if len(printed) > config.TERM_COLS - 7:
                 printed = printed[:config.TERM_COLS - 10] + "..."
             fmt = self.green("{:{width}} [PASS]") if self.passed else self.red("{:{width}} [FAIL]")
@@ -91,10 +93,11 @@ class Result:
         else:
             raise RuntimeError
 
-    def put(self):
+    def put(self, index: int):
         """Print a summary of the result"""
         if config.VERBOSE_LEVEL == 2 and self.passed:
             return
+        self.index = index
         print(self, end="")
         if config.VERBOSE_LEVEL == 0:
             sys.stdout.flush()

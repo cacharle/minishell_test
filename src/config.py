@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 18:21:46 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/08 08:47:39 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -111,3 +111,7 @@ PLATFORM = os.uname().sysname
 EXIT_FIRST = False
 
 CHECK_LEAKS = False
+
+SHOW_RANGE = False
+
+RANGE = None
