@@ -6,12 +6,13 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 15:18:13 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/08 11:43:54 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import re
 import sys
+import os
 
 import config
 
@@ -23,6 +24,10 @@ def sort_lines(output):
 
 def error_line0(output):
     """Replace "/bin/bash: -c: line 0:" by "minishell:" and delete the second line"""
+    error_message = os.environ.get("MINISHELL_TEST_DONT_CHECK_ERROR_MESSAGE")
+    if error_message is not None and error_message == "yes":
+        return "DISCARDED BY TEST"
+
     lines = output.split('\n')
     if len(lines) != 3:
         return output

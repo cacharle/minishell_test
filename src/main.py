@@ -66,7 +66,7 @@ def main():
     config.CHECK_LEAKS = args.check_leaks
     config.RANGE = args.range
     config.SHOW_RANGE = args.show_range
-    if config.RANGE is not None:
+    if config.RANGE is not None or config.CHECK_LEAKS:
         config.SHOW_RANGE = True
 
     Suite.setup(args.suites)
@@ -78,6 +78,9 @@ def main():
     Suite.summarize()
     Suite.save_log()
     print("See", config.LOG_PATH, "for more information")
+    if config.CHECK_LEAKS:
+        print("HELP: Valgrind is really slow the -x and --range options could be useful"
+              " (./run -h for more details)")
 
     if args.pager:
         subprocess.run([config.PAGER, config.LOG_PATH])

@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/10/08 08:45:34 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/08 10:05:39 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -62,19 +62,13 @@ class Test:
             self.hook = []
             self.hook_status = []
             captured = self._run_sandboxed([*config.VALGRIND_CMD, "-c"])
-            self.result = Result.leak(self.cmd, captured.output)
+            self.result = Result.leak(self.full_cmd, captured.output)
             self.result.put(index)
             return
 
         expected = self._run_sandboxed([config.REFERENCE_PATH, *config.REFERENCE_ARGS, "-c"])
         actual   = self._run_sandboxed([config.MINISHELL_PATH, "-c"])
-        s = self.cmd
-        if self.setup != "":
-            s = "[SETUP {}] {}".format(self.setup, s)
-        if len(self.exports) != 0:
-            s = "[EXPORTS {}] {}".format(
-                ' '.join(["{}='{:.20}'".format(k, v) for k, v in self.exports.items()]), s)
-        self.result = Result(s, self.files, expected, actual)
+        self.result = Result(self.full_cmd, self.files, expected, actual)
         self.result.put(index)
 
     def _run_sandboxed(self, shell_cmd: [str]) -> Captured:
@@ -146,3 +140,14 @@ class Test:
         for h in self.hook_status:
             process.returncode = h(process.returncode)
         return Captured(output, process.returncode, files_content)
+
+    @property
+    def full_cmd(self):
+        """ Return the command prefixed by the setup and exports """
+        s = self.cmd
+        if self.setup != "":
+            s = "[SETUP {}] {}".format(self.setup, s)
+        if len(self.exports) != 0:
+            s = "[EXPORTS {}] {}".format(
+                ' '.join(["{}='{:.20}'".format(k, v) for k, v in self.exports.items()]), s)
+        return s

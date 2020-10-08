@@ -71,7 +71,14 @@ Their is 3 different method to enable the bonus tests:
 
 ## Memory leaks
 
-`./run -kx`
+`./run -k`, checkout the `--show-range`, `--range` and `-x` options to help
+to select the tests to run since valgrind is really slow.
+
+## Custom syntax error message
+
+If you don't want to copy bash syntax error message,
+you can set the environment variable `MINISHELL_TEST_DONT_CHECK_ERROR_MESSAGE` to `yes`.  
+It will still test your exit status code but will discard any output on error tests.
 
 ## Linux
 
