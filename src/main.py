@@ -28,10 +28,7 @@ from suites import *  # noqa: F403,F401
 def main():
     args = parse_args()
     if args.list:
-        print("The available suites are:")
-        print('\n'.join([" - " + s.name for s in Suite.available]))
-        print("Groups:")
-        print('\n'.join([" - " + ', '.join(s.groups) for s in Suite.available]))
+        Suite.list()
         sys.exit(0)
 
     if config.MINISHELL_MAKE or args.make:

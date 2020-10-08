@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/09 15:12:58 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 15:16:49 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/08 08:41:38 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -17,6 +17,7 @@ from suite import suite
 
 @suite()
 def suite_path(test):
+    """ searching a command in the path tests """
     whoami_path = distutils.spawn.find_executable("which")
     mode_fmt = ("mkdir path && cp " +
                 whoami_path +
@@ -78,6 +79,7 @@ def suite_path(test):
 
 @suite()
 def suite_path_variable(test):
+    """ $PATH environment variable tests """
     test("echo $PATH", exports={"PATH": "doesnotexits"})
     test("echo $PATH", exports={"PATH": "doesnotexits:asdfasdfas"})
     test("echo $PATH", exports={"PATH": "a:b:c:d:e:f:g:h:i:j:k:l:m:n:o:p:q:r:s:t:u:v:w:x:y:z"})

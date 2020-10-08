@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 15:11:46 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 08:11:04 by charles          ###   ########.fr        #
+#    Updated: 2020/10/08 08:39:36 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -19,6 +19,7 @@ from suite import suite
 
 @suite()
 def suite_redirection(test):
+    """ append/write/read redirections """
     test("echo bonjour > test", setup="", files=["test"])
     test("echo > test bonjour", setup="", files=["test"])
     test("> test echo bonjour", setup="", files=["test"])
@@ -87,6 +88,7 @@ def suite_redirection(test):
 
 @suite()
 def suite_cmd(test):
+    """ long cmd, cmd not found tests """
     test("notfound")
     test("notfound a b c")
     test('echo "\\"" >>a"b""c"  ', files=["abc"])
@@ -105,6 +107,7 @@ def suite_cmd(test):
 
 @suite()
 def suite_status(test):
+    """ $? tests """
     test("echo $?")
     test("echo; echo $?")
     test("notfound; echo $?")
@@ -118,6 +121,7 @@ def suite_status(test):
 
 @suite()
 def suite_cmd_path(test):
+    """ cmd is a relative path, permissions on executable """
     ls_path = distutils.spawn.find_executable("ls")
     cat_path = distutils.spawn.find_executable("cat")
     test(ls_path, setup="touch a b c")

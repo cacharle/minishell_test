@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 11:59:21 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/08 08:40:56 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -16,6 +16,7 @@ from hooks import error_line0, platform_status, discard, replace_double_semi_col
 
 @suite()
 def suite_end(test):
+    """ `;` tests """
     test("echo bonjour; echo je")
     test("echo bonjour ;echo je")
     test("echo bonjour ; echo je")
@@ -54,6 +55,7 @@ def suite_end(test):
 
 @suite()
 def suite_pipe(test):
+    """ `|` tests """
     test("cat /etc/shells | head -c 10")
     test("cat -e /etc/shells | head -c 10")
     test("cat -e /etc/shells | cat -e | head -c 10")
@@ -93,6 +95,7 @@ def suite_pipe(test):
 
 @suite(bonus=True)
 def suite_and(test):
+    """ `&&` tests """
     test("echo bonjour&& echo je")
     test("echo bonjour &&echo je")
     test("echo bonjour && echo je")
@@ -118,6 +121,7 @@ def suite_and(test):
 
 @suite(bonus=True)
 def suite_or(test):
+    """ `||` tests """
     test("echo bonjour|| echo je")
     test("echo bonjour ||echo je")
     test("echo bonjour || echo je")
@@ -143,6 +147,7 @@ def suite_or(test):
 
 @suite(bonus=True)
 def suite_parenthesis(test):
+    """ `(`, `)` tests """
     test("(echo bonjour)")
     test("(echo bonjour )")
     test("( echo bonjour )")

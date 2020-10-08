@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 11:56:46 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/08 08:40:18 by cacharle         ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -20,6 +20,7 @@ from suite import suite
 
 @suite()
 def suite_echo(test):
+    """ echo builtin tests """
     test("echo")
     test("echo bonjour")
     test("echo lalalala lalalalal alalalalal alalalala")
@@ -43,6 +44,7 @@ def suite_echo(test):
 
 @suite()
 def suite_export(test):
+    """ export builtin tests """
     test("export", hook=hooks.export_singleton)
     test("export", exports={"A": ""}, hook=hooks.export_singleton)
     test("export", exports={"A": "\""}, hook=hooks.export_singleton)
@@ -115,6 +117,7 @@ def suite_export(test):
 
 @suite()
 def suite_cd(test):
+    """ cd builtin tests """
     test("cd .; pwd; echo $PWD")
     test("cd ..; pwd; echo $PWD")
     test("cd ../..; pwd; echo $PWD")
@@ -205,6 +208,7 @@ def suite_cd(test):
 
 @suite()
 def suite_unset(test):
+    """ unset builtin tests """
     test("unset")
     test("unset A; echo $A", exports={"A": "a"})
     test("unset 'A '; echo $A", exports={"A": "a"})
@@ -239,6 +243,7 @@ def suite_unset(test):
 
 @suite()
 def suite_pwd(test):
+    """ pwd builtin tests """
     test("pwd")
     test("pwd", setup="cd ..")
     test("pwd", setup="cd ../..")
@@ -252,6 +257,7 @@ def suite_pwd(test):
 
 @suite()
 def suite_env(test):
+    """ env builtin tests """
     test("env", hook=[hooks.sort_lines, hooks.shlvl_0_to_1])
     test("env", setup="export A=a", hook=[hooks.sort_lines, hooks.shlvl_0_to_1])
     test("env", setup="export A=a B=b C=c", hook=[hooks.sort_lines, hooks.shlvl_0_to_1])
@@ -260,6 +266,7 @@ def suite_env(test):
 
 @suite()
 def suite_exit(test):
+    """ exit builtin tests """
     test("exit")
     test("exit 1")
     test("exit 2")

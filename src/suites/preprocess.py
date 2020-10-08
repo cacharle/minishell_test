@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 08:27:57 by charles          ###   ########.fr        #
+#    Updated: 2020/10/08 08:37:19 by cacharle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ from suite import suite
 
 @suite()
 def suite_quote(test):
+    """ double and single quote test, escape in quotes, quote missmatch """
     test("'echo' 'bonjour'")
     test("'echo' 'je' 'suis' 'charles'")
     test('"echo" "bonjour"')
@@ -71,6 +72,7 @@ def suite_quote(test):
 
 @suite()
 def suite_interpolation(test):
+    """environment variable interpolation tests, valid name, escape in variable"""
     test("echo $TEST",             exports={"TEST": "bonjour"})
     test("echo $TES",              exports={"TEST": "bonjour"})
     test("echo $TEST_",            exports={"TEST": "bonjour"})
@@ -168,6 +170,7 @@ def suite_interpolation(test):
 
 @suite()
 def suite_escape(test):
+    """ escape test, in command, with space, before quote """
     test(r"echo \a")
     test(r"\e\c\h\o bonjour")
     test(r"echo charles\ ")
@@ -223,6 +226,7 @@ def suite_escape(test):
 
 @suite()
 def suite_spaces(test):
+    """ field splitting with spaces and tabs """
     test("echo foo")
     test("echo                    foo")
     test("             echo foo")

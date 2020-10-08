@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 18:24:20 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/08 08:42:50 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -15,18 +15,6 @@ import tty
 import termios
 
 import config
-
-
-# # from: https://stackoverflow.com/questions/510357
-# def getchar():
-#     fd = sys.stdin.fileno()
-#     old_settings = termios.tcgetattr(fd)
-#     try:
-#         tty.setraw(sys.stdin.fileno())
-#         char = sys.stdin.read(1)
-#     finally:
-#         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-#     return char
 
 
 class Suite:
@@ -85,7 +73,29 @@ class Suite:
         """List of available suites names"""
         return [s.name for s in cls.available]
 
-    def __init__(self, name: str, groups: [str], bonus: bool = False):
+    @classmethod
+    def list(cls):
+        print("Groups:")
+        print("\n".join(set([" - " + ', '.join(s.groups) for s in Suite.available])))
+        print("The available suites are:")
+        max_name_width = max(len(s.name) for s in Suite.available) + 5
+        lines = [
+            " - {:.<{max_name_width}} {}".format(
+                s.name + " ",
+                s.description,
+                max_name_width=max_name_width
+            )
+            for s in Suite.available
+        ]
+        print("\n".join(lines))
+
+    def __init__(
+        self,
+        name: str,
+        groups: [str],
+        bonus: bool = False,
+        description: str = "no description",
+    ):
         """Suite class
            name:   suite id
            groups: list of suite groups
@@ -93,6 +103,7 @@ class Suite:
         """
         self.name = name
         self.groups = groups
+        self.description = description
         self.bonus = bonus
         self.generator_func = None
         self.tests = []

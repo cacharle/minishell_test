@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:28:00 by charles           #+#    #+#              #
-#    Updated: 2020/09/11 22:08:36 by charles          ###   ########.fr        #
+#    Updated: 2020/10/08 08:34:10 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -22,10 +22,15 @@ def suite(groups: [str] = [], bonus: bool = False):
         """Decorator for a suite function (fmt: suite_[name]) """
 
         mod_name = inspect.getmodule(origin).__name__[len("suites."):]
-        # print(mod_name)
-
         name = "{}/{}".format(mod_name, origin.__name__[len("suite_"):])
-        s = Suite(name, groups + [mod_name], bonus)
+        description = origin.__doc__
+        if description is None:
+            print("You should had a doc string to the {} suite".format(name))
+            description = "no description"
+        description = description.split("\n")[0].strip()
+
+        s = Suite(name, groups + [mod_name], bonus, description)
+
 
         def test_generator():
             def test(*args, **kwargs):
