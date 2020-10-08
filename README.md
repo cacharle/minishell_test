@@ -56,6 +56,7 @@ $ ./minishell -c 'ls'
 README.md test.sh
 ```
 
+With this setup `argv[2]` is what you would usually get in `line` from `get_next_line`.  
 This allows you to set the prompt to whatever you want.
 
 This test works with python >= 3.5.
@@ -74,7 +75,7 @@ Their is 3 different method to enable the bonus tests:
 `./run -k`, checkout the `--show-range`, `--range` and `-x` options to help
 to select the tests to run since valgrind is really slow.
 
-## Custom syntax error message
+## Don't check error messages
 
 If you don't want to copy bash syntax error message,
 you can set the environment variable `MINISHELL_TEST_DONT_CHECK_ERROR_MESSAGE` to `yes`.  
@@ -87,6 +88,8 @@ The tester will try to convert to output/status code of bash on Linux to the one
 ---
 
 ## Add new tests
+
+You can find the suites in the [src/suites](src/suites) directory.
 
 ### Add individual test
 
@@ -101,6 +104,7 @@ test("echo bonjour je suis")                                  # simple command
 test("cat < somefile", setup="echo file content > somefile")  # setup
 test("ls > somefile", setup="", files=["somefile"])           # watch a file
 test("echo $A", exports={"A": "a"})                           # export variables in the environment
+test("echo bonjour", hook=lambda s: s.replace("o", "a"))      # pass the shell output through a hook function
 
 test("cat < somefile > otherfile",
      setup="echo file content > somefile",
@@ -114,6 +118,7 @@ A test suite is a group of related tests.
 ```python
 @suite()  # @suite(bonus=True) if it's a bonus suite
 def suite_yoursuitename(test):
+    """ a description of the suite """
     test(...)
     test(...)
     test(...)

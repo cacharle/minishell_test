@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2020/10/08 09:02:52 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/08 16:29:25 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -16,7 +16,10 @@ import argparse
 def parse_args():
     """Parse command line arguments"""
 
-    parser = argparse.ArgumentParser(description="Minishell test")
+    parser = argparse.ArgumentParser(
+        description="Minishell test",
+        epilog="Signal handling is not tested"
+    )
     parser.add_argument(
         "-k", "--check-leaks", action="store_true",
         help="Run valgrind on tests (disable usual comparison with bash)"
