@@ -6,19 +6,32 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2020/10/08 16:29:25 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/09 10:58:47 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import argparse
+import textwrap
 
 
 def parse_args():
     """Parse command line arguments"""
 
     parser = argparse.ArgumentParser(
-        description="Minishell test",
-        epilog="Signal handling is not tested"
+        description=textwrap.dedent(r"""\
+            ___  ____       _     _          _ _   _            _
+            |  \/  (_)     (_)   | |        | | | | |          | |
+            | .  . |_ _ __  _ ___| |__   ___| | | | |_ ___  ___| |_
+            | |\/| | | '_ \| / __| '_ \ / _ \ | | | __/ _ \/ __| __|
+            | |  | | | | | | \__ \ | | |  __/ | | | ||  __/\__ \ |_
+            \_|  |_/_|_| |_|_|___/_| |_|\___|_|_|  \__\___||___/\__|
+        """),
+        formatter_class=argparse.RawTextHelpFormatter,
+        epilog=textwrap.dedent("""\
+            Signal handling is not tested
+            There is a commented glob suite in src/suites/preprocess.py.
+            Good luck handling `*'.*'`.
+        """)
     )
     parser.add_argument(
         "-k", "--check-leaks", action="store_true",
@@ -62,9 +75,11 @@ def parse_args():
     )
     parser.add_argument(
         "suites", nargs='*', metavar="suite",
-        help="Test suites/group to run. "
-             "It tries to be smart and autocomplete the suite name "
-             "(e.g ./run int -> ./run preprocess/interpolation)"
+        help=textwrap.dedent("""\
+            Test suites/group to run.
+            It tries to be smart and autocomplete the suite name
+            (e.g ./run int -> ./run preprocess/interpolation)
+        """)
     )
     tmp = parser.parse_args()
     if tmp.verbose is None:

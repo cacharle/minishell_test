@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/10/09 08:34:18 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/09 08:48:28 by cacharle         ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -254,6 +254,8 @@ def suite_pwd(test):
     test("pwd", setup="cd $HOME")
     test("pwd | cat -e")
     test("pwd", exports={"PWD": "/etc"})
+    test("unset PWD; pwd; echo $PWD")
+    test("export PWD=foo; pwd; echo $PWD")
     # test("cd lnk; rmdir ../d; pwd", setup="mkdir d; ln -s d lnk")
 
 

@@ -16,17 +16,21 @@ usage: run [-h] [-k] [-x] [-r BEGIN END] [--show-range] [-v] [-b] [-n] [-l]
            [-m] [-p]
            [suite [suite ...]]
 
-Minishell test
+___  ____       _     _          _ _   _            _
+|  \/  (_)     (_)   | |        | | | | |          | |
+| .  . |_ _ __  _ ___| |__   ___| | | | |_ ___  ___| |_
+| |\/| | | '_ \| / __| '_ \ / _ \ | | | __/ _ \/ __| __|
+| |  | | | | | | \__ \ | | |  __/ | | | ||  __/\__ \ |_
+\_|  |_/_|_| |_|_|___/_| |_|\___|_|_|  \__\___||___/\__|
 
 positional arguments:
-  suite                 Test suites/group to run. It tries to be smart and
-                        autocomplete the suite name (e.g ./run int -> ./run
-                        preprocess/interpolation)
+  suite                 Test suites/group to run.
+                        It tries to be smart and autocomplete the suite name
+                        (e.g ./run int -> ./run preprocess/interpolation)
 
 optional arguments:
   -h, --help            show this help message and exit
-  -k, --check-leaks     Run valgrind on tests (disable usual comparison with
-                        bash)
+  -k, --check-leaks     Run valgrind on tests (disable usual comparison with bash)
   -x, --exit-first      Exit on first fail
   -r BEGIN END, --range BEGIN END
                         Range of test index to run (imply --show-index)
@@ -36,8 +40,11 @@ optional arguments:
   -n, --no-bonus        Disable bonus tests
   -l, --list            Print available test suites
   -m, --make            Make minishell and exit
-  -p, --pager           After running the test, display the result in a pager
-                        of your choice
+  -p, --pager           After running the test, display the result in a pager of your choice
+
+Signal handling is not tested
+There is a commented glob suite in src/suites/preprocess.py.
+Good luck handling `*'.*'`.
 ```
 
 ## Test compatibility
@@ -123,3 +130,10 @@ def suite_yoursuitename(test):
     test(...)
     test(...)
 ```
+
+---
+
+## Wildcard (or glob)
+
+There is a commented glob suite in [src/suites/preprocess.py](src/suites/preprocess.py).
+Good luck handling `*'.*'`.

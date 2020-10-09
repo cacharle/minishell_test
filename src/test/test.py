@@ -6,14 +6,13 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/10/08 10:05:39 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/09 11:00:57 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import os
 import sys
 import subprocess
-#import time
 
 import config
 from test.captured import Captured

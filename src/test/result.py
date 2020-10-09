@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2020/10/08 08:53:49 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/09 11:04:16 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -51,18 +51,25 @@ class Result:
     def leak(cmd: str, leak_output: str = None):
         return Result(cmd, None, None, None, leak_output)
 
-    @property
-    def lost_bytes(self):
-        m = re.search(
-            r"definitely lost: (?P<bytes>[0-9,]+) bytes in [0-9,]+ blocks",
+    def _search_leak_kind(self, kind: str) -> int:
+        match = re.search(
+            r"==\d+==\s+" + kind + r" lost: (?P<bytes>[0-9,]+) bytes in [0-9,]+ blocks",
             self.leak_output
         )
-        if m is None:
+        if match is None:
             raise RuntimeError(
                 "valgrind output parsing failed for `{}`:\n{}"
                 .format(self.cmd, self.leak_output)
             )
-        return int(m.group("bytes"))
+        return match
+
+    @property
+    def lost_bytes(self):
+        definite_match = self._search_leak_kind("definitely")
+        indirect_match = self._search_leak_kind("indirectly")
+        definite_bytes = int(definite_match.group("bytes").replace(",", ""))
+        indirect_bytes = int(indirect_match.group("bytes").replace(",", ""))
+        return definite_bytes + indirect_bytes
 
     @property
     def passed(self):

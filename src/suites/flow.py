@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2020/10/08 17:33:32 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/09 08:51:57 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -203,6 +203,10 @@ def suite_parenthesis(test):
     test("(    echo salut && echo bonjours )   ; echo comment ca va")
     test("(cd /; echo $PWD; pwd); echo $PWD; pwd")
     test("(export A=a; echo $A); echo $A")
+    test("(cat /etc/shells) | (cat -e) | (cat -e) | (cat -e)")
+    test("(cat /etc/shells) | (cat -e) | (cat -e) | (cat -e) | (cat -e) | (cat -e) | (cat -e) | (cat -e) | (cat -e)")
+    test("(cat /etc/shells | (cat -e) | (cat -e) | (cat -e)", hook=[error_line0, error_eof_to_expected_token])
+    test("(cat /etc/shells) | (cat -e) | (cat -e | (cat -e)", hook=[error_line0, error_eof_to_expected_token])
 
 
 @suite()

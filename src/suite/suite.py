@@ -6,13 +6,11 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/10/08 08:55:15 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/09 11:00:32 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import sys
-import tty
-import termios
 
 import config
 
@@ -44,28 +42,28 @@ class Suite:
                 names.append(name)
                 continue
             matches = [n for n in suite_names
-                    if n.find("/") != -1
-                    and n[n.find("/") + 1:].startswith(name)
-                    or n.startswith(name)]
+                       if n.find("/") != -1
+                       and n[n.find("/") + 1:].startswith(name)
+                       or n.startswith(name)]
             if len(matches) == 1:
                 names.append(matches[0])
             elif len(matches) != 0 and all([n.startswith(name) for n in matches]):
                 names.extend(matches)
             elif len(matches) > 2:
                 print(("Ambiguous name `{}` match the following suites\n\t{}\n"
-                    "Try to run with -l to see the available suites")
-                    .format(name, ', '.join(matches)))
+                       "Try to run with -l to see the available suites")
+                      .format(name, ', '.join(matches)))
                 sys.exit(1)
             elif len(matches) == 0:
                 print(("Name `{}` doesn't match any suite/group name\n\t"
-                    "Try to run with -l to see the available suites")
-                    .format(name))
+                       "Try to run with -l to see the available suites")
+                      .format(name))
                 sys.exit(1)
 
         cls.available = list(set(
             [s for s in cls.available if s.name in names]
             + [s for s in cls.available if any([g for g in s.groups if g in names])]
-            ))
+        ))
         cls.available.sort(key=lambda s: s.name)
         for s in cls.available:
             s.generator_func()
@@ -127,7 +125,7 @@ class Suite:
                 " " + self.name + " ",
                 self.CLOSE_CHARS,
                 width=config.TERM_COLS
-                ))
+            ))
             for i, t in enumerate(self.tests):
                 if config.RANGE is not None:
                     if not (config.RANGE[0] <= i <= config.RANGE[1]):
@@ -162,9 +160,9 @@ class Suite:
             pass_sum += pass_total
             fail_sum += fail_total
             print("{:.<{width}} \033[32m{:3} [PASS]\033[0m \033[31m{:3} [FAIL]\033[0m"
-                    .format(s.name + " ", pass_total, fail_total, width=config.TERM_COLS - 22))
+                  .format(s.name + " ", pass_total, fail_total, width=config.TERM_COLS - 22))
         print("{:.<{width}} \033[32m{:3} [PASS]\033[0m \033[31m{:3} [FAIL]\033[0m"
-                .format("TOTAL ", pass_sum, fail_sum, width=config.TERM_COLS - 22))
+              .format("TOTAL ", pass_sum, fail_sum, width=config.TERM_COLS - 22))
 
     @classmethod
     def save_log(cls):
