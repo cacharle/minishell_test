@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
-#    Updated: 2020/10/08 08:37:19 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/09 12:39:07 by cacharle         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -236,6 +236,10 @@ def suite_spaces(test):
     test("\t\t\t\t\t\techo\tfoo")
     test("echo\tfoo\t\t\t\t\t\t")
     test("\t\t\t\techo\t\t\t\tfoo\t\t\t\t")
+    test("")
+    test("                                          ")
+    test("\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t")
+    test("            \t\t\t           \t\t\t       ")
 
 
 # @suite(bonus=True)
