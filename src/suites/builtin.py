@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/10/09 08:48:28 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/09 20:28:36 by charles          ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -16,6 +16,7 @@ import os
 import config
 import hooks
 from suite import suite
+from hooks import linux_discard
 
 
 @suite()
@@ -130,12 +131,12 @@ def suite_cd(test):
     # hard and weird to implement with pwd
     # test("cd /etc; pwd; echo $PWD")
     test("echo $PWD; echo $OLDPWD; cd ''; pwd; echo $PWD; echo $OLDPWD")
-    test("echo $PWD; echo $OLDPWD; cd '' ''; pwd; echo $PWD; echo $OLDPWD")
-    test("echo $PWD; echo $OLDPWD; cd '' '' ''; pwd; echo $PWD; echo $OLDPWD")
+    test("echo $PWD; echo $OLDPWD; cd '' ''; pwd; echo $PWD; echo $OLDPWD", hook=linux_discard)
+    test("echo $PWD; echo $OLDPWD; cd '' '' ''; pwd; echo $PWD; echo $OLDPWD", hook=linux_discard)
     test("echo $PWD; echo $OLDPWD; cd ' '; pwd; echo $PWD; echo $OLDPWD")
-    test("echo $PWD; echo $OLDPWD; cd d ''; pwd; echo $PWD; echo $OLDPWD", setup="mkdir d")
-    test("echo $PWD; echo $OLDPWD; cd d d; pwd; echo $PWD; echo $OLDPWD", setup="mkdir d")
-    test("echo $PWD; echo $OLDPWD; cd d ' '; pwd; echo $PWD; echo $OLDPWD", setup="mkdir d")
+    test("echo $PWD; echo $OLDPWD; cd d ''; pwd; echo $PWD; echo $OLDPWD", setup="mkdir d", hook=linux_discard)
+    test("echo $PWD; echo $OLDPWD; cd d d; pwd; echo $PWD; echo $OLDPWD", setup="mkdir d", hook=linux_discard)
+    test("echo $PWD; echo $OLDPWD; cd d ' '; pwd; echo $PWD; echo $OLDPWD", setup="mkdir d", hook=linux_discard)
     test("echo $PWD; echo $OLDPWD; cd $HOME; pwd; echo $PWD; echo $OLDPWD", exports={"HOME": os.getenv("HOME")})
     test("echo $PWD; echo $OLDPWD; cd /; pwd; echo $PWD; echo $OLDPWD")
     test("echo $PWD; echo $OLDPWD; cd /.; pwd; echo $PWD; echo $OLDPWD")

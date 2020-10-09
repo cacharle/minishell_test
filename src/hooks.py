@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2020/10/08 17:32:12 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/09 20:27:30 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -106,3 +106,10 @@ def error_eof_to_expected_token(output):
         "-c: line 1: syntax error: unexpected end of file",
         "syntax error expected token"
     )
+
+
+def linux_discard(output):
+    if config.PLATFORM == "Linux":
+        return "DISCARDED BY MINISHELL TEST"
+    else:
+        return output
