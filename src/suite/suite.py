@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/10/09 11:00:32 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/10 13:47:48 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -159,10 +159,10 @@ class Suite:
                 continue
             pass_sum += pass_total
             fail_sum += fail_total
-            print("{:.<{width}} \033[32m{:3} [PASS]\033[0m \033[31m{:3} [FAIL]\033[0m"
-                  .format(s.name + " ", pass_total, fail_total, width=config.TERM_COLS - 22))
-        print("{:.<{width}} \033[32m{:3} [PASS]\033[0m \033[31m{:3} [FAIL]\033[0m"
-              .format("TOTAL ", pass_sum, fail_sum, width=config.TERM_COLS - 22))
+            print("{:.<{width}} \033[32m{:4} [PASS]\033[0m \033[31m{:4} [FAIL]\033[0m"
+                  .format(s.name + " ", pass_total, fail_total, width=config.TERM_COLS - 24))
+        print("{:.<{width}} \033[32m{:4} [PASS]\033[0m \033[31m{:4} [FAIL]\033[0m"
+              .format("TOTAL ", pass_sum, fail_sum, width=config.TERM_COLS - 24))
 
     @classmethod
     def save_log(cls):
