@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/10/09 11:00:57 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/11 14:09:04 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -61,6 +61,8 @@ class Test:
             self.hook = []
             self.hook_status = []
             captured = self._run_sandboxed([*config.VALGRIND_CMD, "-c"])
+            if config.VERBOSE_LEVEL == 2:
+                print(captured.output)
             self.result = Result.leak(self.full_cmd, captured.output)
             self.result.put(index)
             return

@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2020/10/09 11:04:16 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/11 14:09:24 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -98,7 +98,7 @@ class Result:
         elif config.VERBOSE_LEVEL == 2:
             return self.full_diff()
         else:
-            raise RuntimeError
+            raise RuntimeError("Invalid verbose level")
 
     def put(self, index: int):
         """Print a summary of the result"""

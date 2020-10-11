@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:16:25 by charles           #+#    #+#              #
-#    Updated: 2020/10/07 18:25:05 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/11 08:44:36 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -21,8 +21,13 @@ class Captured:
            files_content: content of the files altered by the command
            is_timeout:    the command has timed out
         """
+        # if config.PROMPT_OBJECT is not None:
+        #     output = output.replace(config.PROMPT_OBJECT + "\n", "")
+        #     output = output.replace(config.PROMPT_OBJECT, "")
         lines = output.split('\n')
         for i, l in enumerate(lines):
+            # if l.find(config.PROMPT_OBJECT) == 0:
+            #     l.replace(config.PROMPT_OBJECT, "")
             if l.find(config.REFERENCE_ERROR_BEGIN) == 0:
                 lines[i] = l.replace(config.REFERENCE_ERROR_BEGIN, config.MINISHELL_ERROR_BEGIN, 1)
             elif l.find(config.REFERENCE_PATH + ": ") == 0:

@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2020/10/09 10:58:47 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/10 14:26:20 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -18,7 +18,7 @@ def parse_args():
     """Parse command line arguments"""
 
     parser = argparse.ArgumentParser(
-        description=textwrap.dedent(r"""\
+        description=textwrap.dedent("""\
             ___  ____       _     _          _ _   _            _
             |  \/  (_)     (_)   | |        | | | | |          | |
             | .  . |_ _ __  _ ___| |__   ___| | | | |_ ___  ___| |_
@@ -38,8 +38,14 @@ def parse_args():
         help="Run valgrind on tests (disable usual comparison with bash)"
     )
     parser.add_argument(
-        "-x", "--exit-first", action="store_true",
-        help="Exit on first fail"
+        "-p", "--prompt",
+        help=textwrap.dedent("""\
+            The format of your prompt, the available format are:
+             - abs_path:  absolute path to the current directory
+             - base_path: last directory of the path to the current directory
+             - username:  current user
+            You can also the the environment variable MINISHELL_TEST_PROMPT.
+        """)
     )
     parser.add_argument(
         "-r", "--range", nargs=2, type=int, metavar=("BEGIN", "END"),
@@ -48,6 +54,10 @@ def parse_args():
     parser.add_argument(
         "--show-range", action="store_true",
         help="Show test index (useful with --range)"
+    )
+    parser.add_argument(
+        "-x", "--exit-first", action="store_true",
+        help="Exit on first fail"
     )
     parser.add_argument(
         "-v", "--verbose", action="count",
@@ -70,7 +80,7 @@ def parse_args():
         help="Make minishell and exit"
     )
     parser.add_argument(
-        "-p", "--pager", action="store_true",
+        "-g", "--pager", action="store_true",
         help="After running the test, display the result in a pager of your choice"
     )
     parser.add_argument(
