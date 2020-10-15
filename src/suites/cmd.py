@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 15:11:46 by charles           #+#    #+#              #
-#    Updated: 2020/10/15 09:25:04 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/15 10:40:11 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -84,6 +84,10 @@ def suite_redirection(test):
     test("cat << << bar", setup="echo bonjour > bar", hook=hooks.error_line0, hook_status=hooks.platform_status(1, 2))
     test("cat <<<<< bar", setup="echo bonjour > bar", hook=hooks.error_line0, hook_status=hooks.platform_status(1, 2))
     test("cat < doesnotexist")
+    test("echo bonjour >> a", setup="echo a > a", files=["a"])
+    test("echo bonjour >> a >> a", setup="echo a > a", files=["a"])
+    test("echo bonjour > a", setup="echo a > a", files=["a"])
+    test("echo bonjour > a >> a", setup="echo a > a", files=["a"])
 
 
 @suite()
