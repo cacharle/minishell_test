@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/10/15 08:49:44 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/15 09:38:07 by cacharle         ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -163,6 +163,7 @@ def suite_cd(test):
     test("echo $PWD; echo $OLDPWD; cd ////; pwd; echo $PWD; echo $OLDPWD")
     test("echo $PWD; echo $OLDPWD; cd //////////////////////////////////////////////////////; pwd; echo $PWD; echo $OLDPWD")
     test("echo $PWD; echo $OLDPWD; cd; echo $OLDPWD")
+    test("echo $PWD; echo $OLDPWD; cd; echo $PWD; echo $OLDPWD", exports={"HOME": os.getenv("HOME")})
     test("echo $PWD; echo $OLDPWD; cd ' /'; pwd; echo $PWD; echo $OLDPWD")
     test("echo $PWD; echo $OLDPWD; cd ' / '; pwd; echo $PWD; echo $OLDPWD")
     test("echo $PWD; echo $OLDPWD; cd '                  /'; pwd; echo $PWD; echo $OLDPWD")
