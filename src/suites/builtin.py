@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/10/09 20:28:36 by charles          ###   ########.fr        #
+#    Updated: 2020/10/15 08:49:44 by cacharle         ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -41,6 +41,22 @@ def suite_echo(test):
     test("echo -n a '' b '' c '' d")
     test('echo -n a "" b "" c "" d')
     test("echo '' '' ''")
+    test("Echo bonjour")
+    test("eCho bonjour")
+    test("ecHo bonjour")
+    test("echO bonjour")
+    test("EchO bonjour")
+    test("eCHo bonjour")
+    test("EcHo bonjour")
+    test("eChO bonjour")
+    test("Echo bonjour", exports={"PATH": "/bin:/usr/bin"})
+    test("eCho bonjour", exports={"PATH": "/bin:/usr/bin"})
+    test("ecHo bonjour", exports={"PATH": "/bin:/usr/bin"})
+    test("echO bonjour", exports={"PATH": "/bin:/usr/bin"})
+    test("EchO bonjour", exports={"PATH": "/bin:/usr/bin"})
+    test("eCHo bonjour", exports={"PATH": "/bin:/usr/bin"})
+    test("EcHo bonjour", exports={"PATH": "/bin:/usr/bin"})
+    test("eChO bonjour", exports={"PATH": "/bin:/usr/bin"})
 
 
 @suite()

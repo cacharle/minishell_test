@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/09 15:12:58 by charles           #+#    #+#              #
-#    Updated: 2020/10/09 12:58:55 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/15 09:17:09 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -66,6 +66,7 @@ def suite_path(test):
     test("a", setup=mode_fmt.format("6777"), exports={"PATH": "path"})
     test("a", setup=mode_fmt.format("7777"), exports={"PATH": "path"})
     test("a", setup=mode_fmt.format("0000"), exports={"PATH": "path"})
+    test("A", setup=mode_fmt.format("000"), exports={"PATH": "path"})
     # test("b", setup="mkdir path && cp " + whoami_path + " ./path/a && ln -s ./path/a ./path/b",
     #      exports={"PATH": "path"})
     test("b", setup="mkdir path && ln -s " + whoami_path + " ./path/b", exports={"PATH": "path"})
@@ -123,3 +124,11 @@ def suite_path_variable(test):
     test("somecmd", setup=create_cmd_setup, exports={"PATH": "/bin:"})
     test("somecmd", setup=create_cmd_setup, exports={"PATH": ":/bin"})
     test("somecmd", setup=create_cmd_setup, exports={"PATH": ":/bin:"})
+    test("Whoami", exports={"PATH": "/usr/bin"})
+    test("wHoAMi", exports={"PATH": "/usr/bin"})
+    test("whoami", exports={"PATH": "/usr/bIn"})
+    test("whoami", exports={"PATH": "/Usr/bin"})
+    test("Whoami", exports={"PATH": "/usr/bIn"})
+    test("wHoami", exports={"PATH": "/Usr/bin"})
+    test("Whoami", exports={"PATH": ""})
+    test("wHoami", exports={"PATH": ""})

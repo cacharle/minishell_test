@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 15:11:46 by charles           #+#    #+#              #
-#    Updated: 2020/10/08 08:39:36 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/15 09:25:04 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -224,6 +224,8 @@ def suite_cmd_path(test):
     test("./somedir", setup='mkdir -m 5777 somedir', hook=hooks.is_directory)
     test("./somedir", setup='mkdir -m 6777 somedir', hook=hooks.is_directory)
     test("./somedir", setup='mkdir -m 0000 somedir', hook=hooks.is_directory)
+    test("./Somefile", setup='echo > somefile && chmod 000 somefile')
+    test("./someFILE", setup='echo > somefile && chmod 000 somefile')
 
 
 # @suite(bonus=True)
