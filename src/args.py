@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2020/10/10 14:26:20 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/24 13:38:47 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -18,7 +18,7 @@ def parse_args():
     """Parse command line arguments"""
 
     parser = argparse.ArgumentParser(
-        description=textwrap.dedent("""\
+        description=textwrap.dedent(r"""
             ___  ____       _     _          _ _   _            _
             |  \/  (_)     (_)   | |        | | | | |          | |
             | .  . |_ _ __  _ ___| |__   ___| | | | |_ ___  ___| |_

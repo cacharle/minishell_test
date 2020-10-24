@@ -6,11 +6,12 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/10 13:06:19 by cacharle          #+#    #+#              #
-#    Updated: 2020/10/10 13:48:31 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/24 13:39:48 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 from suite import suite
+
 
 @suite()
 def suite_shlvl(test):
