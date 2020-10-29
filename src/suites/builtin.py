@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/10/15 10:41:55 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/29 14:16:47 by cacharle         ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -58,6 +58,9 @@ def suite_echo(test):
     test("EcHo bonjour", exports={"PATH": "/bin:/usr/bin"})
     test("eChO bonjour", exports={"PATH": "/bin:/usr/bin"})
     test("eChO -e 'bonjo\\nur'", exports={"PATH": "/bin:/usr/bin"})
+    test("echo -n -n -n -n bonjour")
+    test("echo -nnnnnnnnnnnnnnnnnnnnn bonjour")
+    test("echo -nnnnnnnnnnnnnnnnnnnnn -n -n -n bonjour -n -n")
 
 
 @suite()

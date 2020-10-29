@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2020/10/10 14:22:02 by cacharle         ###   ########.fr        #
+#    Updated: 2020/10/11 15:47:30 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -28,7 +28,7 @@ BONUS = False
 PROMPT = None
 
 # minishell dir path
-MINISHELL_DIR = ".."
+MINISHELL_DIR = "../minishell"
 
 # minishell executable
 MINISHELL_EXEC = "minishell"
