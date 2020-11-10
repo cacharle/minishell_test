@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2020/10/24 13:40:12 by charles          ###   ########.fr        #
+#    Updated: 2020/11/10 13:16:28 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -92,6 +92,10 @@ def suite_pipe(test):
     test("echo a | ls asdfasdf")
     test("ls asdfasdf | echo a; echo b")
     test("echo a | ls asdfasdf; echo b")
+    test("echo a > foo | cat -e", files=["foo"])
+    test("echo a >> foo | cat -e", files=["foo"])
+    test("echo a | cat -e < foo", setup="echo b > foo")
+    test("echo a > bar | cat -e < foo", setup="echo b > foo", files=["bar"])
 
 
 @suite(bonus=True)
