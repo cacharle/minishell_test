@@ -70,20 +70,9 @@ This test works with python >= 3.5.
 
 ### Environement variables
 
-My test only gives the `PATH=minishell_test/bin` and `TERM=xterm-256color` variables to your minishell.  
-**Please check that your project still work with those settings before messaging me on Slack or creating an issue**.
-
-You can test this quickly in a python script:
-
-```python
-import subprocess
-p = subprocess.run(
-    ["./minishell", "-c", "<INPUT>"],
-    capture_output=True,
-    env={"PATH": "minishell_test/bin", "TERM": "xterm-256color"}
-)
-print(p.stdout.decode())
-```
+My test only gives the `PATH=minishell_test/bin` and `TERM=xterm-256color` environment variables to your minishell.  
+**Please check that your project still work with those settings before messaging me on Slack or creating an issue**.  
+You can test this quickly with the [try](try) script (e.g `./try 'echo bonjour | cat -e'`).
 
 ## Bonus
 
