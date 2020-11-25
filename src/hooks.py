@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2020/10/24 13:16:59 by charles          ###   ########.fr        #
+#    Updated: 2020/11/25 21:36:18 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -113,3 +113,11 @@ def linux_discard(output):
         return "DISCARDED BY MINISHELL TEST"
     else:
         return output
+
+
+def should_not_be(not_expected):
+    def hook(output):
+        if output == not_expected:
+            return "OUTPUT SHOULD NOT BE " + output
+        return "DISCARDED BY TEST"
+    return hook
