@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/10/29 14:16:47 by cacharle         ###   ########.fr        #
+#    Updated: 2020/11/26 16:08:25 by charles          ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -69,6 +69,8 @@ def suite_export(test):
     test("export", hook=hooks.export_singleton)
     test("export", exports={"A": ""}, hook=hooks.export_singleton)
     test("export", exports={"A": "\""}, hook=hooks.export_singleton)
+    test("export", exports={"A": "\\"}, hook=hooks.export_singleton)
+    test("export", exports={"A": "$"}, hook=hooks.export_singleton)
     test("export", exports={"A": "\t"}, hook=hooks.export_singleton)
     test("export", exports={"A": "'"}, hook=hooks.export_singleton)
     test("export", exports={"A": "a"}, hook=hooks.export_singleton)
