@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2020/11/26 16:08:25 by charles          ###   ########.fr        #
+#    Updated: 2020/11/28 06:17:19 by charles          ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -136,6 +136,10 @@ def suite_export(test):
     test(r"export BONJOUR\;JESUIS")
     test(r"export BONJOUR\_JESUIS")
     test(r"export BONJOUR\0JESUIS")
+    test("Export B=bonjour")
+    test("exporT B=bonjour")
+    test("Export B=bonjour", exports={"PATH": "/bin:/usr/bin"})
+    test("exporT B=bonjour", exports={"PATH": "/bin:/usr/bin"})
 
 
 @suite()
@@ -230,6 +234,10 @@ def suite_cd(test):
     # test("cd ~/..; pwd; echo $PWD");
     # test("cd ~/../..; pwd; echo $PWD");
     # test("cd $HOME; pwd; echo $PWD")
+    test("Cd .")
+    test("cD .")
+    test("Cd .", exports={"PATH": "/bin:/usr/bin"})
+    test("cD .", exports={"PATH": "/bin:/usr/bin"})
 
 
 @suite()
@@ -265,6 +273,10 @@ def suite_unset(test):
     test("unset 'AH;'=nop")
     test("unset 'AH&'=nop")
     test("unset 'AH\\'=nop")
+    test("Unset TERM")
+    test("unseT TERM")
+    test("Unset TERM", exports={"PATH": "/bin:/usr/bin"})
+    test("unseT TERM", exports={"PATH": "/bin:/usr/bin"})
 
 
 @suite()
@@ -281,6 +293,10 @@ def suite_pwd(test):
     test("unset PWD; pwd; echo $PWD")
     test("export PWD=foo; pwd; echo $PWD")
     # test("cd lnk; rmdir ../d; pwd", setup="mkdir d; ln -s d lnk")
+    test("Pwd")
+    test("pwD")
+    test("Pwd", exports={"PATH": "/bin:/usr/bin"})
+    test("pwD", exports={"PATH": "/bin:/usr/bin"})
 
 
 @suite()
@@ -290,6 +306,10 @@ def suite_env(test):
     test("env", setup="export A=a", hook=[hooks.sort_lines, hooks.shlvl_0_to_1])
     test("env", setup="export A=a B=b C=c", hook=[hooks.sort_lines, hooks.shlvl_0_to_1])
     test("env | cat -e", setup="export A=a B=b C=c", hook=[hooks.sort_lines, hooks.shlvl_0_to_1])
+    test("Env")
+    test("enV")
+    test("Env", exports={"PATH": "/bin:/usr/bin"})
+    test("enV", exports={"PATH": "/bin:/usr/bin"})
 
 
 @suite()
@@ -374,3 +394,10 @@ def suite_exit(test):
     test("exit 0 1")
     test("exit 0 1 2 3 4 5 6 7 8 9")
     test("exit " + config.LOREM, hook_status=hooks.platform_status(255, 2))
+    test("exit bonjoru; echo should have exited", hook_status=hooks.platform_status(255, 2))
+    test("exit 99999999999999999999999999999999999999999999999999999; echo should have exited", hook_status=hooks.platform_status(255, 2))
+    test("exit 9999; echo should have exited")
+    test("Exit; echo a")
+    test("exiT; echo a")
+    test("Exit; echo a", exports={"PATH": "/bin:/usr/bin"})
+    test("exiT; echo a", exports={"PATH": "/bin:/usr/bin"})
