@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/10 13:06:19 by cacharle          #+#    #+#              #
-#    Updated: 2020/10/24 13:39:48 by charles          ###   ########.fr        #
+#    Updated: 2020/11/28 06:10:12 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -83,3 +83,18 @@ def suite_shlvl(test):
     test("echo $SHLVL", exports={"SHLVL": " 00000000000000000000000000000000000000000000001"})
     test("echo $SHLVL", exports={"SHLVL": " 00000000000000000000000000000000000000000000000"
          "00000000000000000000000000000000000000000000001"})
+
+
+@suite()
+def suite_lastcmd(test):
+    """ test for $_, the last executed command """
+    test("echo $_")
+    test("echo; echo $_")
+    test("env; echo $_")
+    test("export A=a; echo $_")
+    test("unset A; echo $_")
+    test("echo a b c d; echo $_")
+    test("cat -e /etc/shells; echo $_")
+    test("echo a; echo \"$_\"")
+    test("echo a; echo '$_'")
+    test("echo a; echo \"@$_@\"")
