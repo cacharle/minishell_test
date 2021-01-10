@@ -8,7 +8,7 @@ Test for the minishell project of school 42.
 
 The default path to your project is `../minishell` but you can change it the the [configuration](src/config.py).
 
-```sh
+```command
 $ ./run  # run all tests
 
 $ ./run --help
@@ -51,7 +51,7 @@ Good luck handling `*'.*'`.
 
 Your executable **must** support the `-c` option which allow to pass command as string.
 
-```sh
+```command
 $ bash -c 'echo bonjour je suis'
 bonjour je suis
 $ ./minishell -c 'echo bonjour je suis'

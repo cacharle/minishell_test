@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/10/15 08:50:05 by cacharle         ###   ########.fr        #
+#    Updated: 2020/12/14 17:53:40 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -146,9 +146,9 @@ class Test:
     def full_cmd(self):
         """ Return the command prefixed by the setup and exports """
         s = self.cmd
-        if self.setup != "":
-            s = "[SETUP {}] {}".format(self.setup, s)
         if len(self.exports) != 0:
             s = "[EXPORTS {}] {}".format(
-                ' '.join(["{}='{:.20}'".format(k, v) for k, v in self.exports.items()]), s)
+                ' '.join(["{}='{}'".format(k, v) for k, v in self.exports.items()]), s)
+        if self.setup != "":
+            s = "[SETUP {}] {}".format(self.setup, s)
         return s
