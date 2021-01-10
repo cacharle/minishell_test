@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2020/10/11 15:47:30 by cacharle         ###   ########.fr        #
+#    Updated: 2021/01/10 15:25:49 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -62,9 +62,11 @@ AVAILABLE_COMMANDS = ["rmdir", "env", "cat", "touch", "ls", "grep", "sh", "head"
 # $PATH environment variable passed to the shell
 PATH_VARIABLE = os.path.abspath(EXECUTABLES_PATH)
 
-# default test timeout
+# test timeout
 TIMEOUT = 0.5
 
+# check leaks  test timeout
+CHECK_LEAKS_TIMEOUT = 10
 
 LOREM = """
 Mollitia asperiores assumenda excepturi et ipsa. Nihil corporis facere aut a rem consequatur.

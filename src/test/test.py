@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2020/12/14 17:53:40 by charles          ###   ########.fr        #
+#    Updated: 2021/01/10 15:20:38 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -63,7 +63,7 @@ class Test:
             captured = self._run_sandboxed([*config.VALGRIND_CMD, "-c"])
             if config.VERBOSE_LEVEL == 2:
                 print(captured.output)
-            self.result = Result.leak(self.full_cmd, captured.output)
+            self.result = Result.leak(self.full_cmd, captured)
             self.result.put(index)
             return
 
@@ -116,7 +116,8 @@ class Test:
 
         # https://docs.python.org/3/library/subprocess.html#subprocess.Popen.communicate
         try:
-            stdout, _ = process.communicate(timeout=(self.timeout if not config.CHECK_LEAKS else 10))
+            stdout, _ = process.communicate(
+                timeout=(self.timeout if not config.CHECK_LEAKS else config.CHECK_LEAKS_TIMEOUT))
         except subprocess.TimeoutExpired:
             process.kill()
             # _, _ = process.communicate(timeout=2)

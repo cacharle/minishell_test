@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2021/01/10 14:56:33 by cacharle         ###   ########.fr        #
+#    Updated: 2021/01/10 15:25:45 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -48,8 +48,8 @@ class Result:
         self.set_colors()
 
     @staticmethod
-    def leak(cmd: str, leak_output: str = None):
-        return Result(cmd, None, None, None, leak_output)
+    def leak(cmd: str, captured: Captured):
+        return Result(cmd, None, None, captured, captured.output)
 
     def _search_leak_kind(self, kind: str) -> int:
         match = re.search(
@@ -79,6 +79,8 @@ class Result:
     def passed(self):
         """Check if the result passed"""
         if self.leak_output is not None:
+            if self.actual.is_timeout:
+                return False
             return self.lost_bytes == 0
         return self.actual == self.expected
 
