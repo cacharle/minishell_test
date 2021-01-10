@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2020/10/11 14:09:24 by cacharle         ###   ########.fr        #
+#    Updated: 2021/01/10 14:56:33 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -65,10 +65,14 @@ class Result:
 
     @property
     def lost_bytes(self):
-        definite_match = self._search_leak_kind("definitely")
-        indirect_match = self._search_leak_kind("indirectly")
-        definite_bytes = int(definite_match.group("bytes").replace(",", ""))
-        indirect_bytes = int(indirect_match.group("bytes").replace(",", ""))
+        if self.leak_output.find("All heap blocks were freed -- no leaks are possible") != -1:
+            definite_bytes = 0
+            indirect_bytes = 0
+        else:
+            definite_match = self._search_leak_kind("definitely")
+            indirect_match = self._search_leak_kind("indirectly")
+            definite_bytes = int(definite_match.group("bytes").replace(",", ""))
+            indirect_bytes = int(indirect_match.group("bytes").replace(",", ""))
         return definite_bytes + indirect_bytes
 
     @property
