@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2020/10/24 13:38:47 by charles          ###   ########.fr        #
+#    Updated: 2021/01/11 22:20:16 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -36,16 +36,6 @@ def parse_args():
     parser.add_argument(
         "-k", "--check-leaks", action="store_true",
         help="Run valgrind on tests (disable usual comparison with bash)"
-    )
-    parser.add_argument(
-        "-p", "--prompt",
-        help=textwrap.dedent("""\
-            The format of your prompt, the available format are:
-             - abs_path:  absolute path to the current directory
-             - base_path: last directory of the path to the current directory
-             - username:  current user
-            You can also the the environment variable MINISHELL_TEST_PROMPT.
-        """)
     )
     parser.add_argument(
         "-r", "--range", nargs=2, type=int, metavar=("BEGIN", "END"),

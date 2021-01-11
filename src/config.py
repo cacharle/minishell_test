@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2021/01/10 15:25:49 by cacharle         ###   ########.fr        #
+#    Updated: 2021/01/11 22:19:59 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -21,11 +21,6 @@ import distutils.spawn
 # run the bonus tests
 # can be changed with `export MINISHELL_TEST_BONUS=yes` in your shell rc file.
 BONUS = False
-
-# Your prompt (string that will be ignored)
-# ./run -h to show the available format
-# Create a new issue if your type of prompt isn't supported
-PROMPT = None
 
 # minishell dir path
 MINISHELL_DIR = "../minishell"
