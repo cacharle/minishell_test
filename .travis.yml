@@ -7,10 +7,13 @@ python:
 
 install:
   - pip install -r requirements.txt
-  # - git clone https://ouaisbrefbams/minishell ../minishell
+  - git clone --recurse-submodule https://github.com/ouaisbrefbams/minishell ../minishell
+  - sed -i 's/-Werror//' ../minishell/Makefile ../minishell/libft/Makefile
+  - sudo apt update
+  - sudo apt install valgrind
 
 script:
   - python -m flake8
   - python -m mypy src
-  # - ./run
-  # - ./run -k echo
+  - ./run
+  - ./run -k pwd
