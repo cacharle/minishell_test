@@ -6,17 +6,19 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2020/10/10 13:47:48 by cacharle         ###   ########.fr        #
+#    Updated: 2021/01/31 02:24:35 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import sys
+from typing import List
 
 import config
+from test import Test
 
 
 class Suite:
-    available = []
+    available: list['Suite'] = []
 
     @classmethod
     def run_all(cls):
@@ -26,7 +28,7 @@ class Suite:
                 break
 
     @classmethod
-    def setup(cls, asked_names: [str]):
+    def setup(cls, asked_names: list[str]):
         """ Remove not asked suite from available suites
             Tries to autocomplete the asked names
         """
@@ -69,7 +71,7 @@ class Suite:
             s.generator_func()
 
     @classmethod
-    def available_names(cls) -> [str]:
+    def available_names(cls) -> list[str]:
         """List of available suites names"""
         return [s.name for s in cls.available]
 
@@ -92,7 +94,7 @@ class Suite:
     def __init__(
         self,
         name: str,
-        groups: [str],
+        groups: List[str],
         bonus: bool = False,
         description: str = "no description",
     ):
@@ -106,7 +108,7 @@ class Suite:
         self.description = description
         self.bonus = bonus
         self.generator_func = None
-        self.tests = []
+        self.tests: list[Test] = []
 
     def add(self, test):
         """Append a test to the suite"""
@@ -137,7 +139,7 @@ class Suite:
             print()
         return True
 
-    def total(self) -> (int, int):
+    def total(self) -> tuple[int, int]:
         """Returns the total of passed and failed tests"""
         passed_total = 0
         for t in self.tests:
@@ -145,7 +147,7 @@ class Suite:
                 return (-1, -1)
             if t.result.passed:
                 passed_total += 1
-        return (passed_total, len(self.tests) - passed_total)
+        return passed_total, len(self.tests) - passed_total
 
     @classmethod
     def summarize(cls):

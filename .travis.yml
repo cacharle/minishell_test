@@ -1,0 +1,14 @@
+language: python
+python:
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8"
+  - "3.9"
+
+install:
+  - pip install -r requirements.txt
+
+script:
+  - python -m mypy src
+  - python -m flake8

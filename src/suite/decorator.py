@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:28:00 by charles           #+#    #+#              #
-#    Updated: 2020/10/09 10:59:09 by cacharle         ###   ########.fr        #
+#    Updated: 2021/01/31 02:13:40 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -15,7 +15,7 @@ from test import Test
 import inspect
 
 
-def suite(groups: [str] = [], bonus: bool = False):
+def suite(groups: list[str] = [], bonus: bool = False):
     """Decorator generator for suites arguments"""
 
     def suite_wrapper(origin):

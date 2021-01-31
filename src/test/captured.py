@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:16:25 by charles           #+#    #+#              #
-#    Updated: 2021/01/11 22:20:29 by charles          ###   ########.fr        #
+#    Updated: 2021/01/31 02:01:30 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -14,7 +14,7 @@ import config
 
 
 class Captured:
-    def __init__(self, output: str, status: int, files_content: [str], is_timeout: bool = False):
+    def __init__(self, output: str, status: int, files_content: list[str], is_timeout: bool = False):
         """Captured class
            output:        captured content
            status:        command status
@@ -34,7 +34,9 @@ class Captured:
         self.files_content = files_content
         self.is_timeout = is_timeout
 
-    def __eq__(self, other: 'Captured') -> bool:
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Captured):
+            raise NotImplementedError
         if self.is_timeout:
             return self.is_timeout == other.is_timeout
         return (self.output == other.output
