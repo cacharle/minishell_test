@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 13:48:07 by charles           #+#    #+#              #
-#    Updated: 2020/09/12 17:06:28 by charles          ###   ########.fr        #
+#    Updated: 2021/01/31 03:59:30 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -36,6 +36,8 @@ def remove():
     except PermissionError:
         subprocess.run(["chmod", "777", *glob.glob(config.SANDBOX_PATH + "/*")], check=True)
         subprocess.run(["rm", "-rf", config.SANDBOX_PATH], check=True)
+    except FileNotFoundError:
+        pass
 
 
 @contextmanager

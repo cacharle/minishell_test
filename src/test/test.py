@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 03:30:15 by charles          ###   ########.fr        #
+#    Updated: 2021/01/31 03:55:43 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -17,7 +17,7 @@ from typing import Optional, List, Dict
 
 import config
 from test.captured import Captured
-from test.result import Result
+from test.result import Result, LeakResult
 import sandbox
 
 
@@ -64,7 +64,7 @@ class Test:
             captured = self._run_sandboxed([*config.VALGRIND_CMD, "-c"])
             if config.VERBOSE_LEVEL == 2:
                 print(captured.output)
-            self.result = Result.leak(self.full_cmd, captured)
+            self.result = LeakResult(self.full_cmd, captured)
             self.result.put(index)
             return
 
