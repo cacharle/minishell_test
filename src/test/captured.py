@@ -6,15 +6,17 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:16:25 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 02:01:30 by charles          ###   ########.fr        #
+#    Updated: 2021/01/31 03:29:22 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
+
+from typing import List
 
 import config
 
 
 class Captured:
-    def __init__(self, output: str, status: int, files_content: list[str], is_timeout: bool = False):
+    def __init__(self, output: str, status: int, files_content: List[str], is_timeout: bool = False):
         """Captured class
            output:        captured content
            status:        command status

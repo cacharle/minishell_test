@@ -6,14 +6,14 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 02:21:17 by charles          ###   ########.fr        #
+#    Updated: 2021/01/31 03:30:15 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import os
 import sys
 import subprocess
-from typing import Optional
+from typing import Optional, List, Dict
 
 import config
 from test.captured import Captured
@@ -25,8 +25,8 @@ class Test:
     def __init__(self,
                  cmd: str,
                  setup: str = "",
-                 files: list[str] = [],
-                 exports: dict[str, str] = {},
+                 files: List[str] = [],
+                 exports: Dict[str, str] = {},
                  timeout: float = config.TIMEOUT,
                  signal=None,
                  hook=[],
@@ -73,7 +73,7 @@ class Test:
         self.result = Result(self.full_cmd, self.files, expected, actual)
         self.result.put(index)
 
-    def _run_sandboxed(self, shell_cmd: list[str]) -> Captured:
+    def _run_sandboxed(self, shell_cmd: List[str]) -> Captured:
         """ Run the command in a sandbox environment """
         with sandbox.context():
             if self.setup != "":
@@ -95,7 +95,7 @@ class Test:
                     sys.exit(1)
             return self._run_capture(shell_cmd)
 
-    def _run_capture(self, shell_cmd: list[str]) -> Captured:
+    def _run_capture(self, shell_cmd: List[str]) -> Captured:
         """ Capture the output (stdout and stderr)
             Capture the content of the watched files after the command is run
         """

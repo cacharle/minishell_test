@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 01:59:00 by charles          ###   ########.fr        #
+#    Updated: 2021/01/31 03:29:05 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -17,6 +17,7 @@
 import os
 import shutil
 import distutils.spawn
+from typing import List
 
 # run the bonus tests
 # can be changed with `export MINISHELL_TEST_BONUS=yes` in your shell rc file.
@@ -35,7 +36,7 @@ MINISHELL_MAKE = True
 # has to support the -c option (sh, bash and zsh support it)
 REFERENCE_PATH = "/bin/bash"
 # can be changed with `export MINISHELL_TEST_ARGS=--poxix,--otherarg`
-REFERENCE_ARGS: list[str] = []  # ["--posix"]
+REFERENCE_ARGS: List[str] = []  # ["--posix"]
 
 # pager to use with --pager option
 # can be changed with `export MINISHELL_TEST_PAGER=yourpager`

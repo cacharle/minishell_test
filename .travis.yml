@@ -1,6 +1,5 @@
 language: python
 python:
-  - "3.5"
   - "3.6"
   - "3.7"
   - "3.8"
@@ -8,7 +7,10 @@ python:
 
 install:
   - pip install -r requirements.txt
+  # - git clone https://ouaisbrefbams/minishell ../minishell
 
 script:
-  - python -m mypy src
   - python -m flake8
+  - python -m mypy src
+  # - ./run
+  # - ./run -k echo

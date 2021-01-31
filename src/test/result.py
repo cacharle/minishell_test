@@ -6,18 +6,19 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 02:28:58 by charles          ###   ########.fr        #
+#    Updated: 2021/01/31 03:35:53 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import sys
 import re
-from typing import Match
+from typing import Match, List
 
 import config
 from test.captured import Captured
 
 
+# TODO split into BaseResult, Result and LeakResult
 class Result:
     RED_CHARS   = "\033[31m"
     GREEN_CHARS = "\033[32m"
@@ -28,7 +29,7 @@ class Result:
     def __init__(
         self,
         cmd: str,
-        file_names: list[str],
+        file_names: List[str],
         expected: Captured,
         actual: Captured,
         leak_output: str = None

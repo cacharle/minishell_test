@@ -6,19 +6,19 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 02:24:35 by charles          ###   ########.fr        #
+#    Updated: 2021/01/31 03:31:15 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import sys
-from typing import List
+from typing import List, Tuple
 
 import config
 from test import Test
 
 
 class Suite:
-    available: list['Suite'] = []
+    available: List['Suite'] = []
 
     @classmethod
     def run_all(cls):
@@ -28,7 +28,7 @@ class Suite:
                 break
 
     @classmethod
-    def setup(cls, asked_names: list[str]):
+    def setup(cls, asked_names: List[str]):
         """ Remove not asked suite from available suites
             Tries to autocomplete the asked names
         """
@@ -71,7 +71,7 @@ class Suite:
             s.generator_func()
 
     @classmethod
-    def available_names(cls) -> list[str]:
+    def available_names(cls) -> List[str]:
         """List of available suites names"""
         return [s.name for s in cls.available]
 
@@ -108,7 +108,7 @@ class Suite:
         self.description = description
         self.bonus = bonus
         self.generator_func = None
-        self.tests: list[Test] = []
+        self.tests: List[Test] = []
 
     def add(self, test):
         """Append a test to the suite"""
@@ -139,7 +139,7 @@ class Suite:
             print()
         return True
 
-    def total(self) -> tuple[int, int]:
+    def total(self) -> Tuple[int, int]:
         """Returns the total of passed and failed tests"""
         passed_total = 0
         for t in self.tests:

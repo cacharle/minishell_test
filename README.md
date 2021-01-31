@@ -1,4 +1,4 @@
-# minishell test
+# minishell test [![Build Status](https://api.travis-ci.com/cacharle/minishell_test.svg?branch=master)](https://travis-ci.com/cacharle/minishell_test)
 
 Test for the minishell project of school 42.
 
@@ -8,7 +8,7 @@ Test for the minishell project of school 42.
 
 The default path to your project is `../minishell` but you can change it the the [configuration](src/config.py).
 
-```command
+```
 $ ./run  # run all tests
 
 $ ./run --help
@@ -66,7 +66,7 @@ README.md test.sh
 With this setup `argv[2]` is what you would usually get in `line` from `get_next_line`.  
 This allows you to set the prompt to whatever you want.
 
-This test works with python >= 3.5.
+**This test works with Python3.6 or higher.**
 
 ### Environement variables
 
