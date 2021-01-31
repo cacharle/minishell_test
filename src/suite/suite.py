@@ -6,12 +6,12 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 03:31:15 by charles          ###   ########.fr        #
+#    Updated: 2021/01/31 04:40:22 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import sys
-from typing import List, Tuple
+from typing import List, Tuple, Optional, Callable
 
 import config
 from test import Test
@@ -68,7 +68,8 @@ class Suite:
         ))
         cls.available.sort(key=lambda s: s.name)
         for s in cls.available:
-            s.generator_func()
+            if s.generator_func is not None:
+                s.generator_func()
 
     @classmethod
     def available_names(cls) -> List[str]:
@@ -107,7 +108,7 @@ class Suite:
         self.groups = groups
         self.description = description
         self.bonus = bonus
-        self.generator_func = None
+        self.generator_func: Optional[Callable] = None
         self.tests: List[Test] = []
 
     def add(self, test):
@@ -133,7 +134,7 @@ class Suite:
                     if not (config.RANGE[0] <= i <= config.RANGE[1]):
                         continue
                 t.run(i)
-                if config.EXIT_FIRST and t.result.failed:
+                if config.EXIT_FIRST and t.result is not None and t.result.failed:
                     return False
         if config.VERBOSE_LEVEL == 0:
             print()

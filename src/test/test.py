@@ -6,14 +6,14 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 03:55:43 by charles          ###   ########.fr        #
+#    Updated: 2021/01/31 04:41:43 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import os
 import sys
 import subprocess
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Union
 
 import config
 from test.captured import Captured
@@ -45,7 +45,7 @@ class Test:
         self.setup = setup
         self.files = files
         self.exports = exports
-        self.result: Optional[Result] = None
+        self.result: Optional[Union[Result, LeakResult]] = None
         self.timeout = timeout
         self.signal = signal
         self.hook = hook
@@ -129,7 +129,7 @@ class Test:
             output = "UNICODE ERROR: {}".format(process.stdout)
 
         # capture watched files content
-        files_content = []
+        files_content: List[Optional[str]] = []
         for file_name in self.files:
             try:
                 with open(os.path.join(config.SANDBOX_PATH, file_name), "rb") as f:

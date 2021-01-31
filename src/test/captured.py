@@ -6,17 +6,23 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:16:25 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 03:29:22 by charles          ###   ########.fr        #
+#    Updated: 2021/01/31 04:23:03 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-from typing import List
+from typing import List, Optional
 
 import config
 
 
 class Captured:
-    def __init__(self, output: str, status: int, files_content: List[str], is_timeout: bool = False):
+    def __init__(
+        self,
+        output: str,
+        status: int,
+        files_content: List[Optional[str]],
+        is_timeout: bool = False
+    ):
         """Captured class
            output:        captured content
            status:        command status
@@ -29,7 +35,6 @@ class Captured:
                 lines[i] = l.replace(config.REFERENCE_ERROR_BEGIN, config.MINISHELL_ERROR_BEGIN, 1)
             elif l.find(config.REFERENCE_PATH + ": ") == 0:
                 lines[i] = l.replace(config.REFERENCE_PATH + ": ", config.MINISHELL_ERROR_BEGIN, 1)
-
         self.output = '\n'.join(lines)
 
         self.status = status

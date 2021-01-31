@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 03:29:05 by charles          ###   ########.fr        #
+#    Updated: 2021/01/31 04:41:29 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -89,8 +89,8 @@ MINISHELL_PATH = os.path.abspath(
     os.path.join(MINISHELL_DIR, MINISHELL_EXEC)
 )
 
-VALGRIND_CMD = [
-    distutils.spawn.find_executable("valgrind"),
+VALGRIND_CMD: List[str] = [
+    distutils.spawn.find_executable("valgrind") or "couldn't find valgrind",
     # "valgrind",
     "--trace-children=no",
     "--leak-check=yes",
