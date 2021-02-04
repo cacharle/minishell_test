@@ -2,3 +2,5 @@
 *.log
 bin
 tags
+dist
+*.egg-info

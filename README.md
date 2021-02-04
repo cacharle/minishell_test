@@ -1,8 +1,8 @@
-# minishell test [![Build Status](https://api.travis-ci.com/cacharle/minishell_test.svg?branch=master)](https://travis-ci.com/cacharle/minishell_test)
+# minishell test [![Build Status](https://api.travis-ci.com/cacharle/minishell_test.svg?branch=master)](https://travis-ci.com/cacharle/minishell_test) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/minishell-test)](https://pypi.org/project/minishell-test/)
 
 Test for the minishell project of school 42.
 
-![preview](preview.gif)
+![preview](https://i.imgur.com/98xh2xY.gif)
 
 ## Usage
 
