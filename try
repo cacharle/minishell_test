@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
 import os
-import sys
 import subprocess
+import sys
 
-from src.config import MINISHELL_DIR, MINISHELL_EXEC, EXECUTABLES_PATH
-
+from src.config import EXECUTABLES_PATH, MINISHELL_DIR, MINISHELL_EXEC
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

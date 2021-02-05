@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 04:40:22 by charles          ###   ########.fr        #
+#    Updated: 2021/02/04 16:13:08 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -28,7 +28,7 @@ class Suite:
                 break
 
     @classmethod
-    def setup(cls, asked_names: List[str]):
+    def setup(cls, asked_names: List[str]) -> None:
         """ Remove not asked suite from available suites
             Tries to autocomplete the asked names
         """
@@ -49,7 +49,7 @@ class Suite:
                        or n.startswith(name)]
             if len(matches) == 1:
                 names.append(matches[0])
-            elif len(matches) != 0 and all([n.startswith(name) for n in matches]):
+            elif len(matches) != 0 and all(n.startswith(name) for n in matches):
                 names.extend(matches)
             elif len(matches) > 2:
                 print(("Ambiguous name `{}` match the following suites\n\t{}\n"
@@ -64,7 +64,7 @@ class Suite:
 
         cls.available = list(set(
             [s for s in cls.available if s.name in names]
-            + [s for s in cls.available if any([g for g in s.groups if g in names])]
+            + [s for s in cls.available if any(g for g in s.groups if g in names)]
         ))
         cls.available.sort(key=lambda s: s.name)
         for s in cls.available:
@@ -79,7 +79,7 @@ class Suite:
     @classmethod
     def list(cls):
         print("Groups:")
-        print("\n".join(set([" - " + ', '.join(s.groups) for s in Suite.available])))
+        print("\n".join({" - " + ', '.join(s.groups) for s in Suite.available}))
         print("The available suites are:")
         max_name_width = max(len(s.name) for s in Suite.available) + 5
         lines = [

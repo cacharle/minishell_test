@@ -46,7 +46,10 @@ def main():
         shutil.rmtree(config.EXECUTABLES_PATH)
     os.mkdir(config.EXECUTABLES_PATH)
     for cmd in config.AVAILABLE_COMMANDS:
-        shutil.copy(distutils.spawn.find_executable(cmd),
+        cmd_path = distutils.spawn.find_executable(cmd)
+        if cmd_path is None:
+            raise RuntimeError
+        shutil.copy(cmd_path,
                     os.path.join(config.EXECUTABLES_PATH, cmd))
 
     reference_args = os.environ.get("MINISHELL_TEST_ARGS")

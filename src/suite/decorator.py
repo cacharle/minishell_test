@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:28:00 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 04:45:08 by charles          ###   ########.fr        #
+#    Updated: 2021/02/04 16:18:11 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -17,13 +17,16 @@ from suite import Suite
 from test import Test
 
 
-def suite(groups: List[str] = [], bonus: bool = False):
+def suite(groups: List[str] = [], bonus: bool = False):  # type: ignore
     """Decorator generator for suites arguments"""
 
     def suite_wrapper(origin):
         """Decorator for a suite function (fmt: suite_[name]) """
 
-        mod_name = inspect.getmodule(origin).__name__[len("suites."):]
+        mod = inspect.getmodule(origin)
+        if mod is None:
+            raise NotImplementedError
+        mod_name = mod.__name__[len("suites."):]
         name = "{}/{}".format(mod_name, origin.__name__[len("suite_"):])
         description = origin.__doc__
         if description is None:

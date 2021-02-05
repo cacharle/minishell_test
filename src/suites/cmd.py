@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 15:11:46 by charles           #+#    #+#              #
-#    Updated: 2020/10/15 10:40:11 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/04 16:14:54 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -127,7 +127,13 @@ def suite_status(test):
 def suite_cmd_path(test):
     """ cmd is a relative path, permissions on executable """
     ls_path = distutils.spawn.find_executable("ls")
+    if ls_path is None:
+        print("Couldn't find `ls` in your PATH: Skipping suite")
+        return
     cat_path = distutils.spawn.find_executable("cat")
+    if cat_path is None:
+        print("Couldn't find `cat` in your PATH: Skipping suite")
+        return
     test(ls_path, setup="touch a b c")
     test(ls_path + " -l", setup="touch a b c")
     test("./bonjour", setup="touch a b c; cp {} bonjour".format(ls_path))

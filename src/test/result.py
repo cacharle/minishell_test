@@ -6,13 +6,13 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 04:10:31 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 01:36:44 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import sys
 import re
-from typing import Match, List
+from typing import Match, List, Optional
 
 import config
 from test.captured import Captured
@@ -25,7 +25,8 @@ class BaseResult:
     BOLD_CHARS  = "\033[1m"
     CLOSE_CHARS = "\033[0m"
 
-    def __init__(self):
+    def __init__(self, cmd: str):
+        self.cmd = cmd
         self.colored = True
         self.set_colors()
 
@@ -43,7 +44,7 @@ class BaseResult:
         """Returns a representation of the result based on the verbosity"""
         if config.VERBOSE_LEVEL == 0:
             return self.green('.') if self.passed else self.red('!')
-        elif config.VERBOSE_LEVEL == 1:
+        if config.VERBOSE_LEVEL == 1:
             printed = self._escaped_cmd[:]
             if config.SHOW_RANGE:
                 printed = "{:2}: ".format(self.index) + printed
@@ -56,7 +57,7 @@ class BaseResult:
         else:
             raise RuntimeError("Invalid verbose level")
 
-    def put(self, index: int):
+    def put(self, index: int) -> None:
         """Print a summary of the result"""
         if config.VERBOSE_LEVEL == 2 and self.passed:
             return
@@ -76,12 +77,13 @@ class BaseResult:
     @property
     def _escaped_cmd(self):
         """Escape common control characters"""
-        return (self.cmd
-                .replace("\t", "\\t")
-                .replace("\n", "\\n")
-                .replace("\v", "\\v")
-                .replace("\r", "\\r")
-                .replace("\f", "\\f"))
+        c = self.cmd
+        c = c.replace("\t", "\\t")
+        c = c.replace("\n", "\\n")
+        c = c.replace("\v", "\\v")
+        c = c.replace("\r", "\\r")
+        c = c.replace("\f", "\\f")
+        return c
 
     @property
     def _header_with(self):
@@ -129,11 +131,10 @@ class Result(BaseResult):
            expected:    expected capture
            actual:      actual capture
         """
-        self.cmd = cmd
         self.file_names = file_names
         self.expected = expected
         self.actual = actual
-        super().__init__()
+        super().__init__(cmd)
 
     @property
     def passed(self):
@@ -144,14 +145,16 @@ class Result(BaseResult):
 
     @property
     def expected_header(self) -> str:
-        return self.green(self.header("EXPECTED"))
+        return self.green(self.header("EXPECTED")) + '\n'
 
     @property
     def actual_header(self) -> str:
-        return self.red(self.header("ACTUAL"))
+        return self.red(self.header("ACTUAL")) + '\n'
 
-    def cat_e(self, s: str) -> str:
+    def cat_e(self, s: Optional[str]) -> str:
         """Pass a string through a cat -e like output"""
+        if s is None:
+            return "FROM TEST: File not created\n"
         s = s.replace("\n", "$\n")
         if len(s) < 2:
             return s
@@ -159,16 +162,17 @@ class Result(BaseResult):
             s += '\n'
         return s
 
-    def file_diff(self, file_name: str, expected: str, actual: str) -> str:
+    def file_diff(self, file_name: str, expected: Optional[str], actual: Optional[str]) -> str:
         """Difference between 2 files"""
         if expected == actual:
             return ""
+        file_header = self.indicator("FILE {}".format(file_name), "|#") + '\n'
         return (
-            self.indicator("FILE {}".format(file_name), "|#") + '\n'
-            + self.expected_header + '\n'
-            + ("FROM TEST: File not created\n" if expected is None else self.cat_e(expected))
-            + self.actual_header + '\n'
-            + ("FROM TEST: File not created\n" if actual is None else self.cat_e(actual))
+            file_header
+            + self.expected_header
+            + self.cat_e(expected)
+            + self.actual_header
+            + self.cat_e(actual)
         )
 
     def files_diff(self):
@@ -190,9 +194,9 @@ class Result(BaseResult):
                 .format(self.expected.status, self.actual.status), "| "
             ) + '\n'
         if self.expected.output != self.actual.output:
-            out += (self.expected_header + '\n'
+            out += (self.expected_header
                     + self.cat_e(self.expected.output)
-                    + self.actual_header + '\n'
+                    + self.actual_header
                     + self.cat_e(self.actual.output))
         return out
 
@@ -203,9 +207,8 @@ class Result(BaseResult):
 
 class LeakResult(BaseResult):
     def __init__(self, cmd: str, captured: Captured):
-        self.cmd = cmd
         self.captured = captured
-        super().__init__()
+        super().__init__(cmd)
 
     def _search_leak_kind(self, kind: str) -> Match:
         match = re.search(

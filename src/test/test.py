@@ -6,38 +6,41 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 04:41:43 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 01:37:44 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import os
 import sys
 import subprocess
-from typing import Optional, List, Dict, Union
+from typing import Optional, List, Dict, Union, Callable
 
 import config
 from test.captured import Captured
 from test.result import Result, LeakResult
 import sandbox
 
+HookType =       Union[Callable[[str], str], List[Callable[[str], str]]]
+HookStatusType = Union[Callable[[int], int], List[Callable[[int], int]]]
+
 
 class Test:
-    def __init__(self,
-                 cmd: str,
-                 setup: str = "",
-                 files: List[str] = [],
-                 exports: Dict[str, str] = {},
-                 timeout: float = config.TIMEOUT,
-                 signal=None,
-                 hook=[],
-                 hook_status=[]):
+    def __init__(
+        self,
+        cmd:         str,
+        setup:       str                  = "",
+        files:       List[str]            = [],
+        exports:     Dict[str, str]       = {},
+        timeout:     float                = config.TIMEOUT,
+        hook:        HookType = [],
+        hook_status: HookStatusType = [],
+    ):
         """ Test class
             cmd:         command to execute
             setup:       command to execute before tested command
             files:       files to watch (check content after test)
             exports:     exported variables
             timeout:     maximum amount of time taken by the test
-            signal:      signal to send to the test
             hook:        function to execute on the output of the test
             hook_status: function to execute on status code
         """
@@ -47,15 +50,14 @@ class Test:
         self.exports = exports
         self.result: Optional[Union[Result, LeakResult]] = None
         self.timeout = timeout
-        self.signal = signal
-        self.hook = hook
-        self.hook_status = hook_status
-        if type(self.hook) is not list:
-            self.hook = [self.hook]
-        if type(self.hook_status) is not list:
-            self.hook_status = [self.hook_status]
+        if type(hook) is not list:
+            hook = [hook]  # type: ignore
+        if type(hook_status) is not list:
+            hook_status = [hook_status]  # type: ignore
+        self.hook:        List[Callable[[str], str]] = hook  # type: ignore
+        self.hook_status: List[Callable[[int], int]] = hook_status  # type: ignore
 
-    def run(self, index: int):
+    def run(self, index: int) -> None:
         """ Run the test for minishell and the reference shell and print the result out """
 
         if config.CHECK_LEAKS:
@@ -111,9 +113,6 @@ class Test:
                 **self.exports,
             },
         )
-        # if self.signal is not None:
-        #     time.sleep(0.1)
-        #     process.send_signal(self.signal)
 
         # https://docs.python.org/3/library/subprocess.html#subprocess.Popen.communicate
         try:
@@ -138,10 +137,10 @@ class Test:
                 files_content.append(None)
 
         # apply output/status hooks
-        for h in self.hook:
-            output = h(output)
-        for h in self.hook_status:
-            process.returncode = h(process.returncode)
+        for hook in self.hook:
+            output = hook(output)
+        for hook_status in self.hook_status:
+            process.returncode = hook_status(process.returncode)
         return Captured(output, process.returncode, files_content)
 
     @property

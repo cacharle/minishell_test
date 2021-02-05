@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/09 15:12:58 by charles           #+#    #+#              #
-#    Updated: 2020/10/15 09:17:09 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/04 16:14:20 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -19,6 +19,9 @@ from suite import suite
 def suite_path(test):
     """ searching a command in the path tests """
     whoami_path = distutils.spawn.find_executable("which")
+    if whoami_path is None:
+        print("Couldn't find `whoami` in your PATH: Skipping suite")
+        return
     mode_fmt = ("mkdir path && cp "
                 + whoami_path
                 + " ./path/a && chmod {} ./path/a")
