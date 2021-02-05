@@ -80,6 +80,8 @@ def main(argv=None):
     try:
         Suite.run_all()
     except KeyboardInterrupt:
+        pass
+    finally:
         sandbox.remove()
 
     Suite.summarize()

@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 04:41:29 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 20:01:16 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -24,7 +24,7 @@ from typing import List
 BONUS = False
 
 # minishell dir path
-MINISHELL_DIR = "../minishell"
+MINISHELL_DIR = "."
 
 # minishell executable
 MINISHELL_EXEC = "minishell"
