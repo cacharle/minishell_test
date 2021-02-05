@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/09 15:12:58 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 14:50:19 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 17:47:32 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -22,9 +22,9 @@ def suite_path(test):
     if whoami_path is None:
         print("Couldn't find `whoami` in your PATH: Skipping suite")
         return
-    mode_fmt = ("mkdir path && cp "
-                + whoami_path
-                + " ./path/a && chmod {} ./path/a")
+    mode_fmt = ("mkdir path && cp " +
+                whoami_path +
+                " ./path/a && chmod {} ./path/a")
     test("a", setup=mode_fmt.format("000"), exports={"PATH": "path"})
     test("a", setup=mode_fmt.format("001"), exports={"PATH": "path"})
     test("a", setup=mode_fmt.format("002"), exports={"PATH": "path"})

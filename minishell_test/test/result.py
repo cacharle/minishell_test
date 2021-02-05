@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 14:55:23 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 17:46:30 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -168,11 +168,11 @@ class Result(BaseResult):
             return ""
         file_header = self.indicator("FILE {}".format(file_name), "|#") + '\n'
         return (
-            file_header
-            + self.expected_header
-            + self.cat_e(expected)
-            + self.actual_header
-            + self.cat_e(actual)
+            file_header +
+            self.expected_header +
+            self.cat_e(expected) +
+            self.actual_header +
+            self.cat_e(actual)
         )
 
     def files_diff(self):
@@ -194,10 +194,10 @@ class Result(BaseResult):
                 .format(self.expected.status, self.actual.status), "| "
             ) + '\n'
         if self.expected.output != self.actual.output:
-            out += (self.expected_header
-                    + self.cat_e(self.expected.output)
-                    + self.actual_header
-                    + self.cat_e(self.actual.output))
+            out += (self.expected_header +
+                    self.cat_e(self.expected.output) +
+                    self.actual_header +
+                    self.cat_e(self.actual.output))
         return out
 
     def full_diff(self) -> str:

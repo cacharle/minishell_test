@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 14:42:26 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 17:39:44 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -20,7 +20,7 @@ from minishell_test.test.captured import Captured
 from minishell_test.test.result import Result, LeakResult
 import minishell_test.sandbox as sandbox
 
-HookType =       Union[Callable[[str], str], List[Callable[[str], str]]]
+HookType       = Union[Callable[[str], str], List[Callable[[str], str]]]
 HookStatusType = Union[Callable[[int], int], List[Callable[[int], int]]]
 
 

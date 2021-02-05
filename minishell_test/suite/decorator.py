@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:28:00 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 14:50:41 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 17:44:25 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -26,7 +26,7 @@ def suite(groups: List[str] = [], bonus: bool = False):  # type: ignore
         mod = inspect.getmodule(origin)
         if mod is None:
             raise NotImplementedError
-        mod_name = mod.__name__[len("suites."):]
+        mod_name = mod.__name__[len("minishell_test.suites."):]
         name = "{}/{}".format(mod_name, origin.__name__[len("suite_"):])
         description = origin.__doc__
         if description is None:

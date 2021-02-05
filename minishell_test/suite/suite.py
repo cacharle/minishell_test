@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 14:24:36 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 18:01:33 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -44,9 +44,9 @@ class Suite:
                 names.append(name)
                 continue
             matches = [n for n in suite_names
-                       if n.find("/") != -1
-                       and n[n.find("/") + 1:].startswith(name)
-                       or n.startswith(name)]
+                       if n.find("/") != -1 and
+                       n[n.find("/") + 1:].startswith(name) or
+                       n.startswith(name)]
             if len(matches) == 1:
                 names.append(matches[0])
             elif len(matches) != 0 and all(n.startswith(name) for n in matches):
@@ -63,8 +63,8 @@ class Suite:
                 sys.exit(1)
 
         cls.available = list(set(
-            [s for s in cls.available if s.name in names]
-            + [s for s in cls.available if any(g for g in s.groups if g in names)]
+            [s for s in cls.available if s.name in names] +
+            [s for s in cls.available if any(g for g in s.groups if g in names)]
         ))
         cls.available.sort(key=lambda s: s.name)
         for s in cls.available:

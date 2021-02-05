@@ -2,6 +2,3 @@ mypy==0.800
 flake8==3.8.4
 flake8_comprehensions==3.3.1
 pep8_naming==0.11.1
-flake8-expression-complexity
-flake8-isort
-flake8-cognitive-complexity

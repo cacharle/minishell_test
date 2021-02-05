@@ -4,6 +4,22 @@ Test for the minishell project of school 42.
 
 ![preview](https://i.imgur.com/98xh2xY.gif)
 
+## Installation
+
+### pip
+
+```
+$ pip3 install minishell-test
+```
+
+### Manual
+
+```
+$ git clone https://github.com/cacharle/minishell_test
+$ cd minishell_test
+$ pip3 install -e minishell_test
+```
+
 ## Usage
 
 The default path to your project is `../minishell` but you can change it the the [configuration](src/config.py).
@@ -12,16 +28,9 @@ The default path to your project is `../minishell` but you can change it the the
 $ ./run  # run all tests
 
 $ ./run --help
-usage: run [-h] [-k] [-x] [-r BEGIN END] [--show-range] [-v] [-b] [-n] [-l]
-           [-m] [-p]
-           [suite [suite ...]]
+usage: run [-h] [-k] [-r BEGIN END] [--show-range] [-x] [-v] [-b] [-n] [-l] [-m] [-g] [suite ...]
 
-___  ____       _     _          _ _   _            _
-|  \/  (_)     (_)   | |        | | | | |          | |
-| .  . |_ _ __  _ ___| |__   ___| | | | |_ ___  ___| |_
-| |\/| | | '_ \| / __| '_ \ / _ \ | | | __/ _ \/ __| __|
-| |  | | | | | | \__ \ | | |  __/ | | | ||  __/\__ \ |_
-\_|  |_/_|_| |_|_|___/_| |_|\___|_|_|  \__\___||___/\__|
+Test for the minishell project of school 42.
 
 positional arguments:
   suite                 Test suites/group to run.
@@ -31,20 +40,20 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -k, --check-leaks     Run valgrind on tests (disable usual comparison with bash)
-  -x, --exit-first      Exit on first fail
   -r BEGIN END, --range BEGIN END
                         Range of test index to run (imply --show-index)
   --show-range          Show test index (useful with --range)
+  -x, --exit-first      Exit on first fail
   -v, --verbose         Increase verbosity level (e.g -vv == 2)
   -b, --bonus           Enable bonus tests
   -n, --no-bonus        Disable bonus tests
   -l, --list            Print available test suites
   -m, --make            Make minishell and exit
-  -p, --pager           After running the test, display the result in a pager of your choice
+  -g, --pager           After running the test, display the result in a pager of your choice
 
-Signal handling is not tested
-There is a commented glob suite in src/suites/preprocess.py.
-Good luck handling `*'.*'`.
+Made by cacharle
+https://github.com/cacharle
+https://cacharle.xyz
 ```
 
 ## Test compatibility

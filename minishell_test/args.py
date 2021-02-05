@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2021/01/11 22:20:16 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 17:14:41 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -18,19 +18,12 @@ def parse_args():
     """Parse command line arguments"""
 
     parser = argparse.ArgumentParser(
-        description=textwrap.dedent(r"""
-            ___  ____       _     _          _ _   _            _
-            |  \/  (_)     (_)   | |        | | | | |          | |
-            | .  . |_ _ __  _ ___| |__   ___| | | | |_ ___  ___| |_
-            | |\/| | | '_ \| / __| '_ \ / _ \ | | | __/ _ \/ __| __|
-            | |  | | | | | | \__ \ | | |  __/ | | | ||  __/\__ \ |_
-            \_|  |_/_|_| |_|_|___/_| |_|\___|_|_|  \__\___||___/\__|
-        """),
+        description="Test for the minishell project of school 42.",
         formatter_class=argparse.RawTextHelpFormatter,
-        epilog=textwrap.dedent("""\
-            Signal handling is not tested
-            There is a commented glob suite in src/suites/preprocess.py.
-            Good luck handling `*'.*'`.
+        epilog=textwrap.dedent("""
+            Made by cacharle
+            https://github.com/cacharle
+            https://cacharle.xyz
         """)
     )
     parser.add_argument(

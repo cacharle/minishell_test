@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 15:11:21 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 17:40:00 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -19,6 +19,7 @@ from minishell_test.hooks import (
     replace_double_semi_colon,
     error_eof_to_expected_token
 )
+
 
 @suite()
 def suite_end(test):
@@ -57,6 +58,7 @@ def suite_end(test):
     test("ls " + 80 * " ; ls", setup="touch a b c")
     test("ls " + 40 * " ; ls" + ";", setup="touch a b c")
     test("ls " + 80 * " ; ls" + ";", setup="touch a b c")
+
 
 @suite()
 def suite_pipe(test):

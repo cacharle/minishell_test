@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:16:25 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 14:55:31 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 17:47:10 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -46,9 +46,9 @@ class Captured:
             raise NotImplementedError
         if self.is_timeout:
             return self.is_timeout == other.is_timeout
-        return (self.output == other.output
-                and self.status == other.status
-                and all(x == y for x, y in zip(self.files_content, other.files_content)))
+        return (self.output == other.output and
+                self.status == other.status and
+                all(x == y for x, y in zip(self.files_content, other.files_content)))
 
     @staticmethod
     def timeout():
