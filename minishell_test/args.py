@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 20:12:53 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 20:38:28 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -23,9 +23,7 @@ def parse_args():
         description="Test for the minishell project of school 42.",
         formatter_class=argparse.RawTextHelpFormatter,
         epilog=textwrap.dedent("""
-            Made by cacharle
-            https://github.com/cacharle
-            https://cacharle.xyz
+            Made by cacharle - https://cacharle.xyz
         """)
     )
     parser.add_argument(
