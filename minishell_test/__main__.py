@@ -25,7 +25,7 @@ from minishell_test.suite.suite import Suite, SuiteException
 from minishell_test.suites import *  # noqa: F403,F401
 
 
-def main():
+def main(argv=None):
     args = parse_args()
     if args.list:
         Suite.list()

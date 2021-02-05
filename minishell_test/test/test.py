@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 17:39:44 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 18:35:12 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -28,11 +28,11 @@ class Test:
     def __init__(
         self,
         cmd:         str,
-        setup:       str                  = "",
-        files:       List[str]            = [],
-        exports:     Dict[str, str]       = {},
-        timeout:     float                = config.TIMEOUT,
-        hook:        HookType = [],
+        setup:       str            = "",
+        files:       List[str]      = [],
+        exports:     Dict[str, str] = {},
+        timeout:     float          = config.TIMEOUT,
+        hook:        HookType       = [],
         hook_status: HookStatusType = [],
     ):
         """ Test class
@@ -50,12 +50,12 @@ class Test:
         self.exports = exports
         self.result: Optional[Union[Result, LeakResult]] = None
         self.timeout = timeout
-        if type(hook) is not list:
-            hook = [hook]  # type: ignore
-        if type(hook_status) is not list:
-            hook_status = [hook_status]  # type: ignore
-        self.hook:        List[Callable[[str], str]] = hook  # type: ignore
-        self.hook_status: List[Callable[[int], int]] = hook_status  # type: ignore
+        if not isinstance(hook, list):
+            hook = [hook]
+        if not isinstance(hook_status, list):
+            hook_status = [hook_status]
+        self.hook = hook
+        self.hook_status = hook_status
 
     def run(self, index: int) -> None:
         """ Run the test for minishell and the reference shell and print the result out """
