@@ -6,12 +6,14 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 17:14:41 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 20:12:53 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import argparse
 import textwrap
+
+import minishell_test.config as config
 
 
 def parse_args():
@@ -65,6 +67,10 @@ def parse_args():
     parser.add_argument(
         "-g", "--pager", action="store_true",
         help="After running the test, display the result in a pager of your choice"
+    )
+    parser.add_argument(
+        "-p", "--path", default=config.MINISHELL_DIR,
+        help="Path to minishell directory"
     )
     parser.add_argument(
         "suites", nargs='*', metavar="suite",

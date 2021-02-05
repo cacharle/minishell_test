@@ -31,6 +31,11 @@ def main(argv=None):
         Suite.list()
         sys.exit(0)
 
+    config.MINISHELL_DIR = args.path
+    config.MINISHELL_PATH = os.path.abspath(
+        os.path.join(config.MINISHELL_DIR, config.MINISHELL_EXEC)
+    )
+
     if config.MINISHELL_MAKE or args.make:
         try:
             print("{:=^{width}}".format("MAKE", width=config.TERM_COLS))
