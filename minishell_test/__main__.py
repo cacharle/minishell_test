@@ -21,7 +21,7 @@ import subprocess
 import minishell_test.config as config
 import minishell_test.sandbox as sandbox
 from minishell_test.args import parse_args
-from minishell_test.suite.suite import Suite
+from minishell_test.suite.suite import Suite, SuiteException
 from minishell_test.suites import *  # noqa: F403,F401
 
 
@@ -72,7 +72,11 @@ def main():
     if config.RANGE is not None or config.CHECK_LEAKS:
         config.SHOW_RANGE = True
 
-    Suite.setup(args.suites)
+    try:
+        Suite.setup(args.suites)
+    except SuiteException as e:
+        print(e)
+        sys.exit(1)
     try:
         Suite.run_all()
     except KeyboardInterrupt:

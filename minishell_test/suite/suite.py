@@ -6,15 +6,40 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 18:01:33 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 18:13:00 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-import sys
 from typing import List, Tuple, Optional, Callable
 
 import minishell_test.config as config
 from minishell_test.test import Test
+
+
+class SuiteException(Exception):
+    """ Base exception for suite """
+    pass
+
+
+class AmbiguousNameException(SuiteException):
+    def __init__(self, name: str, matches: List[str]):
+        self.name = name
+        self.matches = matches
+
+    def __str__(self) -> str:
+        return (("Ambiguous name `{}` match the following suites\n\t{}\n"
+                 "Try to run with -l to see the available suites")
+                .format(self.name, ', '.join(self.matches)))
+
+
+class NoMatchException(SuiteException):
+    def __init__(self, name: str):
+        self.name = name
+
+    def __str__(self) -> str:
+        return (("Name `{}` doesn't match any suite/group name\n\t"
+                 "Try to run with -l to see the available suites")
+                .format(self.name))
 
 
 class Suite:
@@ -52,15 +77,9 @@ class Suite:
             elif len(matches) != 0 and all(n.startswith(name) for n in matches):
                 names.extend(matches)
             elif len(matches) > 2:
-                print(("Ambiguous name `{}` match the following suites\n\t{}\n"
-                       "Try to run with -l to see the available suites")
-                      .format(name, ', '.join(matches)))
-                sys.exit(1)
+                raise AmbiguousNameException(name, matches)
             elif len(matches) == 0:
-                print(("Name `{}` doesn't match any suite/group name\n\t"
-                       "Try to run with -l to see the available suites")
-                      .format(name))
-                sys.exit(1)
+                raise NoMatchException(name)
 
         cls.available = list(set(
             [s for s in cls.available if s.name in names] +
