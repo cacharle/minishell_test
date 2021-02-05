@@ -6,11 +6,11 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/10 13:06:19 by cacharle          #+#    #+#              #
-#    Updated: 2020/11/28 06:10:12 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 14:49:39 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-from suite import suite
+from minishell_test.suite.decorator import suite
 
 
 @suite()

@@ -6,14 +6,19 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2020/11/10 13:16:28 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/05 15:11:21 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-import config
-from suite import suite
-from hooks import error_line0, platform_status, discard, replace_double_semi_colon, error_eof_to_expected_token
-
+import minishell_test.config as config
+from minishell_test.suite.decorator import suite
+from minishell_test.hooks import (
+    error_line0,
+    platform_status,
+    discard,
+    replace_double_semi_colon,
+    error_eof_to_expected_token
+)
 
 @suite()
 def suite_end(test):
@@ -52,7 +57,6 @@ def suite_end(test):
     test("ls " + 80 * " ; ls", setup="touch a b c")
     test("ls " + 40 * " ; ls" + ";", setup="touch a b c")
     test("ls " + 80 * " ; ls" + ";", setup="touch a b c")
-
 
 @suite()
 def suite_pipe(test):

@@ -6,13 +6,13 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:25:00 by charles           #+#    #+#              #
-#    Updated: 2021/01/21 13:06:55 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 14:43:27 by charles          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-import config
-import hooks
-from suite import suite
+import minishell_test.config as config
+import minishell_test.hooks as hooks
+from minishell_test.suite.decorator import suite
 
 
 @suite()

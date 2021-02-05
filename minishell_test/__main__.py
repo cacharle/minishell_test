@@ -18,11 +18,11 @@ import shutil
 import distutils.spawn
 import subprocess
 
-import config
-import sandbox
-from args import parse_args
-from suite import Suite
-from suites import *  # noqa: F403,F401
+import minishell_test.config as config
+import minishell_test.sandbox as sandbox
+from minishell_test.args import parse_args
+from minishell_test.suite.suite import Suite
+from minishell_test.suites import *  # noqa: F403,F401
 
 
 def main():

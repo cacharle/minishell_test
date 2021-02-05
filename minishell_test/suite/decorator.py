@@ -6,15 +6,15 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:28:00 by charles           #+#    #+#              #
-#    Updated: 2021/02/04 16:18:11 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 14:50:41 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import inspect
 from typing import List
 
-from suite import Suite
-from test import Test
+from minishell_test.suite import Suite
+from minishell_test.test import Test
 
 
 def suite(groups: List[str] = [], bonus: bool = False):  # type: ignore

@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2020/11/25 21:36:18 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 15:13:30 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -14,7 +14,7 @@ import re
 import sys
 import os
 
-import config
+import minishell_test.config as config
 
 
 def sort_lines(output):

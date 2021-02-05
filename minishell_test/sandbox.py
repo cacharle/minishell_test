@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 13:48:07 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 03:59:30 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 14:54:37 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -16,7 +16,7 @@ import shutil
 import subprocess
 from contextlib import contextmanager
 
-import config
+import minishell_test.config as config
 
 
 def create():

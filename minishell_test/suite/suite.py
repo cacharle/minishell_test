@@ -6,15 +6,15 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2021/02/04 16:13:08 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 14:24:36 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import sys
 from typing import List, Tuple, Optional, Callable
 
-import config
-from test import Test
+import minishell_test.config as config
+from minishell_test.test import Test
 
 
 class Suite:

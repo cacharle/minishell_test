@@ -6,13 +6,13 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:16:25 by charles           #+#    #+#              #
-#    Updated: 2021/02/04 15:52:19 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 14:55:31 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 from typing import List, Optional
 
-import config
+import minishell_test.config as config
 
 
 class Captured:

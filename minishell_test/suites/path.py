@@ -6,13 +6,13 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/09 15:12:58 by charles           #+#    #+#              #
-#    Updated: 2021/02/04 16:14:20 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 14:50:19 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import distutils.spawn
 
-from suite import suite
+from minishell_test.suite.decorator import suite
 
 
 @suite()

@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 01:37:44 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 14:42:26 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -15,10 +15,10 @@ import sys
 import subprocess
 from typing import Optional, List, Dict, Union, Callable
 
-import config
-from test.captured import Captured
-from test.result import Result, LeakResult
-import sandbox
+import minishell_test.config as config
+from minishell_test.test.captured import Captured
+from minishell_test.test.result import Result, LeakResult
+import minishell_test.sandbox as sandbox
 
 HookType =       Union[Callable[[str], str], List[Callable[[str], str]]]
 HookStatusType = Union[Callable[[int], int], List[Callable[[int], int]]]

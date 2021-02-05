@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 01:36:44 by charles          ###   ########.fr        #
+#    Updated: 2021/02/05 14:55:23 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -14,8 +14,8 @@ import sys
 import re
 from typing import Match, List, Optional
 
-import config
-from test.captured import Captured
+import minishell_test.config as config
+from minishell_test.test.captured import Captured
 
 
 class BaseResult:
