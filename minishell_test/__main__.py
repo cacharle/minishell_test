@@ -35,6 +35,7 @@ def main(argv=None):
     config.MINISHELL_PATH = os.path.abspath(
         os.path.join(config.MINISHELL_DIR, config.MINISHELL_EXEC)
     )
+    config.VALGRIND_CMD[-1] = config.MINISHELL_PATH
 
     if config.MINISHELL_MAKE or args.make:
         try:

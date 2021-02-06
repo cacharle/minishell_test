@@ -1,19 +1,32 @@
 language: python
+
+os:
+  - linux
+  - osx
+
 python:
   - "3.6"
   - "3.7"
   - "3.8"
   - "3.9"
 
+addons:
+  apt:
+    packages:
+      - valgrind
+
+before_install:
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update          ; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install valgrind; fi
+
 install:
+  - pip install -e .
   - pip install -r requirements.txt
-  - git clone --recurse-submodule https://github.com/ouaisbrefbams/minishell ../minishell
-  - sed -i 's/-Werror//' ../minishell/Makefile ../minishell/libft/Makefile
-  - sudo apt update
-  - sudo apt install valgrind
+  - git clone --recurse-submodule https://github.com/ouaisbrefbams/minishell /tmp/minishell
+  - sed -i 's/-Werror//' /tmp/minishell/Makefile /tmp/minishell/libft/Makefile
 
 script:
-  - python -m flake8
-  - python -m mypy src
-  - ./run
-  - ./run -k pwd
+  - python -m flake8 minishell_test
+  - python -m mypy minishell_test
+  - python -m minishell_test -p /tmp/minishell
+  - python -m minishell_test -p /tmp/minishell -k pwd
