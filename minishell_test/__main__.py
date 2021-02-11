@@ -42,15 +42,15 @@ def main():
             sys.exit(1)
         if args.make:
             sys.exit(0)
-    if os.path.exists(config.EXECUTABLES_PATH):
-        shutil.rmtree(config.EXECUTABLES_PATH)
-    os.mkdir(config.EXECUTABLES_PATH)
-    for cmd in config.AVAILABLE_COMMANDS:
-        cmd_path = distutils.spawn.find_executable(cmd)
-        if cmd_path is None:
-            raise RuntimeError
-        shutil.copy(cmd_path,
-                    os.path.join(config.EXECUTABLES_PATH, cmd))
+
+    if not os.path.exists(config.EXECUTABLES_PATH):
+        os.mkdir(config.EXECUTABLES_PATH)
+        for cmd in config.AVAILABLE_COMMANDS:
+            cmd_path = distutils.spawn.find_executable(cmd)
+            if cmd_path is None:
+                raise RuntimeError
+            shutil.copy(cmd_path,
+                        os.path.join(config.EXECUTABLES_PATH, cmd))
 
     reference_args = os.environ.get("MINISHELL_TEST_ARGS")
     if reference_args is not None:

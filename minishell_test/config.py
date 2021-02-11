@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2021/01/31 04:41:29 by charles          ###   ########.fr        #
+#    Updated: 2021/02/11 17:51:48 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -50,7 +50,7 @@ LOG_PATH = "result.log"
 SANDBOX_PATH = "sandbox"
 
 # where the availables commands are stored
-EXECUTABLES_PATH = "./bin"
+EXECUTABLES_PATH = "/tmp/minishell_test_bin"
 
 # commands available in test"
 AVAILABLE_COMMANDS = ["rmdir", "env", "cat", "touch", "ls", "grep", "sh", "head"]
