@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2021/02/11 17:51:48 by charles          ###   ########.fr        #
+#    Updated: 2021/02/11 17:56:37 by charles          ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -43,7 +43,7 @@ REFERENCE_ARGS: List[str] = []  # ["--posix"]
 PAGER = "less"
 
 # log file path
-LOG_PATH = "result.log"
+LOG_PATH = "minishell_test_result.log"
 
 # path to the sandbox directory
 # WARNING: will be rm -rf so be careful
