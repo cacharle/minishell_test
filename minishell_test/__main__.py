@@ -23,6 +23,7 @@ import minishell_test.sandbox as sandbox
 from minishell_test.args import parse_args
 from minishell_test.suite.suite import Suite, SuiteException
 from minishell_test.suites import *  # noqa: F403,F401
+from minishell_test.test import Test
 
 
 def main(argv=None):
@@ -57,6 +58,11 @@ def main(argv=None):
                 raise RuntimeError
             shutil.copy(cmd_path,
                         os.path.join(config.EXECUTABLES_PATH, cmd))
+
+    if args.try_cmd is not None:
+        print("Output")
+        print(Test.try_run(args.try_cmd))
+        sys.exit(0)
 
     reference_args = os.environ.get("MINISHELL_TEST_ARGS")
     if reference_args is not None:
@@ -95,7 +101,7 @@ def main(argv=None):
     print("See", config.LOG_PATH, "for more information")
     if config.CHECK_LEAKS:
         print("HELP: Valgrind is really slow the -x and --range options could be useful"
-              " (./run -h for more details)")
+              " ({} -h for more details)".format(sys.argv[0]))
 
     if args.pager:
         subprocess.run([config.PAGER, config.LOG_PATH])

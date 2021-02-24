@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2021/02/24 08:03:17 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/24 08:48:15 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -22,9 +22,7 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description="Test for the minishell project of school 42.",
         formatter_class=argparse.RawTextHelpFormatter,
-        epilog=textwrap.dedent("""
-            Made by cacharle - https://cacharle.xyz
-        """)
+        epilog="Made by cacharle - https://cacharle.xyz"
     )
     parser.add_argument(
         "-p", "--path", default=config.MINISHELL_DIR,
@@ -33,6 +31,13 @@ def parse_args():
     parser.add_argument(
         "-l", "--list", action="store_true",
         help="Print available test suites"
+    )
+    parser.add_argument(
+        "-t", "--try-cmd", metavar="COMMAND",
+        help=textwrap.dedent("""\
+            Run a custom command like this test would
+            (the only environment variable passed to your executable are TERM and PATH)
+        """)
     )
     parser.add_argument(
         "-k", "--check-leaks", action="store_true",

@@ -27,8 +27,8 @@ $ minishell_test             # In your project directory
 $ python3 -m minishell_test  # If you don't have ~/.brew/bin or ~/.local/bin in your PATH
 
 $ minishell_test --help
-usage: minishell_test [-h] [-p PATH] [-l] [-k] [-r BEGIN END] [--show-range]
-                      [-x] [-v] [-b] [-n] [-m] [-g]
+usage: minishell_test [-h] [-p PATH] [-l] [-t COMMAND] [-k] [-r BEGIN END]
+                      [--show-range] [-x] [-v] [-b] [-n] [-m] [-g]
                       [suite [suite ...]]
 
 Test for the minishell project of school 42.
@@ -42,6 +42,9 @@ optional arguments:
   -h, --help            show this help message and exit
   -p PATH, --path PATH  Path to minishell directory
   -l, --list            Print available test suites
+  -t COMMAND, --try-cmd COMMAND
+                        Run a custom command like this test would
+                        (the only environment variable passed to your executable are TERM and PATH)
   -k, --check-leaks     Run valgrind on tests (disable usual comparison with bash)
   -r BEGIN END, --range BEGIN END
                         Range of test index to run (imply --show-index)
@@ -52,6 +55,8 @@ optional arguments:
   -n, --no-bonus        Disable bonus tests
   -m, --make            Make minishell and exit
   -g, --pager           After running the test, display the result in a pager of your choice
+
+Made by cacharle - https://cacharle.xyz
 ```
 
 ## Test compatibility
@@ -75,9 +80,9 @@ This allows you to set the prompt to whatever you want.
 
 ### Environement variables
 
-My test only gives the `PATH=minishell_test/bin` and `TERM=xterm-256color` environment variables to your minishell.  
+My test only gives the `PATH` and `TERM` environment variables to your minishell.  
 **Please check that your project still work with those settings before messaging me on Slack or creating an issue**.  
-You can test this quickly with the [try](try) script (e.g `./try 'echo bonjour | cat -e'`).
+You can test this quickly with the `-t` option (e.g `minishell_test -t 'echo bonjour`).
 
 ## Bonus
 

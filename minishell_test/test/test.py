@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 18:35:12 by charles          ###   ########.fr        #
+#    Updated: 2021/02/24 09:09:39 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -144,7 +144,7 @@ class Test:
         return Captured(output, process.returncode, files_content)
 
     @property
-    def full_cmd(self):
+    def full_cmd(self) -> str:
         """ Return the command prefixed by the setup and exports """
         s = self.cmd
         if len(self.exports) != 0:
@@ -153,3 +153,15 @@ class Test:
         if self.setup != "":
             s = "[SETUP {}] {}".format(self.setup, s)
         return s
+
+    @classmethod
+    def try_run(cls, cmd: str) -> str:
+        config.VERBOSE_LEVEL = 2
+        test = Test(cmd)
+        test.run(0)
+        if isinstance(test.result, LeakResult):
+            return test.result.captured.output
+        elif isinstance(test.result, Result):
+            return test.result.actual.output
+        else:
+            return "No output"
