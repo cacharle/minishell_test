@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 20:01:16 by charles          ###   ########.fr        #
+#    Updated: 2021/02/24 07:50:26 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -43,14 +43,14 @@ REFERENCE_ARGS: List[str] = []  # ["--posix"]
 PAGER = "less"
 
 # log file path
-LOG_PATH = "result.log"
+LOG_PATH = "minishell_test_result.log"
 
 # path to the sandbox directory
 # WARNING: will be rm -rf so be careful
 SANDBOX_PATH = "sandbox"
 
 # where the availables commands are stored
-EXECUTABLES_PATH = "./bin"
+EXECUTABLES_PATH = "/tmp/minishell_test_bin"
 
 # commands available in test"
 AVAILABLE_COMMANDS = ["rmdir", "env", "cat", "touch", "ls", "grep", "sh", "head"]
