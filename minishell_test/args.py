@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 20:38:28 by charles          ###   ########.fr        #
+#    Updated: 2021/02/24 08:03:17 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -25,6 +25,14 @@ def parse_args():
         epilog=textwrap.dedent("""
             Made by cacharle - https://cacharle.xyz
         """)
+    )
+    parser.add_argument(
+        "-p", "--path", default=config.MINISHELL_DIR,
+        help="Path to minishell directory"
+    )
+    parser.add_argument(
+        "-l", "--list", action="store_true",
+        help="Print available test suites"
     )
     parser.add_argument(
         "-k", "--check-leaks", action="store_true",
@@ -55,20 +63,12 @@ def parse_args():
         help="Disable bonus tests"
     )
     parser.add_argument(
-        "-l", "--list", action="store_true",
-        help="Print available test suites"
-    )
-    parser.add_argument(
         "-m", "--make", action="store_true",
         help="Make minishell and exit"
     )
     parser.add_argument(
         "-g", "--pager", action="store_true",
         help="After running the test, display the result in a pager of your choice"
-    )
-    parser.add_argument(
-        "-p", "--path", default=config.MINISHELL_DIR,
-        help="Path to minishell directory"
     )
     parser.add_argument(
         "suites", nargs='*', metavar="suite",

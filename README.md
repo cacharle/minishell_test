@@ -17,18 +17,19 @@ $ pip3 install minishell-test
 ```
 $ git clone https://github.com/cacharle/minishell_test
 $ cd minishell_test
-$ pip3 install -e minishell_test
+$ pip3 install -e .
 ```
 
 ## Usage
 
-The default path to your project is `../minishell` but you can change it the the [configuration](src/config.py).
-
 ```
-$ ./run  # run all tests
+$ minishell_test             # In your project directory
+$ python3 -m minishell_test  # If you don't have ~/.brew/bin or ~/.local/bin in your PATH
 
-$ ./run --help
-usage: run [-h] [-k] [-r BEGIN END] [--show-range] [-x] [-v] [-b] [-n] [-l] [-m] [-g] [suite ...]
+$ minishell_test --help
+usage: minishell_test [-h] [-p PATH] [-l] [-k] [-r BEGIN END] [--show-range]
+                      [-x] [-v] [-b] [-n] [-m] [-g]
+                      [suite [suite ...]]
 
 Test for the minishell project of school 42.
 
@@ -39,6 +40,8 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
+  -p PATH, --path PATH  Path to minishell directory
+  -l, --list            Print available test suites
   -k, --check-leaks     Run valgrind on tests (disable usual comparison with bash)
   -r BEGIN END, --range BEGIN END
                         Range of test index to run (imply --show-index)
@@ -47,13 +50,8 @@ optional arguments:
   -v, --verbose         Increase verbosity level (e.g -vv == 2)
   -b, --bonus           Enable bonus tests
   -n, --no-bonus        Disable bonus tests
-  -l, --list            Print available test suites
   -m, --make            Make minishell and exit
   -g, --pager           After running the test, display the result in a pager of your choice
-
-Made by cacharle
-https://github.com/cacharle
-https://cacharle.xyz
 ```
 
 ## Test compatibility
@@ -75,8 +73,6 @@ README.md test.sh
 With this setup `argv[2]` is what you would usually get in `line` from `get_next_line`.  
 This allows you to set the prompt to whatever you want.
 
-**This test works with Python3.6 or higher.**
-
 ### Environement variables
 
 My test only gives the `PATH=minishell_test/bin` and `TERM=xterm-256color` environment variables to your minishell.  
@@ -85,16 +81,14 @@ You can test this quickly with the [try](try) script (e.g `./try 'echo bonjour |
 
 ## Bonus
 
-Their is 3 different method to enable the bonus tests:
-
-* Force the bonus tests with `./run -b`
-* Change the `BONUS` variable in [config.py](src/config.py) to True
+* Force the bonus tests with `$ minishell_test -b`
+* Change the `BONUS` variable in [config.py](minishell_test/config.py) to True
 * Set the environment variable `MINISHELL_TEST_BONUS` to `yes`  
   (e.g `echo 'export MINISHELL_TEST_BONUS=yes' >> ~/.zshrc`)
 
 ## Memory leaks
 
-`./run -k`, checkout the `--show-range`, `--range` and `-x` options to help
+`$ minishell_test -k`, checkout the `--show-range`, `--range` and `-x` options to help
 to select the tests to run since valgrind is really slow.
 
 ## Don't check error messages
@@ -111,7 +105,7 @@ The tester will try to convert to output/status code of bash on Linux to the one
 
 ## Add new tests
 
-You can find the suites in the [src/suites](src/suites) directory.
+You can find the suites in the [minishell\_test/suites](minishell_test/suites) directory.
 
 ### Add individual test
 
@@ -152,5 +146,5 @@ def suite_yoursuitename(test):
 
 ## Wildcard (or glob)
 
-There is a commented glob suite in [src/suites/preprocess.py](src/suites/preprocess.py).
+There is a commented glob suite in [minishell\_test/suites/preprocess.py](minishell_test/suites/preprocess.py).
 Good luck handling `*'.*'`.
