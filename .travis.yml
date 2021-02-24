@@ -2,7 +2,9 @@ language: python
 
 os:
   - linux
-  - osx
+  # disabled since travis CI doesn't support python build on OSX and Window
+  # (https://docs.travis-ci.com/user/languages/python/)
+  # - osx
 
 python:
   - "3.6"
@@ -15,9 +17,9 @@ addons:
     packages:
       - valgrind
 
-before_install:
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update          ; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install valgrind; fi
+# before_install:
+#   - [ "$TRAVIS_OS_NAME" = "osx" ] && brew update
+#   - [ "$TRAVIS_OS_NAME" = "osx" ] && brew install valgrind
 
 install:
   - pip install -e .
