@@ -4,5 +4,6 @@ bin/
 tags
 dist/
 *.egg-info
-build/
 .tox/
+build/
+docs/_build/
