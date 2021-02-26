@@ -1,3 +1,5 @@
+.. program:: minishell_test
+
 minishell_test
 ==============
 
@@ -72,10 +74,10 @@ Environement variables
 
 This test only gives the ``PATH`` and ``TERM`` environment variables to your minishell by default (see :ref:`config env`).
 
-You can test this quickly with the `-t` option (See :ref:`options try`).
+You can test this quickly with :option:`--try`.
 
 .. warning::
-    Please check that your project still work with those settings before creating an issue or messaging me on.
+    Please check that your project still work with this environment before creating an issue or messaging me on Slack.
 
 Bonus
 -----

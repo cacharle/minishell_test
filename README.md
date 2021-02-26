@@ -1,4 +1,4 @@
-# minishell test [![Build Status](https://api.travis-ci.com/cacharle/minishell_test.svg?branch=master)](https://travis-ci.com/cacharle/minishell_test) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/minishell-test)](https://pypi.org/project/minishell-test/)
+# minishell test [![Build Status](https://api.travis-ci.com/cacharle/minishell_test.svg?branch=master)](https://travis-ci.com/cacharle/minishell_test) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/minishell-test)](https://pypi.org/project/minishell-test/) [![Documentation](https://readthedocs.org/projects/minishell-test/badge/?version=latest)](https://minishell-test.readthedocs.io)
 
 Test for the minishell project of school 42.
 
@@ -75,20 +75,20 @@ $ ./minishell -c 'ls'
 README.md test.sh
 ```
 
-With this setup `argv[2]` is what you would usually get in `line` from `get_next_line`.  
+With this setup `argv[2]` is what you would usually get in `line` from `get_next_line`.
 This allows you to set the prompt to whatever you want.
 
 ### Environement variables
 
-My test only gives the `PATH` and `TERM` environment variables to your minishell.  
-**Please check that your project still work with those settings before messaging me on Slack or creating an issue**.  
+My test only gives the `PATH` and `TERM` environment variables to your minishell.
+**Please check that your project still work with those settings before messaging me on Slack or creating an issue**.
 You can test this quickly with the `-t` option (e.g `minishell_test -t 'echo bonjour`).
 
 ## Bonus
 
 * Force the bonus tests with `$ minishell_test -b`
 * Change the `BONUS` variable in [config.py](minishell_test/config.py) to True
-* Set the environment variable `MINISHELL_TEST_BONUS` to `yes`  
+* Set the environment variable `MINISHELL_TEST_BONUS` to `yes`
   (e.g `echo 'export MINISHELL_TEST_BONUS=yes' >> ~/.zshrc`)
 
 ## Memory leaks
@@ -99,7 +99,7 @@ to select the tests to run since valgrind is really slow.
 ## Don't check error messages
 
 If you don't want to copy bash syntax error message,
-you can set the environment variable `MINISHELL_TEST_DONT_CHECK_ERROR_MESSAGE` to `yes`.  
+you can set the environment variable `MINISHELL_TEST_DONT_CHECK_ERROR_MESSAGE` to `yes`.
 It will still test your exit status code but will discard any output on error tests.
 
 ## Linux
