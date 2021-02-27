@@ -8,6 +8,16 @@ Configuration file
 
 It looks for a ``minishell_test.cfg`` file in your project directory.
 
+Here is what the default configuration looks like:
+
+.. code-block:: cfg
+
+   .. include:: ../minishell_test/data/default.cfg
+
+Format used for the configuration file:
+
+https://docs.python.org/3/library/configparser.html#supported-ini-file-structure
+
 Global
 ------
 

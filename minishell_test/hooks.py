@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2021/02/27 15:40:25 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/27 20:54:14 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -44,18 +44,15 @@ def export_singleton(output):
     prefix = "export " if ("--posix" in config.SHELL_REFERENCE_ARGS) else "declare -x "
     return sort_lines(
         '\n'.join([line for line in output.split('\n')
-                   if re.match("^{}[a-zA-Z]+$".format(prefix), line) is None])
+                   if re.match("^{}[a-zA-Z_][a-zA-Z0-9_]*$".format(prefix), line) is None])
     )
 
 
-def replace_double_slash(output):
-    """Replace occurence of double slash by one"""
-    return output.replace("//", "/")
-
-
-def replace_double_semi_colon(output):
-    """Replace occurence of double semi-colon by one"""
-    return output.replace(";;", ";")
+def replace_double(s):
+    """Replace double occurence of a string by one"""
+    def hook(output):
+        return output.replace(s + s, s)
+    return hook
 
 
 def platform_status(darwin_status, linux_status, windows_status=None):
@@ -68,30 +65,33 @@ def platform_status(darwin_status, linux_status, windows_status=None):
     return hook
 
 
+def linux_only(func):
+    """ Decorator for hooks that only need to be executed on linux """
+    def hook(output):
+        if not config.PLATFORM == "linux":
+            return output
+        return func(output)
+    return hook
+
+
+@linux_only
 def is_directory(output):
-    if config.PLATFORM == "linux":
-        return output.replace("Is a directory", "is a directory")
-    else:
-        return output
+    return output.replace("Is a directory", "is a directory")
 
 
-# def no_cd_too_many_arguments(output):
-#     for i, line in output.split("\n"):
-#         if line.find("too many arguments")
-
-
+@linux_only
 def shlvl_0_to_1(output):
-    if config.PLATFORM == "linux":
-        return output.replace("SHLVL=0", "SHLVL=1")
-    else:
-        return output
+    return output.replace("SHLVL=0", "SHLVL=1")
 
 
+@linux_only
 def delete_escape(output):
-    if config.PLATFORM == "linux":
-        return output.replace("\\", "")
-    else:
-        return output
+    return output.replace("\\", "")
+
+
+@linux_only
+def linux_discard(output):
+    return "DISCARDED BY MINISHELL TEST"
 
 
 def error_eof_to_expected_token(output):
@@ -99,13 +99,6 @@ def error_eof_to_expected_token(output):
         "-c: line 1: syntax error: unexpected end of file",
         "syntax error expected token"
     )
-
-
-def linux_discard(output):
-    if config.PLATFORM == "linux":
-        return "DISCARDED BY MINISHELL TEST"
-    else:
-        return output
 
 
 def should_not_be(not_expected):

@@ -6,7 +6,7 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2021/02/27 12:07:46 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/27 20:36:27 by cacharle         ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
@@ -168,7 +168,7 @@ def suite_cd(test):
     test("echo $PWD; echo $OLDPWD; cd /.; pwd; echo $PWD; echo $OLDPWD")
     test("echo $PWD; echo $OLDPWD; cd /./; pwd; echo $PWD; echo $OLDPWD")
     test("echo $PWD; echo $OLDPWD; cd /././././; pwd; echo $PWD; echo $OLDPWD")
-    test("echo $PWD; echo $OLDPWD; cd //; pwd; echo $PWD; echo $OLDPWD", hook=hooks.replace_double_slash)
+    test("echo $PWD; echo $OLDPWD; cd //; pwd; echo $PWD; echo $OLDPWD", hook=hooks.replace_double("/"))
     test("echo $PWD; echo $OLDPWD; cd ///; pwd; echo $PWD; echo $OLDPWD")
     test("echo $PWD; echo $OLDPWD; cd ////; pwd; echo $PWD; echo $OLDPWD")
     test("echo $PWD; echo $OLDPWD; cd //////////////////////////////////////////////////////; pwd; echo $PWD; echo $OLDPWD")
@@ -179,7 +179,7 @@ def suite_cd(test):
     test("echo $PWD; echo $OLDPWD; cd '                  /'; pwd; echo $PWD; echo $OLDPWD")
     test("echo $PWD; echo $OLDPWD; cd '                  /              '; pwd; echo $PWD; echo $OLDPWD")
     test("echo $PWD; echo $OLDPWD; cd ' // '; pwd; echo $PWD; echo $OLDPWD")
-    test("echo $PWD; echo $OLDPWD; cd //home; pwd; echo $PWD; echo $OLDPWD", hook=hooks.replace_double_slash)
+    test("echo $PWD; echo $OLDPWD; cd //home; pwd; echo $PWD; echo $OLDPWD", hook=hooks.replace_double("/"))
     test("echo $PWD; echo $OLDPWD; cd ' //home'; pwd; echo $PWD; echo $OLDPWD")
     test("echo $PWD; echo $OLDPWD; cd '     //home    '; pwd; echo $PWD; echo $OLDPWD")
     test("echo $PWD; echo $OLDPWD; cd d; echo $OLDPWD", setup="mkdir -m 000 d")

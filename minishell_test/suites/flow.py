@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:52 by charles           #+#    #+#              #
-#    Updated: 2021/02/27 12:06:58 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/27 20:35:46 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -16,7 +16,7 @@ from minishell_test.hooks import (
     error_line0,
     platform_status,
     discard,
-    replace_double_semi_colon,
+    replace_double,
     error_eof_to_expected_token
 )
 
@@ -49,11 +49,11 @@ def suite_end(test):
     test("; ;", hook=error_line0, hook_status=platform_status(2, 1))
     test("; ; ;", hook=error_line0, hook_status=platform_status(2, 1))
     test("echo a ; ; echo b", hook=error_line0, hook_status=platform_status(2, 1))
-    test(";;", hook=[error_line0, replace_double_semi_colon], hook_status=platform_status(2, 1))
-    test(";;;", hook=[error_line0, replace_double_semi_colon], hook_status=platform_status(2, 1))
-    test(";;;;;", hook=[error_line0, replace_double_semi_colon], hook_status=platform_status(2, 1))
-    test("echo a ;; echo b", hook=[error_line0, replace_double_semi_colon], hook_status=platform_status(2, 1))
-    test("echo a ;;;;; echo b", hook=[error_line0, replace_double_semi_colon], hook_status=platform_status(2, 1))
+    test(";;", hook=[error_line0, replace_double(";")], hook_status=platform_status(2, 1))
+    test(";;;", hook=[error_line0, replace_double(";")], hook_status=platform_status(2, 1))
+    test(";;;;;", hook=[error_line0, replace_double(";")], hook_status=platform_status(2, 1))
+    test("echo a ;; echo b", hook=[error_line0, replace_double(";")], hook_status=platform_status(2, 1))
+    test("echo a ;;;;; echo b", hook=[error_line0, replace_double(";")], hook_status=platform_status(2, 1))
     test("ls " + 40 * " ; ls", setup="touch a b c")
     test("ls " + 80 * " ; ls", setup="touch a b c")
     test("ls " + 40 * " ; ls" + ";", setup="touch a b c")
