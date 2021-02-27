@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:16:25 by charles           #+#    #+#              #
-#    Updated: 2021/02/27 15:25:58 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/27 15:48:30 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -32,7 +32,7 @@ class Captured:
         """
 
         lines = output.split('\n')
-        for i, _ in enumerate(lines):
+        for i, line in enumerate(lines):
             lines[i] = line = re.sub(f"line [01]: ", "", lines[i], 1)
             if line.startswith(config.SHELL_REFERENCE_PREFIX):
                 lines[i] = config.MINISHELL_PREFIX + line[len(config.SHELL_REFERENCE_PREFIX):]

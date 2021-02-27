@@ -6,3 +6,4 @@ dist/
 *.egg-info
 build/
 .tox/
+bash3.2.57
