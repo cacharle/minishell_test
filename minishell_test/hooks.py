@@ -6,12 +6,11 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2021/02/27 14:44:19 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/27 15:40:25 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import re
-import os
 
 from minishell_test import config
 
@@ -29,10 +28,10 @@ def error_line0(output):
     lines = output.split('\n')
     if len(lines) != 3:
         return output
-    prefix = "{}: -c: line 0: ".format(config.SHELL_REFERENCE_PATH)
-    if lines[0].find(prefix) != 0:
+    prefix = config.SHELL_REFERENCE_PREFIX + "-c: "
+    if not lines[0].startswith(prefix):
         return output
-    return lines[0].replace(prefix, "minishell: ") + "\n"
+    return lines[0].replace(prefix, config.MINISHELL_PREFIX, 1) + "\n"
 
 
 def discard(output):

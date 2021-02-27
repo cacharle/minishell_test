@@ -6,13 +6,14 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:16:25 by charles           #+#    #+#              #
-#    Updated: 2021/02/27 12:20:00 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/27 15:25:58 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
+import re
 from typing import List, Optional
 
-# from minishell_test import config
+from minishell_test import config
 
 
 class Captured:
@@ -30,14 +31,12 @@ class Captured:
            is_timeout:    the command has timed out
         """
 
-        # lines = output.split('\n')
-        # for i, l in enumerate(lines):
-        #     if l.find(config.REFERENCE_ERROR_BEGIN) == 0:
-        #         lines[i] = l.replace(config.REFERENCE_ERROR_BEGIN, config.MINISHELL_ERROR_BEGIN, 1)
-        #     elif l.find(config.REFERENCE_PATH + ": ") == 0:
-        #         lines[i] = l.replace(config.REFERENCE_PATH + ": ", config.MINISHELL_ERROR_BEGIN, 1)
-
-        self.output = output  # '\n'.join(lines)
+        lines = output.split('\n')
+        for i, _ in enumerate(lines):
+            lines[i] = line = re.sub(f"line [01]: ", "", lines[i], 1)
+            if line.startswith(config.SHELL_REFERENCE_PREFIX):
+                lines[i] = config.MINISHELL_PREFIX + line[len(config.SHELL_REFERENCE_PREFIX):]
+        self.output = '\n'.join(lines)
 
         self.status = status
         self.files_content = files_content

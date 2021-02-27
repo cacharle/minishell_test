@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/26 09:40:36 by cacharle          #+#    #+#              #
-#    Updated: 2021/02/27 14:44:12 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/27 15:13:19 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -22,11 +22,12 @@ import minishell_test.data
 from minishell_test.args import parse_args
 
 
-DATA_DIR        = Path(inspect.getfile(minishell_test.data)).parent
-CONFIG_FILENAME = Path('minishell_test.cfg')
+DATA_DIR = Path(inspect.getfile(minishell_test.data)).parent
 
 
 class ConfigParser(configparser.ConfigParser):
+    BOOLEAN_STATES = {'true': True, 'false': False}
+
     def __init__(self):
         super().__init__(self)
 
@@ -41,16 +42,19 @@ class ConfigParser(configparser.ConfigParser):
         return self.get(section, options).strip().split('\n')
 
 
+args = parse_args()
+MINISHELL_DIR = Path(args.path).resolve()
+
+CONFIG_FILENAME = Path('minishell_test.cfg')
 
 config = ConfigParser()
 config.read(DATA_DIR / 'default.cfg')
 
 # TODO check user_config for unkown stuff
 user_config = ConfigParser()
-user_config.read(Path(".") / CONFIG_FILENAME)
+user_config.read(MINISHELL_DIR / CONFIG_FILENAME)
 config.read_dict({**config, **user_config})
 
-args = parse_args()
 
 BONUS                    = config.getboolean('minishell_test', 'bonus')
 EXEC_NAME                = config.get('minishell_test', 'exec_name')
@@ -70,7 +74,6 @@ SHELL_REFERENCE_ARGS     = config.getargs('shell:reference', 'args')
 TIMEOUT_TEST             = config.getfloat('timeout', 'test')
 TIMEOUT_LEAKS            = config.getfloat('timeout', 'leaks')
 
-
 xdg_cache_home = os.environ.get('XDG_CACHE_HOME')
 home = os.environ.get('HOME')
 if xdg_cache_home is not None:
@@ -88,8 +91,10 @@ SHELL_PATH_VARIABLE = SHELL_PATH_VARIABLE.format(shell_available_commands_dir=SH
 with open(DATA_DIR / 'lorem') as f:
     LOREM = ' '.join(f.read().split('\n'))
 
-MINISHELL_DIR       = Path(args.path).resolve()
 MINISHELL_EXEC_PATH = MINISHELL_DIR / EXEC_NAME
+
+MINISHELL_PREFIX = EXEC_NAME + ": "
+SHELL_REFERENCE_PREFIX = str(SHELL_REFERENCE_PATH) + ": "
 
 EXIT_FIRST = args.exit_first
 RANGE = args.range
