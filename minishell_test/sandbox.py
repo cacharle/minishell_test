@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 13:48:07 by charles           #+#    #+#              #
-#    Updated: 2021/02/27 12:05:35 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/27 12:32:17 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -42,5 +42,7 @@ def remove():
 def context():
     """Sandbox context manager"""
     create()
-    yield
-    remove()
+    try:
+        yield
+    finally:
+        remove()

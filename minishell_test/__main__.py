@@ -38,9 +38,9 @@ def main(argv=None):
         print("{:=^{width}}".format("MAKE", width=config.TERM_COLS))
         try:
             subprocess.run(
-                ["make", "--no-print-directory", "-C", config.MINISHELL_DIR],
+                ["make", *config.MAKE_ARGS, "--no-print-directory", "-C", config.MINISHELL_DIR],
                 check=True,
-                env={"MINISHELL_TEST_FLAGS": "-DMINISHELL_TEST", **os.environ}
+                env=os.environ,
             )
         except subprocess.CalledProcessError:
             sys.exit(1)

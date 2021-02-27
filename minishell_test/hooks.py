@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2021/02/27 12:09:25 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/27 14:44:19 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -22,9 +22,8 @@ def sort_lines(output):
 
 
 def error_line0(output):
-    """Replace "/bin/bash: -c: line 0:" by "minishell:" and delete the second line"""
-    error_message = os.environ.get("MINISHELL_TEST_DONT_CHECK_ERROR_MESSAGE")
-    if error_message is not None and error_message == "yes":
+    """Replace "/bin/bash: -c: line n:" by "minishell:" and delete the second line"""
+    if not config.CHECK_ERROR_MESSAGES:
         return "DISCARDED BY TEST"
 
     lines = output.split('\n')
