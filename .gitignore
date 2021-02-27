@@ -7,3 +7,4 @@ dist/
 .tox/
 build/
 docs/_build/
+bash3.2.57

@@ -6,15 +6,15 @@
 #    By: juligonz <juligonz@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:43 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 14:48:47 by charles          ###   ########.fr        #
+#    Updated: 2021/02/27 12:07:46 by cacharle         ###   ########.fr        #
 #    Updated: 2020/09/11 18:01:27 by juligonz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 import os
 
-import minishell_test.config as config
-import minishell_test.hooks as hooks
+from minishell_test import config
+from minishell_test import hooks
 from minishell_test.suite.decorator import suite
 from minishell_test.hooks import linux_discard
 
