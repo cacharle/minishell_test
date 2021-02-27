@@ -18,8 +18,8 @@ import shutil
 import distutils.spawn
 import subprocess
 
-import minishell_test.config as config
-import minishell_test.sandbox as sandbox
+from minishell_test import config
+from minishell_test import sandbox
 from minishell_test.args import parse_args
 from minishell_test.suite.suite import Suite, SuiteException
 from minishell_test.suites import *  # noqa: F403,F401
@@ -28,67 +28,49 @@ from minishell_test.test import Test
 
 def main(argv=None):
     args = parse_args()
+
     if args.list:
         Suite.list()
         sys.exit(0)
 
-    config.MINISHELL_DIR = args.path
-    config.MINISHELL_PATH = os.path.abspath(
-        os.path.join(config.MINISHELL_DIR, config.MINISHELL_EXEC)
-    )
-    config.VALGRIND_CMD[-1] = config.MINISHELL_PATH
-
-    if config.MINISHELL_MAKE or args.make:
+    # running ``make`` in minishell directory
+    if config.MAKE or args.make:
+        print("{:=^{width}}".format("MAKE", width=config.TERM_COLS))
         try:
-            print("{:=^{width}}".format("MAKE", width=config.TERM_COLS))
-            subprocess.run(["make", "--no-print-directory", "-C", config.MINISHELL_DIR],
-                           check=True,
-                           env={"MINISHELL_TEST_FLAGS": "-DMINISHELL_TEST", **os.environ})
-            print("=" * config.TERM_COLS)
+            subprocess.run(
+                ["make", "--no-print-directory", "-C", config.MINISHELL_DIR],
+                check=True,
+                env={"MINISHELL_TEST_FLAGS": "-DMINISHELL_TEST", **os.environ}
+            )
         except subprocess.CalledProcessError:
             sys.exit(1)
+        print("=" * config.TERM_COLS)
         if args.make:
             sys.exit(0)
 
-    if not os.path.exists(config.EXECUTABLES_PATH):
-        os.mkdir(config.EXECUTABLES_PATH)
-        for cmd in config.AVAILABLE_COMMANDS:
-            cmd_path = distutils.spawn.find_executable(cmd)
-            if cmd_path is None:
-                raise RuntimeError
-            shutil.copy(cmd_path,
-                        os.path.join(config.EXECUTABLES_PATH, cmd))
+    # setup available commands
+    if not config.SHELL_AVAILABLE_COMMANDS_DIR.exists():
+        config.SHELL_AVAILABLE_COMMANDS_DIR.mkdir(parents=True, exist_ok=True)
+    for cmd in config.SHELL_AVAILABLE_COMMANDS:
+        copied_path = config.SHELL_AVAILABLE_COMMANDS_DIR / cmd
+        if copied_path.exists():
+            continue
+        cmd_path = distutils.spawn.find_executable(cmd)
+        if cmd_path is None:
+            raise RuntimeError(f"Command not found {cmd}")
+        shutil.copy(cmd_path, copied_path)
 
     if args.try_cmd is not None:
         print("Output")
         print(Test.try_run(args.try_cmd))
         sys.exit(0)
 
-    reference_args = os.environ.get("MINISHELL_TEST_ARGS")
-    if reference_args is not None:
-        config.REFERENCE_ARGS.extend(reference_args.split(','))
-
-    pager = os.environ.get("MINISHELL_TEST_PAGER")
-    if pager is not None:
-        config.PAGER = pager
-
-    config.VERBOSE_LEVEL = args.verbose
-    if args.bonus or os.environ.get("MINISHELL_TEST_BONUS") == "yes":
-        config.BONUS = True
-    if args.no_bonus:
-        config.BONUS = False
-    config.EXIT_FIRST = args.exit_first
-    config.CHECK_LEAKS = args.check_leaks
-    config.RANGE = args.range
-    config.SHOW_RANGE = args.show_range
-    if config.RANGE is not None or config.CHECK_LEAKS:
-        config.SHOW_RANGE = True
-
     try:
         Suite.setup(args.suites)
     except SuiteException as e:
         print(e)
         sys.exit(1)
+
     try:
         Suite.run_all()
     except KeyboardInterrupt:
@@ -103,8 +85,9 @@ def main(argv=None):
         print("HELP: Valgrind is really slow the -x and --range options could be useful"
               " ({} -h for more details)".format(sys.argv[0]))
 
-    if args.pager:
-        subprocess.run([config.PAGER, config.LOG_PATH])
+    if config.PAGER:
+        # TODO {} replaced by filename in pager config var
+        subprocess.run([config.PAGER_PROG, config.LOG_PATH])
 
 
 if __name__ == "__main__":

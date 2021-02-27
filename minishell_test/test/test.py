@@ -6,19 +6,20 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/02/24 09:09:39 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/27 12:19:15 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import os
 import sys
 import subprocess
+from pathlib import Path
 from typing import Optional, List, Dict, Union, Callable
 
-import minishell_test.config as config
+from minishell_test import config
 from minishell_test.test.captured import Captured
 from minishell_test.test.result import Result, LeakResult
-import minishell_test.sandbox as sandbox
+from minishell_test import sandbox
 
 HookType       = Union[Callable[[str], str], List[Callable[[str], str]]]
 HookStatusType = Union[Callable[[int], int], List[Callable[[int], int]]]
@@ -31,7 +32,7 @@ class Test:
         setup:       str            = "",
         files:       List[str]      = [],
         exports:     Dict[str, str] = {},
-        timeout:     float          = config.TIMEOUT,
+        timeout:     float          = config.TIMEOUT_TEST,
         hook:        HookType       = [],
         hook_status: HookStatusType = [],
     ):
@@ -64,18 +65,16 @@ class Test:
             self.hook = []
             self.hook_status = []
             captured = self._run_sandboxed([*config.VALGRIND_CMD, "-c"])
-            if config.VERBOSE_LEVEL == 2:
-                print(captured.output)
             self.result = LeakResult(self.full_cmd, captured)
             self.result.put(index)
             return
 
-        expected = self._run_sandboxed([config.REFERENCE_PATH, *config.REFERENCE_ARGS, "-c"])
-        actual   = self._run_sandboxed([config.MINISHELL_PATH, "-c"])
+        expected = self._run_sandboxed([config.SHELL_REFERENCE_PATH, *config.SHELL_REFERENCE_ARGS, "-c"])
+        actual   = self._run_sandboxed([config.MINISHELL_EXEC_PATH, "-c"])
         self.result = Result(self.full_cmd, self.files, expected, actual)
         self.result.put(index)
 
-    def _run_sandboxed(self, shell_cmd: List[str]) -> Captured:
+    def _run_sandboxed(self, shell_cmd: List[Union[str, Path]]) -> Captured:
         """ Run the command in a sandbox environment """
         with sandbox.context():
             if self.setup != "":
@@ -83,7 +82,7 @@ class Test:
                     subprocess.run(
                         self.setup,
                         shell=True,
-                        cwd=config.SANDBOX_PATH,
+                        cwd=config.SANDBOX_DIR,
                         stderr=subprocess.STDOUT,
                         stdout=subprocess.PIPE,
                         check=True
@@ -97,7 +96,7 @@ class Test:
                     sys.exit(1)
             return self._run_capture(shell_cmd)
 
-    def _run_capture(self, shell_cmd: List[str]) -> Captured:
+    def _run_capture(self, shell_cmd: List[Union[str, Path]]) -> Captured:
         """ Capture the output (stdout and stderr)
             Capture the content of the watched files after the command is run
         """
@@ -106,9 +105,9 @@ class Test:
             [*shell_cmd, self.cmd],
             stderr=subprocess.STDOUT,
             stdout=subprocess.PIPE,
-            cwd=config.SANDBOX_PATH,
+            cwd=config.SANDBOX_DIR,
             env={
-                'PATH': config.PATH_VARIABLE,
+                'PATH': config.SHELL_PATH_VARIABLE,
                 'TERM': 'xterm-256color',
                 **self.exports,
             },
@@ -117,7 +116,7 @@ class Test:
         # https://docs.python.org/3/library/subprocess.html#subprocess.Popen.communicate
         try:
             stdout, _ = process.communicate(
-                timeout=(self.timeout if not config.CHECK_LEAKS else config.CHECK_LEAKS_TIMEOUT))
+                timeout=(self.timeout if not config.CHECK_LEAKS else config.TIMEOUT_LEAKS))
         except subprocess.TimeoutExpired:
             process.kill()
             # _, _ = process.communicate(timeout=2)
@@ -131,7 +130,7 @@ class Test:
         files_content: List[Optional[str]] = []
         for file_name in self.files:
             try:
-                with open(os.path.join(config.SANDBOX_PATH, file_name), "rb") as f:
+                with open(os.path.join(config.SANDBOX_DIR, file_name), "rb") as f:
                     files_content.append(f.read().decode())
             except FileNotFoundError:
                 files_content.append(None)
@@ -156,7 +155,6 @@ class Test:
 
     @classmethod
     def try_run(cls, cmd: str) -> str:
-        config.VERBOSE_LEVEL = 2
         test = Test(cmd)
         test.run(0)
         if isinstance(test.result, LeakResult):

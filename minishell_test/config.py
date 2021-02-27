@@ -3,118 +3,104 @@
 #                                                         :::      ::::::::    #
 #    config.py                                          :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
+#    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/07/15 18:24:19 by charles           #+#    #+#              #
-#    Updated: 2021/02/24 07:50:26 by cacharle         ###   ########.fr        #
+#    Created: 2021/02/26 09:40:36 by cacharle          #+#    #+#              #
+#    Updated: 2021/02/27 12:18:55 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-################################################################################
-# Minishell configuration file                                                 #
-################################################################################
-
 import os
+import sys
+import configparser
+import inspect
 import shutil
-import distutils.spawn
-from typing import List
+import distutils
+from pathlib import Path
 
-# run the bonus tests
-# can be changed with `export MINISHELL_TEST_BONUS=yes` in your shell rc file.
-BONUS = False
+import minishell_test.data
+from minishell_test.args import parse_args
 
-# minishell dir path
-MINISHELL_DIR = "."
 
-# minishell executable
-MINISHELL_EXEC = "minishell"
+DATA_DIR        = Path(inspect.getfile(minishell_test.data)).parent
+CONFIG_FILENAME = Path('minishell_test.cfg')
 
-# make minishell before executing the test if set to True
-MINISHELL_MAKE = True
+config = configparser.ConfigParser()
+config.read(DATA_DIR / 'default.cfg')
 
-# path to reference shell (shell which will be compared minishell)
-# has to support the -c option (sh, bash and zsh support it)
-REFERENCE_PATH = "/bin/bash"
-# can be changed with `export MINISHELL_TEST_ARGS=--poxix,--otherarg`
-REFERENCE_ARGS: List[str] = []  # ["--posix"]
+# TODO check user_config for unkown stuff
+user_config = configparser.ConfigParser()
+user_config.read(Path(".") / CONFIG_FILENAME)
+config.read_dict({**config, **user_config})
 
-# pager to use with --pager option
-# can be changed with `export MINISHELL_TEST_PAGER=yourpager`
-PAGER = "less"
+args = parse_args()
 
-# log file path
-LOG_PATH = "minishell_test_result.log"
+BONUS                    = config.getboolean('minishell_test', 'bonus')
+EXEC_NAME                = Path(config.get('minishell_test', 'exec_name'))
+MAKE                     = config.getboolean('minishell_test', 'make')
+PAGER                    = config.getboolean('minishell_test', 'pager')
+PAGER_PROG               = config.get('minishell_test', 'pager_prog')
+LOG_PATH                 = Path(config.get('minishell_test', 'log_path'))
 
-# path to the sandbox directory
-# WARNING: will be rm -rf so be careful
-SANDBOX_PATH = "sandbox"
+SHELL_AVAILABLE_COMMANDS = config.get('shell', 'available_commands').strip().split('\n')
+SHELL_PATH_VARIABLE      = config.get('shell', 'path_variable')
 
-# where the availables commands are stored
-EXECUTABLES_PATH = "/tmp/minishell_test_bin"
+SHELL_REFERENCE_PATH     = Path(config.get('shell:reference', 'path'))
 
-# commands available in test"
-AVAILABLE_COMMANDS = ["rmdir", "env", "cat", "touch", "ls", "grep", "sh", "head"]
+reference_args = config.get('shell:reference', 'args')
+SHELL_REFERENCE_ARGS = reference_args.strip().split(' ') if len(reference_args) != 0 else []
 
-# $PATH environment variable passed to the shell
-PATH_VARIABLE = os.path.abspath(EXECUTABLES_PATH)
+TIMEOUT_TEST             = config.getfloat('timeout', 'test')
+TIMEOUT_LEAKS            = config.getfloat('timeout', 'leaks')
 
-# test timeout
-TIMEOUT = 0.5
 
-# check leaks  test timeout
-CHECK_LEAKS_TIMEOUT = 10
+xdg_cache_home = os.environ.get('XDG_CACHE_HOME')
+home = os.environ.get('HOME')
+if xdg_cache_home is not None:
+    CACHE_DIR = Path(xdg_cache_home) / 'minishell_test'
+elif home is not None:
+    CACHE_DIR = Path(home) / '.cache' / 'minishell_test'
+else:
+    CACHE_DIR = Path('.cache', 'minishell_test')
 
-LOREM = """
-Mollitia asperiores assumenda excepturi et ipsa. Nihil corporis facere aut a rem consequatur.
-Quas molestiae corporis et quibusdam maiores. Molestiae sed unde aut at sed.
-Deserunt quidem quidem aspernatur pariatur vel illum voluptatum. Culpa unde dolor aspernatur sit.
-Mollitia tenetur sed eaque autem placeat a aut in. Ipsam ea consequuntur omnis.
-Non et qui vel corrupti similique eum aut voluptatibus. Iste consequatur voluptatum et omnis debitis.
-Sit quia neque nihil consequatur sint. Velit libero ut aut et et rerum.
-Placeat cumque incidunt non repellat sunt perspiciatis ullam.
-Repellendus repudiandae nostrum quia quis corrupti.
-Rerum veniam earum cumque pariatur accusantium voluptatum omnis.
-Alias ut et et adipisci. Tempore omnis numquam ullam et animi et eveniet.
-Dolor itaque distinctio in. Magnam rerum quia est laboriosam repellat perspiciatis eos.
-Consequuntur quae corrupti atque. Numquam enim ut ut.
-Perspiciatis ut maxime et libero quo voluptas consequatur illum. Pariatur porro dolor cumque molestiae harum.
-"""
-LOREM = ' '.join(LOREM.split('\n'))
+SANDBOX_DIR            = CACHE_DIR / 'sandbox'
+SHELL_AVAILABLE_COMMANDS_DIR = CACHE_DIR / 'bin'
 
-###############################################################################
-# You probably shouldn't edit after                                           #
-###############################################################################
+SHELL_PATH_VARIABLE = SHELL_PATH_VARIABLE.format(shell_available_commands_dir=SHELL_AVAILABLE_COMMANDS_DIR)
 
-MINISHELL_PATH = os.path.abspath(
-    os.path.join(MINISHELL_DIR, MINISHELL_EXEC)
-)
+with open(DATA_DIR / 'lorem') as f:
+    LOREM = ' '.join(f.read().split('\n'))
 
-VALGRIND_CMD: List[str] = [
-    distutils.spawn.find_executable("valgrind") or "couldn't find valgrind",
-    # "valgrind",
-    "--trace-children=no",
-    "--leak-check=yes",
-    "--child-silent-after-fork=yes",
-    "--show-leak-kinds=definite",
-    MINISHELL_PATH,
-]
+MINISHELL_DIR       = Path(args.path)
+MINISHELL_EXEC_PATH = MINISHELL_DIR / EXEC_NAME
 
-# 0, 1, 2
-VERBOSE_LEVEL = 1
+EXIT_FIRST = args.exit_first
+RANGE = args.range
+CHECK_LEAKS = args.check_leaks
 
-MINISHELL_ERROR_BEGIN = os.path.basename(MINISHELL_PATH) + ": "
-REFERENCE_ERROR_BEGIN = REFERENCE_PATH + ": line 0: "
+if RANGE is not None or CHECK_LEAKS:
+    SHOW_RANGE = True
+else:
+    SHOW_RANGE = args.show_range
+
+if CHECK_LEAKS:
+    valgrind_path = distutils.spawn.find_executable("valgrind")
+    if valgrind_path is None:
+        raise RuntimeError("Could not find valgrind command on your system")
+    VALGRIND_CMD = [
+        str(valgrind_path),
+        "--trace-children=no",
+        "--leak-check=yes",
+        "--child-silent-after-fork=yes",
+        "--show-leak-kinds=definite",
+        str(MINISHELL_EXEC_PATH),
+    ]
 
 TERM_COLS = shutil.get_terminal_size().columns
 if TERM_COLS < 40:
-    raise RuntimeError("You're terminal isn't wide enough")
+    raise RuntimeError("You're terminal isn't wide enough 40 cols minimum required")
 
-PLATFORM = os.uname().sysname
-
-EXIT_FIRST = False
-
-CHECK_LEAKS = False
-
-SHOW_RANGE = False
-
-RANGE = None
+PLATFORM = sys.platform
+supported = ['linux', 'darwin']
+if PLATFORM not in supported:
+    raise RuntimeError("Your platform ({PLATFORM}) is not supported, supported platforms are: {', '.join(supported)}")

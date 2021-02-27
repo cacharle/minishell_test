@@ -6,23 +6,21 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 13:48:07 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 14:54:37 by charles          ###   ########.fr        #
+#    Updated: 2021/02/27 12:05:35 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-import os
-import glob
 import shutil
 import subprocess
 from contextlib import contextmanager
 
-import minishell_test.config as config
+from minishell_test import config
 
 
 def create():
     """Create a new sandbox directory"""
     try:
-        os.mkdir(config.SANDBOX_PATH)
+        config.SANDBOX_DIR.mkdir(parents=True, exist_ok=True)
     except OSError:
         pass
 
@@ -32,10 +30,10 @@ def remove():
        Brute force rm -rf if clean removal doesn't work due to permissions.
     """
     try:
-        shutil.rmtree(config.SANDBOX_PATH)
+        shutil.rmtree(config.SANDBOX_DIR)
     except PermissionError:
-        subprocess.run(["chmod", "777", *glob.glob(config.SANDBOX_PATH + "/*")], check=True)
-        subprocess.run(["rm", "-rf", config.SANDBOX_PATH], check=True)
+        subprocess.run(["chmod", "777", *config.SANDBOX_DIR.glob("*")], check=True)
+        shutil.rmtree(config.SANDBOX_DIR)
     except FileNotFoundError:
         pass
 

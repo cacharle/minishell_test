@@ -6,13 +6,13 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:16:25 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 17:47:10 by charles          ###   ########.fr        #
+#    Updated: 2021/02/27 12:20:00 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 from typing import List, Optional
 
-import minishell_test.config as config
+# from minishell_test import config
 
 
 class Captured:
@@ -29,13 +29,15 @@ class Captured:
            files_content: content of the files altered by the command
            is_timeout:    the command has timed out
         """
-        lines = output.split('\n')
-        for i, l in enumerate(lines):
-            if l.find(config.REFERENCE_ERROR_BEGIN) == 0:
-                lines[i] = l.replace(config.REFERENCE_ERROR_BEGIN, config.MINISHELL_ERROR_BEGIN, 1)
-            elif l.find(config.REFERENCE_PATH + ": ") == 0:
-                lines[i] = l.replace(config.REFERENCE_PATH + ": ", config.MINISHELL_ERROR_BEGIN, 1)
-        self.output = '\n'.join(lines)
+
+        # lines = output.split('\n')
+        # for i, l in enumerate(lines):
+        #     if l.find(config.REFERENCE_ERROR_BEGIN) == 0:
+        #         lines[i] = l.replace(config.REFERENCE_ERROR_BEGIN, config.MINISHELL_ERROR_BEGIN, 1)
+        #     elif l.find(config.REFERENCE_PATH + ": ") == 0:
+        #         lines[i] = l.replace(config.REFERENCE_PATH + ": ", config.MINISHELL_ERROR_BEGIN, 1)
+
+        self.output = output  # '\n'.join(lines)
 
         self.status = status
         self.files_content = files_content

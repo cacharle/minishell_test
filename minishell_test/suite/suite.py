@@ -6,13 +6,13 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 18:15:26 by charles          ###   ########.fr        #
+#    Updated: 2021/02/27 12:07:59 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 from typing import List, Tuple, Optional, Callable
 
-import minishell_test.config as config
+from minishell_test import config
 from minishell_test.test import Test
 
 
@@ -139,24 +139,19 @@ class Suite:
 
     def run(self) -> bool:
         """Run all test in the suite"""
-        if config.VERBOSE_LEVEL == 0:
-            print(self.name + ": ", end="")
-        else:
-            print("{}{:#^{width}}{}".format(
-                self.BLUE_CHARS,
-                " " + self.name + " ",
-                self.CLOSE_CHARS,
-                width=config.TERM_COLS
-            ))
-            for i, t in enumerate(self.tests):
-                if config.RANGE is not None:
-                    if not (config.RANGE[0] <= i <= config.RANGE[1]):
-                        continue
-                t.run(i)
-                if config.EXIT_FIRST and t.result is not None and t.result.failed:
-                    return False
-        if config.VERBOSE_LEVEL == 0:
-            print()
+        print("{}{:#^{width}}{}".format(
+            self.BLUE_CHARS,
+            " " + self.name + " ",
+            self.CLOSE_CHARS,
+            width=config.TERM_COLS
+        ))
+        for i, t in enumerate(self.tests):
+            if config.RANGE is not None:
+                if not (config.RANGE[0] <= i <= config.RANGE[1]):
+                    continue
+            t.run(i)
+            if config.EXIT_FIRST and t.result is not None and t.result.failed:
+                return False
         return True
 
     def total(self) -> Tuple[int, int]:

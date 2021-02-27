@@ -6,15 +6,14 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2021/02/24 08:56:03 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/27 12:10:13 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-import sys
 import re
 from typing import Match, List, Optional
 
-import minishell_test.config as config
+from minishell_test import config
 from minishell_test.test.captured import Captured
 
 
@@ -42,31 +41,18 @@ class BaseResult:
 
     def __repr__(self):
         """Returns a representation of the result based on the verbosity"""
-        if config.VERBOSE_LEVEL == 0:
-            return self.green('.') if self.passed else self.red('!')
-        if config.VERBOSE_LEVEL == 1:
-            printed = self._escaped_cmd[:]
-            if config.SHOW_RANGE:
-                printed = "{:2}: ".format(self.index) + printed
-            if len(printed) > config.TERM_COLS - 7:
-                printed = printed[:config.TERM_COLS - 10] + "..."
-            fmt = self.green("{:{width}} [PASS]") if self.passed else self.red("{:{width}} [FAIL]")
-            return fmt.format(printed, width=config.TERM_COLS - 7)
-        elif config.VERBOSE_LEVEL == 2:
-            return self.full_diff()
-        else:
-            raise RuntimeError("Invalid verbose level")
+        printed = self._escaped_cmd[:]
+        if config.SHOW_RANGE:
+            printed = "{:2}: ".format(self.index) + printed
+        if len(printed) > config.TERM_COLS - 7:
+            printed = printed[:config.TERM_COLS - 10] + "..."
+        fmt = self.green("{:{width}} [PASS]") if self.passed else self.red("{:{width}} [FAIL]")
+        return fmt.format(printed, width=config.TERM_COLS - 7)
 
     def put(self, index: int) -> None:
         """Print a summary of the result"""
-        if config.VERBOSE_LEVEL == 2 and self.passed:
-            return
         self.index = index
-        print(self, end="")
-        if config.VERBOSE_LEVEL == 0:
-            sys.stdout.flush()
-        else:
-            print()
+        print(self)
 
     def indicator(self, title: str, prefix: str) -> str:
         return self.bold(self.blue(prefix + " " + title))
