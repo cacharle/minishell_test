@@ -18,4 +18,4 @@ Test for 42 school's minishell project.
 .. image:: https://i.imgur.com/98xh2xY.gif
    :alt: preview
 
-.. include:: docs/gettingstarted.rst
+.. include:: gettingstarted.rst
