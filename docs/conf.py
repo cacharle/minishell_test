@@ -70,12 +70,6 @@ def setup(app):
                 names=('type',),
                 bodyrolename='class'
             ),
-            Field(
-                'default',
-                label='Default',
-                has_arg=False,
-                names=('default',),
-            ),
         ]
     )
 

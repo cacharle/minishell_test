@@ -23,4 +23,4 @@ Test for 42 school's minishell project.
 Documentation
 -------------
 
-The full documentation for this project is available at `minishell-test.readthedocs.io<https://minishell-test.readthedocs.io>`_.
+The full documentation for this project is available at `minishell-test.readthedocs.io <https://minishell-test.readthedocs.io>`_.

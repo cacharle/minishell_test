@@ -68,8 +68,8 @@ Global settings are defined under the ``[minishell_test]`` section.
 
    :type: true|false
 
-   | If is ``true``, will ignore the content of the error messages outputted by the reference shell,
-   | Useful if you have implemented your own error messages and don't want to copy bash's ones.
+   | If is ``true``, will ignore the content of the error messages outputed by the reference shell,
+   | Usefull if you have implemented your own error messages and don't want to copy bash's ones.
 
 .. conf:: pager
 
@@ -85,7 +85,7 @@ Shell settings are defined under the ``[shell]`` section.
 
 .. conf:: available_commands
 
-   :type: multi-line list
+   :type: multiline list
 
    Commands available in a test.
 
@@ -122,7 +122,7 @@ Reference shell settings are defined under the ``[shell:reference]`` section.
    :type: space separated list
 
    | Supplementary arguments to the reference shell.
-   | e.g ``--posix`` can be used with bash for a more posix compliant behavior.
+   | e.g ``--posix`` can be used with bash for a more posix complient behavior.
 
 Timeout
 -------
@@ -139,4 +139,4 @@ Timeout settings are defined under the ``[timeout]`` section.
 
    :type: float (seconds)
 
-   Time before a timeout occurs on a leak test (with ``valgrind``).
+   Time before a timeout occurs on a leak test (with valgrind).
