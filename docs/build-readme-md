@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# gfm = github flavored markdown
+pandoc README.rst -f rst -t gfm > ../README.md
