@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/26 09:40:36 by cacharle          #+#    #+#              #
-#    Updated: 2021/02/28 10:53:38 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/28 11:19:13 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -78,7 +78,7 @@ class Config():
     @classmethod
     def init(cls, args):
         if isinstance(args, list):
-            args = parse_args(sys.argv[1:])
+            args = parse_args(args)
 
         cls.minishell_dir = Path(args.path).resolve()
 
@@ -160,7 +160,7 @@ class Config():
         cfg = ConfigParser()
         cfg.read(DATA_DIR / 'default.cfg')
         user_cfg = ConfigParser()
-        user_cfg.read(cls.minishell_dir / CONFIG_FILENAME)
+        user_cfg.read(cls.minishell_dir / CONFIG_FILENAME)  # if file doesn't exists, returns []
 
         for section in user_cfg:
             if section not in cfg:

@@ -30,5 +30,6 @@ install:
 script:
   - python -m flake8 minishell_test
   - python -m mypy minishell_test
+  - python -m pytest -vvv
   - python -m minishell_test -p /tmp/minishell
   - python -m minishell_test -p /tmp/minishell -k pwd

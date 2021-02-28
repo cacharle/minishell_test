@@ -6,13 +6,13 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/27 20:03:52 by cacharle          #+#    #+#              #
-#    Updated: 2021/02/27 20:44:22 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/28 12:05:58 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-import pytest
+import contextlib
 
-from minishell_test import config
+from minishell_test.config import Config
 
 from minishell_test.hooks import (
     sort_lines,
@@ -21,13 +21,24 @@ from minishell_test.hooks import (
     export_singleton,
     replace_double,
     platform_status,
-    is_directory,
-    shlvl_0_to_1,
-    delete_escape,
+    linux_replace,
     error_eof_to_expected_token,
     linux_discard,
     should_not_be,
+    DISCARDED_TEXT,
 )
+
+Config.init([])
+
+
+@contextlib.contextmanager
+def config_context(attr, value):
+    prev = getattr(Config, attr)
+    setattr(Config, attr, value)
+    try:
+        yield
+    finally:
+        setattr(Config, attr, prev)
 
 
 def test_sort_lines():
@@ -63,14 +74,19 @@ _=/usr/bin/env\
 """)
 
 
-@pytest.mark.skip()
 def test_error_line0():
-    pass
+    assert ""                                               == error_line0("")
+    assert "foo"                                            == error_line0("foo")
+    assert "a\nb"                                           == error_line0("a\nb")
+    assert "a\nb\nc"                                        == error_line0("a\nb\nc")
+    assert "minishell: bonjour\n"                           == error_line0(Config.shell_reference_prefix + "-c: bonjour\nfoo\n")
+    assert "minishell: \n"                                  == error_line0(Config.shell_reference_prefix + "-c: \nfoo\n")
+    assert Config.shell_reference_prefix + "-c:asdf\nfoo\n" == error_line0(Config.shell_reference_prefix + "-c:asdf\nfoo\n")
 
 
 def test_discard():
-    assert "DISCARDED BY TEST" == discard("")
-    assert "DISCARDED BY TEST" == discard("foo")
+    assert DISCARDED_TEXT == discard("")
+    assert DISCARDED_TEXT == discard("foo")
 
 
 def test_export_singleton():
@@ -100,9 +116,7 @@ declare -x YSU_VERSION="1.7.3"
 declare -x ZDOTDIR="/home/cacharle/.config/zsh"\
 """)
 
-    prev = config.SHELL_REFERENCE_ARGS
-    config.SHELL_REFERENCE_ARGS = ['--posix']
-    try:
+    with config_context("shell_reference_args", ["--posix"]):
         assert "" == export_singleton("export IGOTNUMBERS42")
         assert "" == export_singleton("export IGOTUNDERSCORE__")
         assert "" == export_singleton("export I")
@@ -128,8 +142,6 @@ export YSU_MESSAGE_POSITION="after"
 export YSU_VERSION="1.7.3"
 export ZDOTDIR="/home/cacharle/.config/zsh"\
 """)
-    finally:
-        config.SHELL_REFERENCE_ARGS = prev
 
 
 def test_replace_double():
@@ -141,29 +153,43 @@ def test_replace_double():
     assert ";;;;" == replace_double(";")(";;;;;;;;")
 
 
-@pytest.mark.skip()
-def test_platform_status():
-    pass
-
-@pytest.mark.skip()
-def test_is_directory():
-    pass
-
-@pytest.mark.skip()
-def test_shlvl_0_to_1():
-    pass
-
-@pytest.mark.skip()
-def test_delete_escape():
-    pass
-
 def test_error_eof_to_expected_token():
     assert "syntax error expected token" == error_eof_to_expected_token("-c: line 1: syntax error: unexpected end of file")
 
-@pytest.mark.skip()
-def test_linux_discard():
-    pass
 
-@pytest.mark.skip()
 def test_should_not_be():
-    pass
+    assert "OUTPUT SHOULD NOT BE "        == should_not_be("")("")
+    assert "OUTPUT SHOULD NOT BE bonjour" == should_not_be("bonjour")("bonjour")
+    assert DISCARDED_TEXT                 == should_not_be("foo")("")
+    assert DISCARDED_TEXT                 == should_not_be("bar")("bonjour")
+
+
+def test_platform_status():
+    with config_context('platform', 'darwin'):
+        assert 0 == platform_status(0, 1)(0)
+        assert 1 == platform_status(42, 42)(1)
+    with config_context('platform', 'linux'):
+        assert 0 == platform_status(0, 1)(1)
+        assert 42 == platform_status(0, 1)(42)
+    with config_context('platform', 'foo'):
+        assert 0 == platform_status(42, 42)(0)
+
+
+def test_linux_replace():
+    with config_context('platform', 'darwin'):
+        assert "Is a directory" == linux_replace("Is a directory", "is a directory")("Is a directory")
+        assert "SHLVL=0"        == linux_replace("SHLVL=0", "SHLVL=1")("SHLVL=0")
+        assert "\\"             == linux_replace("\\", "")("\\")
+    with config_context('platform', 'linux'):
+        assert "is a directory" == linux_replace("Is a directory", "is a directory")("Is a directory")
+        assert "SHLVL=1"        == linux_replace("SHLVL=0", "SHLVL=1")("SHLVL=0")
+        assert ""               == linux_replace("\\", "")("\\")
+
+
+def test_linux_discard():
+    with config_context('platform', 'darwin'):
+        assert ""    == linux_discard("")
+        assert "foo" == linux_discard("foo")
+    with config_context('platform', 'linux'):
+        assert DISCARDED_TEXT == linux_discard("")
+        assert DISCARDED_TEXT == linux_discard("foo")
