@@ -1,73 +1,16 @@
 .. program:: minishell_test
 
-minishell_test
-==============
-
-Test for 42 school's minishell project.
-
-.. .. image:: https://i.imgur.com/98xh2xY.gif
-
-Getting Started
----------------
-
-Installation
-++++++++++++
-
-.. code-block::
-
-    $ pip3 install minishell-test
-    $ pip3 install --user minishell-test  # if you don't have root access
-
-Compatibility
-+++++++++++++
-
-Your executable **must** support the ``-c`` option which allow to pass command as string.
-
-.. code-block::
-
-    $ bash -c 'echo bonjour je suis | cat -e'
-    bonjour je suis$
-    $ ./minishell -c 'echo bonjour je suis | cat -e'
-    bonjour je suis$
-
-
-.. note::
-    With this setup ``argv[2]`` is what you would usually get in ``line`` from ``get_next_line``.
-
-Usage
-+++++
-
-Run all the predefined tests:
-
-.. code-block::
-
-    $ cd <MINISHELL>
-    $ minishell_test
-
-.. warning::
-    If you get ``command not found``, do either of those things:
-
-    * ``~/.local/bin`` to your ``PATH`` environment variable.
-    * run ``$ python3 -m minishell_test`` instead of ``$ minishell_test``
-
-
-Documentation
--------------
+minishell_test documentation
+============================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    config
    options
    developers
 
-
-.. code-block::
-
-    $ minishell_test --help
-
-The options are explained in more details in :ref:`options <options>`.
-
+.. include:: gettingstarted.rst
 
 Environement variables
 ----------------------
@@ -94,3 +37,40 @@ Linux
 -----
 
 It will try to convert to output/status code of ``bash`` on Linux to the one on Mac.
+
+.. Add individual test
+.. -------------------
+..
+.. In your suite function you can use the `test` function. With the following arguments:
+..
+.. 1. Command to be tested (output and status will be compared to bash)
+.. 2. A command to setup the sandbox directory where the tested command will be run
+.. 3. List of files to watch (the content of each file will be compared)
+..
+.. ```python
+.. test("echo bonjour je suis")                                  # simple command
+.. test("cat < somefile", setup="echo file content > somefile")  # setup
+.. test("ls > somefile", setup="", files=["somefile"])           # watch a file
+.. test("echo $A", exports={"A": "a"})                           # export variables
+..                                                               # in the environment
+.. test("echo bonjour", hook=lambda s: s.replace("o", "a"))      # pass the shell output
+..                                                               # through a hook function
+..
+.. test("cat < somefile > otherfile",
+..      setup="echo file content > somefile",
+..      files=["otherfile"])
+.. ```
+..
+.. ### Add Suite
+..
+.. A test suite is a group of related tests.
+..
+.. ```python
+.. @suite()  # @suite(bonus=True) if it's a bonus suite
+.. def suite_yoursuitename(test):
+..     """ a description of the suite """
+..     test(...)
+..     test(...)
+..     test(...)
+.. ```
+..

@@ -10,13 +10,11 @@ It looks for a ``minishell_test.cfg`` file in your project directory.
 
 Here is what the default configuration looks like:
 
-.. code-block:: cfg
+.. include:: ../minishell_test/data/default.cfg
+   :code: cfg
 
-   .. include:: ../minishell_test/data/default.cfg
 
-Format used for the configuration file:
-
-https://docs.python.org/3/library/configparser.html#supported-ini-file-structure
+The format of this file is described in more details `here <https://docs.python.org/3/library/configparser.html#supported-ini-file-structure>`_
 
 Global
 ------
@@ -33,35 +31,35 @@ Global settings are defined under the ``minishell_test`` section:
    :type: true|false
    :default: false
 
-    Run the bonus tests
+   Run the bonus tests
 
 .. conf:: exec_name
 
    :type: PATH
    :default: minishell
 
-    Minishell executable name
+   Minishell executable name
 
 .. conf:: make
 
    :type: true|false
    :default: true
 
-    Run ``make`` in your project directory before the test
+   Run ``make`` in your project directory before the test
 
 .. conf:: pager
 
    :type: NAME
    :default: less
 
-    Pager to use when viewing your results
+   Pager to use when viewing your results
 
 .. conf:: log_path
 
    :type: PATH
    :default: minishell_test.log
 
-    File where to put the test results
+   File where to put the test results
 
 .. conf:: cache_path
 
@@ -84,14 +82,14 @@ Shell settings are defined under the ``shell`` section:
    :type: LIST
    :default: rmdir env cat touch ls grep sh head
 
-    Commands available in test
+   Commands available in test
 
 .. conf:: path_variable
 
    :type: LIST
    :default: {cache:executables_path}
 
-    ``$PATH`` environment variable passed to the shell
+   ``$PATH`` environment variable passed to the shell
 
 Reference
 +++++++++
@@ -108,15 +106,15 @@ Reference shell settings are defined under the ``shell:reference`` section:
    :type: PATH
    :default: /bin/bash
 
-    Path to reference shell (shell which will be compared minishell)
-    has to support the ``-c`` option (``sh``, ``bash`` and ``zsh`` support it)
+   Path to reference shell (shell which will be compared minishell)
+   has to support the ``-c`` option (``sh``, ``bash`` and ``zsh`` support it)
 
 .. conf:: args
 
    :type: ARGV
 
-   Supplementary arguments to the reference shell
-   (e.g ``--posix`` can be used with bash for a more posix complient behavior)
+   | Supplementary arguments to the reference shell
+   | e.g ``--posix`` can be used with bash for a more posix complient behavior
 
 Timeout
 -------
