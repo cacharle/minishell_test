@@ -13,7 +13,7 @@
 import re
 from typing import List, Optional
 
-from minishell_test import config
+from minishell_test.config import Config
 
 
 class Captured:
@@ -34,8 +34,8 @@ class Captured:
         lines = output.split('\n')
         for i, line in enumerate(lines):
             lines[i] = line = re.sub("line [01]: ", "", lines[i], 1)
-            if line.startswith(config.SHELL_REFERENCE_PREFIX):
-                lines[i] = config.MINISHELL_PREFIX + line[len(config.SHELL_REFERENCE_PREFIX):]
+            if line.startswith(Config.shell_reference_prefix):
+                lines[i] = Config.minishell_prefix + line[len(Config.shell_reference_prefix):]
         self.output = '\n'.join(lines)
 
         self.status = status

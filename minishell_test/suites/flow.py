@@ -10,7 +10,7 @@
 #                                                                              #
 # ############################################################################ #
 
-from minishell_test import config
+from minishell_test.config import Config
 from minishell_test.suite.decorator import suite
 from minishell_test.hooks import (
     error_line0,
@@ -241,10 +241,10 @@ def suite_syntax_error(test):
     test("> a ; a",  hook=error_line0)
     test("< a ; a",  hook=error_line0)
     test(">> a ; a", hook=error_line0)
-    test(config.LOREM + " > >" + config.LOREM, hook=error_line0, hook_status=platform_status(2, 1))
-    test(config.LOREM + " < <" + config.LOREM, hook=error_line0, hook_status=platform_status(2, 1))
-    test(config.LOREM + " ; |" + config.LOREM, hook=error_line0, hook_status=platform_status(2, 1))
-    test(config.LOREM + " | ;" + config.LOREM, hook=error_line0, hook_status=platform_status(2, 1))
+    test(Config.lorem + " > >" + Config.lorem, hook=error_line0, hook_status=platform_status(2, 1))
+    test(Config.lorem + " < <" + Config.lorem, hook=error_line0, hook_status=platform_status(2, 1))
+    test(Config.lorem + " ; |" + Config.lorem, hook=error_line0, hook_status=platform_status(2, 1))
+    test(Config.lorem + " | ;" + Config.lorem, hook=error_line0, hook_status=platform_status(2, 1))
 
 
 @suite(bonus=True)
@@ -289,8 +289,8 @@ def suite_syntax_error_bonus(test):
     test("() a",    hook=error_line0, hook_status=platform_status(2, 1))
     test("( a",     hook=[error_line0, error_eof_to_expected_token], hook_status=platform_status(2, 1))
     test(") a",     hook=error_line0, hook_status=platform_status(2, 1))
-    test(config.LOREM + " && &&" + config.LOREM, hook=error_line0, hook_status=platform_status(2, 1))
-    test(config.LOREM + " || ||" + config.LOREM, hook=error_line0, hook_status=platform_status(2, 1))
-    test(config.LOREM + " ( ("   + config.LOREM, hook=error_line0, hook_status=platform_status(2, 1))
-    test(config.LOREM + " ) )"   + config.LOREM, hook=error_line0, hook_status=platform_status(2, 1))
+    test(Config.lorem + " && &&" + Config.lorem, hook=error_line0, hook_status=platform_status(2, 1))
+    test(Config.lorem + " || ||" + Config.lorem, hook=error_line0, hook_status=platform_status(2, 1))
+    test(Config.lorem + " ( ("   + Config.lorem, hook=error_line0, hook_status=platform_status(2, 1))
+    test(Config.lorem + " ) )"   + Config.lorem, hook=error_line0, hook_status=platform_status(2, 1))
     test("(); () ;() ;() ;() ;() ;() ;() ;() ;() ;a",    hook=error_line0, hook_status=platform_status(2, 1))

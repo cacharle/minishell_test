@@ -6,17 +6,15 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2021/02/27 20:16:56 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/28 09:06:53 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import argparse
 import textwrap
-import functools
 
 
-@functools.lru_cache(maxsize=1)
-def parse_args():
+def parse_args(argv):
     """Parse command line arguments"""
 
     parser = argparse.ArgumentParser(
@@ -85,4 +83,4 @@ def parse_args():
             (e.g ./run int -> ./run preprocess/interpolation)
         """)
     )
-    return parser.parse_args()
+    return parser.parse_args(argv)

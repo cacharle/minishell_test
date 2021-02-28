@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/02/27 12:19:15 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/28 10:42:37 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -16,7 +16,7 @@ import subprocess
 from pathlib import Path
 from typing import Optional, List, Dict, Union, Callable
 
-from minishell_test import config
+from minishell_test.config import Config
 from minishell_test.test.captured import Captured
 from minishell_test.test.result import Result, LeakResult
 from minishell_test import sandbox
@@ -32,7 +32,7 @@ class Test:
         setup:       str            = "",
         files:       List[str]      = [],
         exports:     Dict[str, str] = {},
-        timeout:     float          = config.TIMEOUT_TEST,
+        timeout:     float          = -1,
         hook:        HookType       = [],
         hook_status: HookStatusType = [],
     ):
@@ -50,7 +50,7 @@ class Test:
         self.files = files
         self.exports = exports
         self.result: Optional[Union[Result, LeakResult]] = None
-        self.timeout = timeout
+        self.timeout = timeout if timeout < 0 else Config.timeout_test
         if not isinstance(hook, list):
             hook = [hook]
         if not isinstance(hook_status, list):
@@ -61,16 +61,16 @@ class Test:
     def run(self, index: int) -> None:
         """ Run the test for minishell and the reference shell and print the result out """
 
-        if config.CHECK_LEAKS:
+        if Config.check_leaks:
             self.hook = []
             self.hook_status = []
-            captured = self._run_sandboxed([*config.VALGRIND_CMD, "-c"])
+            captured = self._run_sandboxed([*Config.valgrind_cmd, "-c"])
             self.result = LeakResult(self.full_cmd, captured)
             self.result.put(index)
             return
 
-        expected = self._run_sandboxed([config.SHELL_REFERENCE_PATH, *config.SHELL_REFERENCE_ARGS, "-c"])
-        actual   = self._run_sandboxed([config.MINISHELL_EXEC_PATH, "-c"])
+        expected = self._run_sandboxed([Config.shell_reference_path, *Config.shell_reference_args, "-c"])
+        actual   = self._run_sandboxed([Config.minishell_exec_path, "-c"])
         self.result = Result(self.full_cmd, self.files, expected, actual)
         self.result.put(index)
 
@@ -82,7 +82,7 @@ class Test:
                     subprocess.run(
                         self.setup,
                         shell=True,
-                        cwd=config.SANDBOX_DIR,
+                        cwd=Config.sandbox_dir,
                         stderr=subprocess.STDOUT,
                         stdout=subprocess.PIPE,
                         check=True
@@ -105,9 +105,9 @@ class Test:
             [*shell_cmd, self.cmd],
             stderr=subprocess.STDOUT,
             stdout=subprocess.PIPE,
-            cwd=config.SANDBOX_DIR,
+            cwd=Config.sandbox_dir,
             env={
-                'PATH': config.SHELL_PATH_VARIABLE,
+                'PATH': Config.shell_path_variable,
                 'TERM': 'xterm-256color',
                 **self.exports,
             },
@@ -116,7 +116,7 @@ class Test:
         # https://docs.python.org/3/library/subprocess.html#subprocess.Popen.communicate
         try:
             stdout, _ = process.communicate(
-                timeout=(self.timeout if not config.CHECK_LEAKS else config.TIMEOUT_LEAKS))
+                timeout=(self.timeout if not Config.check_leaks else Config.timeout_leaks))
         except subprocess.TimeoutExpired:
             process.kill()
             # _, _ = process.communicate(timeout=2)
@@ -130,7 +130,7 @@ class Test:
         files_content: List[Optional[str]] = []
         for file_name in self.files:
             try:
-                with open(os.path.join(config.SANDBOX_DIR, file_name), "rb") as f:
+                with open(os.path.join(Config.sandbox_dir, file_name), "rb") as f:
                     files_content.append(f.read().decode())
             except FileNotFoundError:
                 files_content.append(None)

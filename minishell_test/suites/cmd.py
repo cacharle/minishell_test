@@ -13,7 +13,7 @@
 import distutils
 
 from minishell_test import hooks
-from minishell_test import config
+from minishell_test.config import Config
 from minishell_test.suite.decorator import suite
 
 
@@ -105,8 +105,8 @@ def suite_cmd(test):
          "asd f asd f asdf asdf  asdf  asd f asd f asd f asd f as df as df a"
          "asd f asd f asdf asdf  asdf  asd f asd f asd f asd f as df as df a"
          "asd f asd f asdf asdf  asdf  asd f asd f asd f asd f as df as df a")
-    test("echo " + config.LOREM * 10)
-    test("echo " + config.LOREM * 20)
+    test("echo " + Config.lorem * 10)
+    test("echo " + Config.lorem * 20)
 
 
 @suite()

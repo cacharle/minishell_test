@@ -13,7 +13,7 @@
 
 import os
 
-from minishell_test import config
+from minishell_test.config import Config
 from minishell_test import hooks
 from minishell_test.suite.decorator import suite
 from minishell_test.hooks import linux_discard
@@ -26,12 +26,12 @@ def suite_echo(test):
     test("echo bonjour")
     test("echo lalalala lalalalal alalalalal alalalala")
     test("echo lalalala                lalalalal      alalalalal alalalala")
-    test("echo " + config.LOREM)
+    test("echo " + Config.lorem)
     test("echo -n")
     test("echo -n bonjour")
     test("echo -n lalalala lalalalal alalalalal alalalala")
     test("echo -n lalalala                lalalalal      alalalalal alalalala")
-    test("echo -n " + config.LOREM)
+    test("echo -n " + Config.lorem)
     test("echo bonjour -n")
     test("echo -n bonjour -n")
     test("                        echo                     bonjour             je")
@@ -393,7 +393,7 @@ def suite_exit(test):
     test("exit bonjour 0", hook_status=hooks.platform_status(255, 2))
     test("exit 0 1")
     test("exit 0 1 2 3 4 5 6 7 8 9")
-    test("exit " + config.LOREM, hook_status=hooks.platform_status(255, 2))
+    test("exit " + Config.lorem, hook_status=hooks.platform_status(255, 2))
     test("exit bonjoru; echo should have exited", hook_status=hooks.platform_status(255, 2))
     test("exit 99999999999999999999999999999999999999999999999999999; echo should have exited", hook_status=hooks.platform_status(255, 2))
     test("exit 9999; echo should have exited")

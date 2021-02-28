@@ -13,7 +13,7 @@
 import re
 from typing import Match, List, Optional
 
-from minishell_test import config
+from minishell_test.config import Config
 from minishell_test.test.captured import Captured
 
 
@@ -42,12 +42,12 @@ class BaseResult:
     def __repr__(self):
         """Returns a representation of the result based on the verbosity"""
         printed = self._escaped_cmd[:]
-        if config.SHOW_RANGE:
+        if Config.show_range:
             printed = "{:2}: ".format(self.index) + printed
-        if len(printed) > config.TERM_COLS - 7:
-            printed = printed[:config.TERM_COLS - 10] + "..."
+        if len(printed) > Config.term_cols - 7:
+            printed = printed[:Config.term_cols - 10] + "..."
         fmt = self.green("{:{width}} [PASS]") if self.passed else self.red("{:{width}} [FAIL]")
-        return fmt.format(printed, width=config.TERM_COLS - 7)
+        return fmt.format(printed, width=Config.term_cols - 7)
 
     def put(self, index: int) -> None:
         """Print a summary of the result"""

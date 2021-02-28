@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/26 09:40:36 by cacharle          #+#    #+#              #
-#    Updated: 2021/02/27 16:16:07 by cacharle         ###   ########.fr        #
+#    Updated: 2021/02/28 10:53:38 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -17,12 +17,14 @@ import inspect
 import shutil
 import distutils
 from pathlib import Path
+from typing import cast, List, Tuple
 
 import minishell_test.data
 from minishell_test.args import parse_args
 
 
 DATA_DIR = Path(inspect.getfile(minishell_test.data)).parent
+CONFIG_FILENAME = Path('minishell_test.cfg')
 
 
 class ConfigParser(configparser.ConfigParser):
@@ -42,93 +44,130 @@ class ConfigParser(configparser.ConfigParser):
         return self.get(section, options).strip().split('\n')
 
 
-args = parse_args()
-MINISHELL_DIR = Path(args.path).resolve()
+class Config():
+    minishell_dir                = cast(Path, None)
+    bonus                        = cast(bool, None)
+    exec_name                    = cast(str, None)
+    make                         = cast(bool, None)
+    make_args                    = cast(List[str], None)
+    pager                        = cast(bool, None)
+    pager_prog                   = cast(Path, None)
+    log_path                     = cast(Path, None)
+    check_error_messages         = cast(bool, None)
+    shell_available_commands     = cast(List[str], None)
+    shell_path_variable          = cast(str, None)
+    shell_reference_path         = cast(Path, None)
+    shell_reference_args         = cast(List[str], None)
+    timeout_test                 = cast(float, None)
+    timeout_leaks                = cast(float, None)
+    cache_dir                    = cast(Path, None)
+    sandbox_dir                  = cast(Path, None)
+    shell_available_commands_dir = cast(Path, None)
+    lorem                        = cast(str, None)
+    minishell_exec_path          = cast(Path, None)
+    minishell_prefix             = cast(str, None)
+    shell_reference_prefix       = cast(str, None)
+    exit_first                   = cast(bool, None)
+    range                        = cast(Tuple[int, int], None)
+    check_leaks                  = cast(bool, None)
+    show_range                   = cast(bool, None)
+    valgrind_cmd                 = cast(List[str], None)
+    term_cols                    = cast(int, None)
+    platform                     = cast(str, None)
 
-CONFIG_FILENAME = Path('minishell_test.cfg')
+    @classmethod
+    def init(cls, args):
+        if isinstance(args, list):
+            args = parse_args(sys.argv[1:])
 
-config = ConfigParser()
-config.read(DATA_DIR / 'default.cfg')
-user_config = ConfigParser()
-user_config.read(MINISHELL_DIR / CONFIG_FILENAME)
+        cls.minishell_dir = Path(args.path).resolve()
 
-for section in user_config:
-    if section not in config:
-        raise RuntimeError(f"Unknown section name: {section}")
-    for key in user_config[section]:
-        if key not in config[section]:
-            raise RuntimeError(f"Unknown key name: {key}")
+        cfg = cls._load_cfg()
 
-config.read_dict({**config, **user_config})
+        cls.bonus                    = cfg.getboolean('minishell_test', 'bonus')
+        cls.exec_name                = cfg.get('minishell_test', 'exec_name')
+        cls.make                     = cfg.getboolean('minishell_test', 'make')
+        cls.make_args                = cfg.getargs('minishell_test', 'make_args')
+        cls.pager                    = cfg.getboolean('minishell_test', 'pager')
+        cls.pager_prog               = cfg.get('minishell_test', 'pager_prog')
+        cls.log_path                 = cfg.getpath('minishell_test', 'log_path')
+        cls.check_error_messages     = cfg.getboolean('minishell_test', 'check_error_messages')
 
-BONUS                    = config.getboolean('minishell_test', 'bonus')
-EXEC_NAME                = config.get('minishell_test', 'exec_name')
-MAKE                     = config.getboolean('minishell_test', 'make')
-MAKE_ARGS                = config.getargs('minishell_test', 'make_args')
-PAGER                    = config.getboolean('minishell_test', 'pager')
-PAGER_PROG               = config.get('minishell_test', 'pager_prog')
-LOG_PATH                 = config.getpath('minishell_test', 'log_path')
-CHECK_ERROR_MESSAGES     = config.getboolean('minishell_test', 'check_error_messages')
+        cls.shell_available_commands = cfg.getmultiline('shell', 'available_commands')
+        cls.shell_path_variable      = cfg.get('shell', 'path_variable')
 
-SHELL_AVAILABLE_COMMANDS = config.getmultiline('shell', 'available_commands')
-SHELL_PATH_VARIABLE      = config.get('shell', 'path_variable')
+        cls.shell_reference_path     = cfg.getpath('shell:reference', 'path')
+        cls.shell_reference_args     = cfg.getargs('shell:reference', 'args')
 
+        cls.timeout_test             = cfg.getfloat('timeout', 'test')
+        cls.timeout_leaks            = cfg.getfloat('timeout', 'leaks')
 
-SHELL_REFERENCE_PATH     = config.getpath('shell:reference', 'path')
-SHELL_REFERENCE_ARGS     = config.getargs('shell:reference', 'args')
+        xdg_cache_home = os.environ.get('XDG_CACHE_HOME')
+        home = os.environ.get('HOME')
+        if xdg_cache_home is not None:
+            cls.cache_dir = Path(xdg_cache_home) / 'minishell_test'
+        elif home is not None:
+            cls.cache_dir = Path(home) / '.cache' / 'minishell_test'
+        else:
+            cls.cache_dir = Path('.cache', 'minishell_test')
 
-TIMEOUT_TEST             = config.getfloat('timeout', 'test')
-TIMEOUT_LEAKS            = config.getfloat('timeout', 'leaks')
+        cls.sandbox_dir                  = cls.cache_dir / 'sandbox'
+        cls.shell_available_commands_dir = cls.cache_dir / 'bin'
 
-xdg_cache_home = os.environ.get('XDG_CACHE_HOME')
-home = os.environ.get('HOME')
-if xdg_cache_home is not None:
-    CACHE_DIR = Path(xdg_cache_home) / 'minishell_test'
-elif home is not None:
-    CACHE_DIR = Path(home) / '.cache' / 'minishell_test'
-else:
-    CACHE_DIR = Path('.cache', 'minishell_test')
+        cls.shell_path_variable = cls.shell_path_variable.format(shell_available_commands_dir=cls.shell_available_commands_dir)
 
-SANDBOX_DIR                  = CACHE_DIR / 'sandbox'
-SHELL_AVAILABLE_COMMANDS_DIR = CACHE_DIR / 'bin'
+        with open(DATA_DIR / 'lorem') as f:
+            cls.lorem = ' '.join(f.read().split('\n'))
 
-SHELL_PATH_VARIABLE = SHELL_PATH_VARIABLE.format(shell_available_commands_dir=SHELL_AVAILABLE_COMMANDS_DIR)
+        cls.minishell_exec_path = cls.minishell_dir / cls.exec_name
 
-with open(DATA_DIR / 'lorem') as f:
-    LOREM = ' '.join(f.read().split('\n'))
+        cls.minishell_prefix = cls.exec_name + ": "
+        cls.shell_reference_prefix = str(cls.shell_reference_path) + ": "
 
-MINISHELL_EXEC_PATH = MINISHELL_DIR / EXEC_NAME
+        cls.exit_first = args.exit_first
+        cls.range = args.range
+        cls.check_leaks = args.check_leaks
 
-MINISHELL_PREFIX = EXEC_NAME + ": "
-SHELL_REFERENCE_PREFIX = str(SHELL_REFERENCE_PATH) + ": "
+        if cls.range is not None or cls.check_leaks:
+            cls.show_range = True
+        else:
+            cls.show_range = args.show_range
 
-EXIT_FIRST = args.exit_first
-RANGE = args.range
-CHECK_LEAKS = args.check_leaks
+        if cls.check_leaks:
+            valgrind_path = distutils.spawn.find_executable("valgrind")
+            if valgrind_path is None:
+                raise RuntimeError("could not find valgrind command on your system")
+            cls.valgrind_cmd = [
+                str(valgrind_path),
+                "--trace-children=no",
+                "--leak-check=yes",
+                "--child-silent-after-fork=yes",
+                "--show-leak-kinds=definite",
+                str(cls.minishell_exec_path),
+            ]
 
-if RANGE is not None or CHECK_LEAKS:
-    SHOW_RANGE = True
-else:
-    SHOW_RANGE = args.show_range
+        cls.term_cols = shutil.get_terminal_size().columns
+        if cls.term_cols < 40:
+            raise RuntimeError("You're terminal isn't wide enough 40 cols minimum required")
 
-if CHECK_LEAKS:
-    valgrind_path = distutils.spawn.find_executable("valgrind")
-    if valgrind_path is None:
-        raise RuntimeError("Could not find valgrind command on your system")
-    VALGRIND_CMD = [
-        str(valgrind_path),
-        "--trace-children=no",
-        "--leak-check=yes",
-        "--child-silent-after-fork=yes",
-        "--show-leak-kinds=definite",
-        str(MINISHELL_EXEC_PATH),
-    ]
+        cls.platform = sys.platform
+        supported = ['linux', 'darwin']
+        if cls.platform not in supported:
+            raise RuntimeError("Your platform ({cls.platform}) is not supported, supported platforms are: {', '.join(supported)}")
 
-TERM_COLS = shutil.get_terminal_size().columns
-if TERM_COLS < 40:
-    raise RuntimeError("You're terminal isn't wide enough 40 cols minimum required")
+    @classmethod
+    def _load_cfg(cls):
+        cfg = ConfigParser()
+        cfg.read(DATA_DIR / 'default.cfg')
+        user_cfg = ConfigParser()
+        user_cfg.read(cls.minishell_dir / CONFIG_FILENAME)
 
-PLATFORM = sys.platform
-supported = ['linux', 'darwin']
-if PLATFORM not in supported:
-    raise RuntimeError("Your platform ({PLATFORM}) is not supported, supported platforms are: {', '.join(supported)}")
+        for section in user_cfg:
+            if section not in cfg:
+                raise RuntimeError(f"Unknown section name: {section}")
+            for key in user_cfg[section]:
+                if key not in cfg[section]:
+                    raise RuntimeError(f"Unknown key name: {key}")
+
+        cfg.read_dict({**cfg, **user_cfg})
+        return cfg

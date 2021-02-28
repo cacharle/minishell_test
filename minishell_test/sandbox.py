@@ -14,13 +14,13 @@ import shutil
 import subprocess
 from contextlib import contextmanager
 
-from minishell_test import config
+from minishell_test.config import Config
 
 
 def create():
     """Create a new sandbox directory"""
     try:
-        config.SANDBOX_DIR.mkdir(parents=True, exist_ok=True)
+        Config.sandbox_dir.mkdir(parents=True, exist_ok=True)
     except OSError:
         pass
 
@@ -30,10 +30,10 @@ def remove():
        Brute force rm -rf if clean removal doesn't work due to permissions.
     """
     try:
-        shutil.rmtree(config.SANDBOX_DIR)
+        shutil.rmtree(Config.sandbox_dir)
     except PermissionError:
-        subprocess.run(["chmod", "777", *config.SANDBOX_DIR.glob("*")], check=True)
-        shutil.rmtree(config.SANDBOX_DIR)
+        subprocess.run(["chmod", "777", *Config.sandbox_dir.glob("*")], check=True)
+        shutil.rmtree(Config.sandbox_dir)
     except FileNotFoundError:
         pass
 

@@ -12,7 +12,7 @@
 
 import re
 
-from minishell_test import config
+from minishell_test.config import Config
 
 
 def sort_lines(output):
@@ -22,16 +22,16 @@ def sort_lines(output):
 
 def error_line0(output):
     """Replace "/bin/bash: -c: line n:" by "minishell:" and delete the second line"""
-    if not config.CHECK_ERROR_MESSAGES:
+    if not Config.check_error_messages:
         return "DISCARDED BY TEST"
 
     lines = output.split('\n')
     if len(lines) != 3:
         return output
-    prefix = config.SHELL_REFERENCE_PREFIX + "-c: "
+    prefix = Config.shell_reference_prefix + "-c: "
     if not lines[0].startswith(prefix):
         return output
-    return lines[0].replace(prefix, config.MINISHELL_PREFIX, 1) + "\n"
+    return lines[0].replace(prefix, Config.minishell_prefix, 1) + "\n"
 
 
 def discard(output):
@@ -41,7 +41,7 @@ def discard(output):
 
 def export_singleton(output):
     """Remove variable that are not set to anything in a call to export without arguments"""
-    prefix = "export " if ("--posix" in config.SHELL_REFERENCE_ARGS) else "declare -x "
+    prefix = "export " if ("--posix" in Config.shell_reference_args) else "declare -x "
     return sort_lines(
         '\n'.join([line for line in output.split('\n')
                    if re.match("^{}[a-zA-Z_][a-zA-Z0-9_]*$".format(prefix), line) is None])
@@ -57,9 +57,9 @@ def replace_double(s):
 
 def platform_status(darwin_status, linux_status, windows_status=None):
     def hook(status):
-        if config.PLATFORM == "darwin":
+        if Config.platform == "darwin":
             return status
-        elif config.PLATFORM == "linux":
+        elif Config.platform == "linux":
             return (darwin_status if status == linux_status else status)
         return status
     return hook
@@ -68,7 +68,7 @@ def platform_status(darwin_status, linux_status, windows_status=None):
 def linux_only(func):
     """ Decorator for hooks that only need to be executed on linux """
     def hook(output):
-        if not config.PLATFORM == "linux":
+        if not Config.platform == "linux":
             return output
         return func(output)
     return hook

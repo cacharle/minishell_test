@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-from minishell_test import config
+from minishell_test.config import Config
 from minishell_test import hooks
 from minishell_test.suite.decorator import suite
 
@@ -128,9 +128,9 @@ def suite_interpolation(test):
     test('echo $A\\ ',   exports={"A": "bonjour     je     suis    splited"})
     test('echo $A\\ ',   exports={"A": "   bonjour     je     suis    splited   "})
     test('echo $A$A$A',  exports={"A": "   bonjour     je     suis    splited   "})
-    test("echo $A",      exports={"A": "'" + config.LOREM + "'"})
-    test('echo "$A"',    exports={"A": "'" + config.LOREM + "'"})
-    test("echo '$A'",    exports={"A": "'" + config.LOREM + "'"})
+    test("echo $A",      exports={"A": "'" + Config.lorem + "'"})
+    test('echo "$A"',    exports={"A": "'" + Config.lorem + "'"})
+    test("echo '$A'",    exports={"A": "'" + Config.lorem + "'"})
     test("$ECHO $ECHO",  exports={"ECHO": "echo"})
     test("$A$B bonjour", exports={"A": "ec", "B": "ho"})
     test("$LS",          exports={"LS": "ls -l"}, setup="touch a b c")

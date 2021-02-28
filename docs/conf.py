@@ -14,9 +14,6 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-from docutils import nodes
-from sphinx import addnodes
-
 # -- Project information -----------------------------------------------------
 
 project = 'minishell_test'
@@ -57,6 +54,7 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+
 def setup(app):
     from sphinx.util.docfields import Field
     app.add_object_type(
@@ -80,6 +78,7 @@ def setup(app):
             ),
         ]
     )
+
 
 extlinks = {
     "issue": ("https://github.com/cacharle/minishell_test/issues/%s", "#"),

@@ -12,7 +12,7 @@
 
 from typing import List, Tuple, Optional, Callable
 
-from minishell_test import config
+from minishell_test.config import Config
 from minishell_test.test import Test
 
 
@@ -49,7 +49,7 @@ class Suite:
     def run_all(cls):
         """Run all available suites"""
         for s in cls.available:
-            if not s.run() and config.EXIT_FIRST:
+            if not s.run() and Config.exit_first:
                 break
 
     @classmethod
@@ -57,7 +57,7 @@ class Suite:
         """ Remove not asked suite from available suites
             Tries to autocomplete the asked names
         """
-        if not config.BONUS:
+        if not Config.bonus:
             cls.available = [s for s in cls.available if not s.bonus]
         if len(asked_names) == 0:
             asked_names = [s.name for s in cls.available]
@@ -143,14 +143,14 @@ class Suite:
             self.BLUE_CHARS,
             " " + self.name + " ",
             self.CLOSE_CHARS,
-            width=config.TERM_COLS
+            width=Config.term_cols
         ))
         for i, t in enumerate(self.tests):
-            if config.RANGE is not None:
-                if not (config.RANGE[0] <= i <= config.RANGE[1]):
+            if Config.range is not None:
+                if not (Config.range[0] <= i <= Config.range[1]):
                     continue
             t.run(i)
-            if config.EXIT_FIRST and t.result is not None and t.result.failed:
+            if Config.exit_first and t.result is not None and t.result.failed:
                 return False
         return True
 
@@ -177,14 +177,14 @@ class Suite:
             pass_sum += pass_total
             fail_sum += fail_total
             print("{:.<{width}} \033[32m{:4} [PASS]\033[0m \033[31m{:4} [FAIL]\033[0m"
-                  .format(s.name + " ", pass_total, fail_total, width=config.TERM_COLS - 24))
+                  .format(s.name + " ", pass_total, fail_total, width=Config.term_cols - 24))
         print("{:.<{width}} \033[32m{:4} [PASS]\033[0m \033[31m{:4} [FAIL]\033[0m"
-              .format("TOTAL ", pass_sum, fail_sum, width=config.TERM_COLS - 24))
+              .format("TOTAL ", pass_sum, fail_sum, width=Config.term_cols - 24))
 
     @classmethod
     def save_log(cls):
         """Save the result of all suites to a file"""
-        with open(config.LOG_PATH, "w") as log_file:
+        with open(Config.log_path, "w") as log_file:
             for s in cls.available:
                 for t in s.tests:
                     if t.result is not None and t.result.failed:
