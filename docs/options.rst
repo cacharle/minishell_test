@@ -13,8 +13,26 @@ Command line Options
    | e.g ``$ minishell_test int`` -> ``$ minishell_test preprocess/interpolation``.
    | See :option:`--list` to list the available suites.
 
-   .. command-output:: minishell_test -p ../../minishell inter
-      :ellipsis: 20
+   .. code-block::
+
+      $ minishell_test -p ../../minishell inter
+      ########################### preprocess/interpolation ###########################
+      [EXPORTS TEST='bonjour'] echo $TEST                                       [PASS]
+      [EXPORTS TEST='bonjour'] echo $TES                                        [PASS]
+      [EXPORTS TEST='bonjour'] echo $TEST_                                      [PASS]
+      [EXPORTS TEST='bonjour'] echo "|$TEST|"                                   [PASS]
+      [EXPORTS TEST='bonjour'] echo "|$TES|"                                    [PASS]
+      [EXPORTS TEST='bonjour'] echo "|$TEST_|"                                  [PASS]
+      [EXPORTS TEST='bonjour'] echo '|$TEST|'                                   [PASS]
+      [EXPORTS TEST='bonjour'] echo '|$TES|'                                    [PASS]
+      [EXPORTS TEST='bonjour'] echo '|$TEST_|'                                  [PASS]
+      [EXPORTS A='foo' B='bar' C='baz'] echo $A$B$C                             [PASS]
+      [EXPORTS A='foo' B='bar' C='baz'] echo "$A$B$C"                           [PASS]
+      [EXPORTS A='foo' B='bar' C='baz'] echo '$A$B$C'                           [PASS]
+      [EXPORTS A='foo' B='bar' C='baz'] echo $A,$B,$C                           [PASS]
+      [EXPORTS A='foo' B='bar' C='baz'] echo "$A,$B,$C"                         [PASS]
+      [EXPORTS A='foo' B='bar' C='baz'] echo '$A,$B,$C'                         [PASS]
+      ...
 
 .. option:: -h, --help
 
@@ -33,10 +51,8 @@ Command line Options
 
 .. option:: -t <COMMAND>, --try <COMMAND>
 
-   | Run a custom command like this test would
-   | (the only environment variable passed to your executable are TERM and PATH)
-
-   .. command-output:: minishell_test -p ../../minishell --try 'echo bonjour | cat -e'
+   | Run a custom command like the test would,
+   | the only environment variable passed to your executable are ``TERM`` and ``PATH``.
 
 .. option:: -g, --pager
 
