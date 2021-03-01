@@ -1,7 +1,5 @@
-.. program:: minishell_test
-
-minishell_test documentation
-============================
+Documentation of minishell_test
+===============================
 
 .. toctree::
    :maxdepth: 2
@@ -10,9 +8,8 @@ minishell_test documentation
    config
    options
    bonus
-   memory_leaks
-   linux
    custom_test
+   linux
    disclaimer
    developers
 

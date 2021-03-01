@@ -1,3 +1,5 @@
+.. _custom-tests:
+
 Add Custom Tests
 ================
 

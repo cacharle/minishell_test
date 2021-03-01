@@ -8,3 +8,4 @@ dist/
 build/
 docs/_build/
 bash3.2.57
+*.bak

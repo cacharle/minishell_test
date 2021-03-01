@@ -22,18 +22,22 @@ Global
 
 Global settings are defined under the ``[minishell_test]`` section.
 
+.. _config-bonus:
 .. conf:: bonus
 
    :type: true|false
 
    Enable the bonus tests (:ref:`bonus`).
 
+
+.. _config-make:
 .. conf:: make
 
    :type: true|false
 
    Run the ``make`` command in your project directory before the test.
 
+.. _config-make-args:
 .. conf:: make_args
 
    :type: space separated list
@@ -41,7 +45,7 @@ Global settings are defined under the ``[minishell_test]`` section.
    | Argument given to the ``make`` command.
    | The default value (``MINISHELL_TEST_FLAGS=-DMINISHELL_TEST``) allows you to do conditional compilation
      to support both the ``-c`` option and the :ref:`subject`
-     (which doesn't say anything about options, so we assumed the minishell executable didn't take any).
+     (which doesn't say anything about options, so we assume the minishell executable didn't take any).
 
    | In your ``Makefile`` add ``$(MINISHELL_TEST_FLAGS)`` in your object compilation command.
      (e.g ``$(CC) $(CCFLAGS) -c -o $@ $<``)
@@ -64,6 +68,7 @@ Global settings are defined under the ``[minishell_test]`` section.
         }
         #endif
 
+.. _config-check-error-messages:
 .. conf:: check_error_messages
 
    :type: true|false
@@ -71,12 +76,13 @@ Global settings are defined under the ``[minishell_test]`` section.
    | If is ``true``, will ignore the content of the error messages outputted by the reference shell,
    | Useful if you have implemented your own error messages and don't want to copy bash's ones.
 
+.. _config-pager:
 .. conf:: pager
 
    :type: command name
 
    | Pager to use when viewing your results after the tests finished running.
-   | Will be called like so: ``{pager} {log_filename}``.
+   | Will be called like: ``{pager} {log_filename}``.
 
 Shell
 -----
@@ -93,6 +99,7 @@ Shell settings are defined under the ``[shell]`` section.
       Some of the default tests won't serve their purpose
       if the default available commands are not present.
 
+.. _config-path-variable:
 .. conf:: path_variable
 
    :type: string (``:`` separated directories)
@@ -108,11 +115,12 @@ Reference
 
 Reference shell settings are defined under the ``[shell:reference]`` section.
 
+.. _config-shell-reference-path:
 .. conf:: path
 
    :type: path
 
-   Path to reference shell, the one to which minishell will be compared.
+   Path to reference shell, to which your ``minishell`` will be compared.
 
    .. note::
       has to support the ``-c`` option, ``sh``, ``bash`` and ``zsh`` support it.
@@ -135,6 +143,7 @@ Timeout settings are defined under the ``[timeout]`` section.
 
    Time before a timeout occurs on a regular test.
 
+.. _config-timeout-leaks:
 .. conf:: leaks
 
    :type: float (seconds)

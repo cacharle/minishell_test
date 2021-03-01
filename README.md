@@ -4,8 +4,6 @@
 [![Documentation](https://readthedocs.org/projects/minishell-test/badge/?version=latest)](https://minishell-test.readthedocs.io)
 [![Build Status](https://api.travis-ci.com/cacharle/minishell_test.svg?branch=master)](https://travis-ci.com/cacharle/minishell_test)
 
-Test for 42 school's minishell project.
-
 ![preview](https://i.imgur.com/98xh2xY.gif)
 
 ## Getting Started
@@ -33,7 +31,6 @@ bonjour je suis$
 
 <div class="title">
 
-Note
 
 </div>
 
@@ -55,14 +52,13 @@ $ minishell_test
 
 <div class="title">
 
-Warning
 
 </div>
 
 If you get `command not found`, do either of those things:
 
--   `~/.local/bin` to your `PATH` environment variable.
--   run `$ python3 -m minishell_test` instead of `$ minishell_test`
+-   Add `~/.local/bin` to your `PATH` environment variable.
+-   Run `$ python3 -m minishell_test` instead of `$ minishell_test`
 
 </div>
 

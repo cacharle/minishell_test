@@ -14,6 +14,8 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+from pathlib import Path
+
 # -- Project information -----------------------------------------------------
 
 project = 'minishell_test'
@@ -23,6 +25,7 @@ author = 'Charles Cabergs'
 # The full version, including alpha/beta/rc tags
 release = '1.0.1'
 
+# display_github = True
 
 # -- General configuration ---------------------------------------------------
 
@@ -31,6 +34,7 @@ release = '1.0.1'
 # ones.
 extensions = [
     "sphinx.ext.extlinks",
+    "sphinxcontrib.programoutput",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -41,13 +45,25 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
+
+html_theme_options = {
+    "style_external_links": True,
+}
+
+github_url = 'https://github.com/cacharle/minishell_test'
+html_context = {
+    "display_github": True,
+    "github_user": "cacharle",
+    "github_repo": "minishell_test",
+    "conf_py_path": f"/{Path(__file__).parent.name}/",
+    "github_version": "master",
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

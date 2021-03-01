@@ -13,8 +13,6 @@ minishell_test
 
 |pypi-python-version| |documentation-build| |travis-build|
 
-Test for 42 school's minishell project.
-
 .. image:: https://i.imgur.com/98xh2xY.gif
    :alt: preview
 

@@ -6,3 +6,5 @@ pep8_naming==0.11.1
 pytest
 sphinx
 sphinx-rtd-theme
+sphinxcontrib-programoutput
+

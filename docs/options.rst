@@ -1,71 +1,69 @@
 Command line Options
 ====================
 
-.. code-block:: txt
-
-    usage: minishell_test [-h] [-p PATH] [-l] [-t COMMAND] [-k] [-r BEGIN END]
-                          [--show-range] [-x] [-v] [-b] [-n] [-m] [-g]
-                          [suite ...]
+.. command-output:: minishell_test --help
+   :ellipsis: 3
 
 .. program:: minishell_test
 
 .. option:: suite
 
-   Test suites/group to run.
-   It tries to be smart and autocomplete the suite name
-   (e.g ./run int -> ./run preprocess/interpolation)
+   | Select the test suites/group to run.
+   | It tries to be smart and autocomplete the suite name,
+   | e.g ``$ minishell_test int`` -> ``$ minishell_test preprocess/interpolation``.
+   | See :option:`--list` to list the available suites.
 
+   .. command-output:: minishell_test -p ../../minishell inter
+      :ellipsis: 20
 
 .. option:: -h, --help
 
-   show this help message and exit
+   Print usage and exit.
 
 .. option:: -p <PATH>, --path <PATH>
 
-   Path to minishell directory
+   Path to the minishell directory, defaults to the current directory.
 
 .. option:: -l, --list
 
    Print available test suites
 
+   .. command-output:: minishell_test --list
+      :ellipsis: 15
+
 .. option:: -t <COMMAND>, --try <COMMAND>
 
-   Run a custom command like this test would
-   (the only environment variable passed to your executable are TERM and PATH)
+   | Run a custom command like this test would
+   | (the only environment variable passed to your executable are TERM and PATH)
 
-.. option:: -k, --check-leaks
-
-   Run valgrind on tests (disable usual comparison with bash)
-
-.. option:: -r <BEGIN> <END>, --range <BEGIN> <END>
-
-    Range of test index to run (imply --show-index)
-
-.. option:: --show-range
-
-   Show test index (useful with --range)
-
-.. option:: -x, --exit-first
-
-    Exit on first fail
-
-.. option:: -v, --verbose
-
-    Increase verbosity level (e.g -vv == 2)
-
-.. option:: -b, --bonus
-
-    Enable bonus tests
-
-.. option:: -n, --no-bonus
-
-    Disable bonus tests
-
-.. option:: -m, --make
-
-    Make minishell and exit
+   .. command-output:: minishell_test -p ../../minishell --try 'echo bonjour | cat -e'
 
 .. option:: -g, --pager
 
-    After running the test, display the result in a pager of your choice
+   After running the test, display the result in a pager of your choice, see :ref:`pager configuration <config-pager>`.
 
+Memory Leaks
+------------
+
+.. option:: -k, --check-leaks
+
+   | Runs `valgrind <https://valgrind.org/>`_ on tests to check for memory leaks.
+   | (disable the usual comparison with the :ref:`reference shell <config-shell-reference-path>`)
+
+   .. warning::
+      | Running ``valgrind`` on each tests may take a while especially if your ``minishell`` isn't correctly optimized,
+      | See the :ref:`leaks timeout <config-timeout-leaks>` configuration variable to change the leak tests timeout.
+
+.. option:: -r <BEGIN> <END>, --range <BEGIN> <END>
+
+   | Only run the test in the selected range,
+   | ``<BEGIN>`` and ``<END>`` must be test indices.
+
+.. option:: --show-range
+
+   | Show the tests indices.
+   | Both :option:`--check-leaks` and :option:`--range` imply this option.
+
+.. option:: -x, --exit-first
+
+   Immediately stops when a test fails.

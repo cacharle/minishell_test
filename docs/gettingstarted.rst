@@ -12,12 +12,12 @@ Installation
 Compatibility
 +++++++++++++
 
-Your executable **must** support the ``-c`` option which allow to pass command as string.
+Your executable **must** support the ``-c`` option which allow to pass command as an argument.
 
 .. code-block::
 
     $ bash -c 'echo bonjour je suis | cat -e'
-    bonjour je suis$
+    bonjour he suis$
     $ ./minishell -c 'echo bonjour je suis | cat -e'
     bonjour je suis$
 
@@ -38,5 +38,5 @@ Run all the predefined tests:
 .. warning::
     If you get ``command not found``, do either of those things:
 
-    * ``~/.local/bin`` to your ``PATH`` environment variable.
-    * run ``$ python3 -m minishell_test`` instead of ``$ minishell_test``
+    * Add ``~/.local/bin`` to your ``PATH`` environment variable.
+    * Run ``$ python3 -m minishell_test`` instead of ``$ minishell_test``
