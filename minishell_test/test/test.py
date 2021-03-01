@@ -6,11 +6,12 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/02/28 10:42:37 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/01 16:02:35 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import os
+import re
 import sys
 import subprocess
 from pathlib import Path
@@ -50,7 +51,7 @@ class Test:
         self.files = files
         self.exports = exports
         self.result: Optional[Union[Result, LeakResult]] = None
-        self.timeout = timeout if timeout < 0 else Config.timeout_test
+        self.timeout = timeout if timeout > 0 else Config.timeout_test
         if not isinstance(hook, list):
             hook = [hook]
         if not isinstance(hook_status, list):
@@ -140,6 +141,15 @@ class Test:
             output = hook(output)
         for hook_status in self.hook_status:
             process.returncode = hook_status(process.returncode)
+
+        # replace reference prefix with minishell prefix
+        lines = output.split('\n')
+        for i, line in enumerate(lines):
+            lines[i] = line = re.sub("line [01]: ", "", lines[i], 1)
+            if line.startswith(Config.shell_reference_prefix):
+                lines[i] = Config.minishell_prefix + line[len(Config.shell_reference_prefix):]
+        output = '\n'.join(lines)
+
         return Captured(output, process.returncode, files_content)
 
     @property

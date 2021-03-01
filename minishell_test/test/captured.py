@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:16:25 by charles           #+#    #+#              #
-#    Updated: 2021/02/27 16:15:13 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/01 16:02:26 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -31,13 +31,7 @@ class Captured:
            is_timeout:    the command has timed out
         """
 
-        lines = output.split('\n')
-        for i, line in enumerate(lines):
-            lines[i] = line = re.sub("line [01]: ", "", lines[i], 1)
-            if line.startswith(Config.shell_reference_prefix):
-                lines[i] = Config.minishell_prefix + line[len(Config.shell_reference_prefix):]
-        self.output = '\n'.join(lines)
-
+        self.output = output
         self.status = status
         self.files_content = files_content
         self.is_timeout = is_timeout
