@@ -6,6 +6,11 @@
 
 ![preview](https://i.imgur.com/98xh2xY.gif)
 
+## Documentation
+
+The full documentation for this project is available at
+[minishell-test.readthedocs.io](https://minishell-test.readthedocs.io).
+
 ## Getting Started
 
 ### Installation
@@ -18,7 +23,7 @@ $ pip3 install --user minishell-test  # if you don't have root access
 ### Compatibility
 
 Your executable **must** support the `-c` option which allow to pass
-command as string.
+command as an argument.
 
 ``` 
 $ bash -c 'echo bonjour je suis | cat -e'
@@ -61,8 +66,3 @@ If you get `command not found`, do either of those things:
 -   Run `$ python3 -m minishell_test` instead of `$ minishell_test`
 
 </div>
-
-## Documentation
-
-The full documentation for this project is available at
-[minishell-test.readthedocs.io](https://minishell-test.readthedocs.io).

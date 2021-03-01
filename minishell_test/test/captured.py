@@ -6,14 +6,11 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:16:25 by charles           #+#    #+#              #
-#    Updated: 2021/03/01 16:02:26 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/01 16:15:31 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-import re
 from typing import List, Optional
-
-from minishell_test.config import Config
 
 
 class Captured:
@@ -38,7 +35,7 @@ class Captured:
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Captured):
-            raise NotImplementedError
+            return False
         if self.is_timeout:
             return self.is_timeout == other.is_timeout
         return (self.output == other.output and

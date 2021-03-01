@@ -19,7 +19,7 @@ Your executable **must** support the ``-c`` option which allow to pass command a
 .. code-block::
 
     $ bash -c 'echo bonjour je suis | cat -e'
-    bonjour he suis$
+    bonjour je suis$
     $ ./minishell -c 'echo bonjour je suis | cat -e'
     bonjour je suis$
 

@@ -16,9 +16,9 @@ minishell_test
 .. image:: https://i.imgur.com/98xh2xY.gif
    :alt: preview
 
-.. include:: gettingstarted.rst.inc
-
 Documentation
 -------------
 
 The full documentation for this project is available at `minishell-test.readthedocs.io <https://minishell-test.readthedocs.io>`_.
+
+.. include:: gettingstarted.rst.inc
