@@ -4,7 +4,6 @@ Documentation of minishell_test
 .. toctree::
    :maxdepth: 2
 
-   gettingstarted
    config
    options
    bonus
@@ -15,4 +14,4 @@ Documentation of minishell_test
 
 .. include:: disclaimer.rst
 
-.. include:: gettingstarted.rst
+.. include:: gettingstarted.rst.inc

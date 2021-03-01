@@ -1,7 +1,10 @@
-.. program:: minishell_test
+.. _bonus:
 
 Bonus
 =====
+
+.. program:: minishell_test
+
 
 See :ref:`how to enable the bonus tests in the configuration <config-bonus>`
 and the :option:`suite` option.

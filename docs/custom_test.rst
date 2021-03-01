@@ -3,30 +3,7 @@
 Add Custom Tests
 ================
 
-Test
-----
-
-In your suite function you can use the ``test`` function. With the
-following arguments:
-
-1. Command to be tested (output and status will be compared to bash)
-2. A command to setup the sandbox directory where the tested command
-   will be run
-3. List of files to watch (the content of each file will be compared)
-
-.. code:: python
-
-   test("echo bonjour je suis")                                  # simple command
-   test("cat < somefile", setup="echo file content > somefile")  # setup
-   test("ls > somefile", setup="", files=["somefile"])           # watch a file
-   test("echo $A", exports={"A": "a"})                           # export variables
-                                                                 # in the environment
-   test("echo bonjour", hook=lambda s: s.replace("o", "a"))      # pass the shell output
-                                                                 # through a hook function
-
-   test("cat < somefile > otherfile",
-        setup="echo file content > somefile",
-        files=["otherfile"])
+You can add custom test in a file named ``minishell_test.py`` at the root of your project.
 
 Suite
 -----
@@ -35,9 +12,110 @@ A test suite is a group of related tests.
 
 .. code:: python
 
-   @suite()  # @suite(bonus=True) if it's a bonus suite
+   @suite()
    def suite_yoursuitename(test):
        """ a description of the suite """
        test(...)
        test(...)
-       test(...)
+
+.. warning::
+   your suite function name **must** be prefixed by ``suite_``.
+
+Bonus
++++++
+
+.. code:: python
+
+   @suite(bonus=True)
+   def suite_yoursuitename(test):
+
+Test
+----
+
+In your suite function you can use the ``test`` function (passed in the suite function argument).
+
+The first argument of ``test`` is passed to the shell (via ``-c``, see :ref:`compatibility`).
+
+.. code:: python
+
+   test("echo bonjour je suis")
+   test("cat -e < /etc/shells")
+   test("sed 's/sh/foo/g' /etc/shells > notshells")
+
+Setup Command
++++++++++++++
+
+| ``setup`` is a command to run before the test.
+| Contrary to the tested command there is no restriction for the ``setup`` command.
+| The only requirement for the test setup to be successful is for this command to return a non zero status code.
+
+.. code:: python
+
+   test("cat < somefile", setup="echo file content > somefile")
+   test("ls -la",         setup="touch a b c d e")
+
+
+Compare Files
++++++++++++++
+
+| The ``files`` argument is a list of files to compare against the :ref:`config-reference-shell`..
+| Checks if the file exists and the file's content.
+
+.. code:: python
+
+   test("echo bonjour > somefile",                   files=["somefile"])
+   test("echo bonjour > a > b > c",                  files=["a", "b", "c"])
+   test("echo bonjour > foo ; echo aurevoir >> foo", files=["foo"])
+
+Export Variables
+++++++++++++++++
+
+Add environment variable passed to your executable with the ``exports`` dictionnary.
+
+.. note::
+   Those variables will be passed **in addition** of the default exports (i.e ``PATH`` and ``TERM``).
+
+.. code:: python
+
+   test("echo $FOO",     exports={"FOO": "foo"})
+   test("echo $FOO$BAR", exports={"FOO": "foo", "BAR": "bar"})
+   test("echo $SHLVL",   exports={"SHLVL": "100"})
+
+Timeout
++++++++
+
+``timeout`` overwrites the :ref:`default timeout value<config-timeout-test>` of the configuration.
+
+.. code:: python
+
+   test("echo /*/*/*", timeout=60)
+
+Hook
+++++
+
+Output
+^^^^^^
+
+``hook`` is a function (or list of functions) applied on the output of test after it is done running.
+
+.. code:: python
+
+   def replace_foo_by_bar_hook(output):
+       return output.replace("foo", "bar")
+
+   test("echo @@foo foo foo@@", hook=replace_foo_by_bar_hook)
+   # initial output:             @@foo foo foo@@
+   # after passedf through hook: @@bar bar bar@@
+
+Status Code
+^^^^^^^^^^^
+
+``hook_status`` is similar to ``hook`` only it take a status code has it's first argument and return the new status.
+
+.. code:: python
+
+   def reverse_error(status):
+       return 0 if status != 0 else 1
+
+   test("cat doesnotexists", hook=reverse_error)
+   # status code will be 0 after status hook

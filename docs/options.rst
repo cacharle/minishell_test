@@ -47,7 +47,8 @@ Command line Options
    Print available test suites
 
    .. command-output:: minishell_test --list
-      :ellipsis: 15
+
+.. :ellipsis: 15
 
 .. option:: -t <COMMAND>, --try <COMMAND>
 
@@ -64,7 +65,7 @@ Memory Leaks
 .. option:: -k, --check-leaks
 
    | Runs `valgrind <https://valgrind.org/>`_ on tests to check for memory leaks.
-   | (disable the usual comparison with the :ref:`reference shell <config-shell-reference-path>`)
+   | (disable the usual comparison with the :ref:`config-reference-shell`)
 
    .. warning::
       | Running ``valgrind`` on each tests may take a while especially if your ``minishell`` isn't correctly optimized,

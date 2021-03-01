@@ -9,6 +9,8 @@ Installation
     $ pip3 install minishell-test
     $ pip3 install --user minishell-test  # if you don't have root access
 
+.. _compatibility:
+
 Compatibility
 +++++++++++++
 
@@ -40,3 +42,5 @@ Run all the predefined tests:
 
     * Add ``~/.local/bin`` to your ``PATH`` environment variable.
     * Run ``$ python3 -m minishell_test`` instead of ``$ minishell_test``
+
+.. vim:ft=rst

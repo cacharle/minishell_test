@@ -27,8 +27,7 @@ Global settings are defined under the ``[minishell_test]`` section.
 
    :type: true|false
 
-   Enable the bonus tests (:ref:`bonus`).
-
+   Enable the bonus tests, see :ref:`bonus`.
 
 .. _config-make:
 .. conf:: make
@@ -44,7 +43,7 @@ Global settings are defined under the ``[minishell_test]`` section.
 
    | Argument given to the ``make`` command.
    | The default value (``MINISHELL_TEST_FLAGS=-DMINISHELL_TEST``) allows you to do conditional compilation
-     to support both the ``-c`` option and the :ref:`subject`
+     to support both the ``-c`` option and the subject
      (which doesn't say anything about options, so we assume the minishell executable didn't take any).
 
    | In your ``Makefile`` add ``$(MINISHELL_TEST_FLAGS)`` in your object compilation command.
@@ -69,6 +68,7 @@ Global settings are defined under the ``[minishell_test]`` section.
         #endif
 
 .. _config-check-error-messages:
+
 .. conf:: check_error_messages
 
    :type: true|false
@@ -110,12 +110,13 @@ Shell settings are defined under the ``[shell]`` section.
       ``{shell_available_commands_dir}`` will be replaced by the directory
       where the available commands are stored.
 
-Reference
-+++++++++
+.. _config-reference-shell:
+
+Reference Shell
++++++++++++++++
 
 Reference shell settings are defined under the ``[shell:reference]`` section.
 
-.. _config-shell-reference-path:
 .. conf:: path
 
    :type: path
@@ -137,6 +138,8 @@ Timeout
 
 Timeout settings are defined under the ``[timeout]`` section.
 
+.. _config-timeout-test:
+
 .. conf:: test
 
    :type: float (seconds)
@@ -144,6 +147,7 @@ Timeout settings are defined under the ``[timeout]`` section.
    Time before a timeout occurs on a regular test.
 
 .. _config-timeout-leaks:
+
 .. conf:: leaks
 
    :type: float (seconds)

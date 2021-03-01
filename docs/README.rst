@@ -16,7 +16,7 @@ minishell_test
 .. image:: https://i.imgur.com/98xh2xY.gif
    :alt: preview
 
-.. include:: gettingstarted.rst
+.. include:: gettingstarted.rst.inc
 
 Documentation
 -------------
