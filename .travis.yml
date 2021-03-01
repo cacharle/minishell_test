@@ -33,4 +33,3 @@ script:
   - python -m pytest -vvv
   - python -m minishell_test -p /tmp/minishell
   - python -m minishell_test -p /tmp/minishell -k pwd
-  - python -m sphinx-build docs docs/_build

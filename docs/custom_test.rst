@@ -70,7 +70,7 @@ Compare Files
 Export Variables
 ++++++++++++++++
 
-Add environment variable passed to your executable with the ``exports`` dictionnary.
+Add environment variable passed to your executable with the ``exports`` dictionary.
 
 .. note::
    Those variables will be passed **in addition** of the default exports (i.e ``PATH`` and ``TERM``).
@@ -104,8 +104,8 @@ Output
        return output.replace("foo", "bar")
 
    test("echo @@foo foo foo@@", hook=replace_foo_by_bar_hook)
-   # initial output:             @@foo foo foo@@
-   # after passedf through hook: @@bar bar bar@@
+   # initial output:            @@foo foo foo@@
+   # after passed through hook: @@bar bar bar@@
 
 Status Code
 ^^^^^^^^^^^
