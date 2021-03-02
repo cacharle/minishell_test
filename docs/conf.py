@@ -34,6 +34,7 @@ release = '1.0.1'
 # ones.
 extensions = [
     "sphinx.ext.extlinks",
+    "sphinx.ext.autodoc",
     "sphinxcontrib.programoutput",
 ]
 
@@ -64,6 +65,8 @@ html_context = {
     "conf_py_path": f"/{Path(__file__).parent.name}/",
     "github_version": "master",
 }
+
+autodoc_typehints = "description"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

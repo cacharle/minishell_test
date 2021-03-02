@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2021/02/27 12:07:59 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/02 11:12:35 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -145,12 +145,12 @@ class Suite:
             self.CLOSE_CHARS,
             width=Config.term_cols
         ))
-        for i, t in enumerate(self.tests):
-            if Config.range is not None:
-                if not (Config.range[0] <= i <= Config.range[1]):
-                    continue
-            t.run(i)
-            if Config.exit_first and t.result is not None and t.result.failed:
+        if Config.range is not None:
+            self.tests = self.test[Config.range[0] : Config.range[1] + 1]
+        for i, test in enumerate(self.tests):
+            result = test.run()
+            print(result.to_string(i))
+            if Config.exit_first and result is not None and result.failed:
                 return False
         return True
 

@@ -3,6 +3,18 @@
 Developers
 ==========
 
+.. autoclass:: minishell_test.test.captured.CapturedCommand
+   :members:
+   :special-members: __init__, __eq__
+
+.. autoclass:: minishell_test.test.captured.CapturedTimeout
+   :members:
+   :special-members: __eq__
+
+.. autoclass:: minishell_test.test.result.BaseResult
+   :members:
+   :special-members: __init__
+
 Install requirements
 --------------------
 

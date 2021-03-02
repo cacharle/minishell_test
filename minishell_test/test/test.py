@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/03/01 16:02:35 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/02 11:10:28 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -18,7 +18,7 @@ from pathlib import Path
 from typing import Optional, List, Dict, Union, Callable
 
 from minishell_test.config import Config
-from minishell_test.test.captured import Captured
+from minishell_test.test.captured import CapturedCommand, CapturedTimeout, CapturedType
 from minishell_test.test.result import Result, LeakResult
 from minishell_test import sandbox
 
@@ -50,7 +50,6 @@ class Test:
         self.setup = setup
         self.files = files
         self.exports = exports
-        self.result: Optional[Union[Result, LeakResult]] = None
         self.timeout = timeout if timeout > 0 else Config.timeout_test
         if not isinstance(hook, list):
             hook = [hook]
@@ -59,23 +58,20 @@ class Test:
         self.hook = hook
         self.hook_status = hook_status
 
-    def run(self, index: int) -> None:
+    def run(self) -> Union[Result, LeakResult]:
         """ Run the test for minishell and the reference shell and print the result out """
 
         if Config.check_leaks:
             self.hook = []
             self.hook_status = []
             captured = self._run_sandboxed([*Config.valgrind_cmd, "-c"])
-            self.result = LeakResult(self.full_cmd, captured)
-            self.result.put(index)
-            return
+            return LeakResult(self.full_cmd, captured)
 
         expected = self._run_sandboxed([Config.shell_reference_path, *Config.shell_reference_args, "-c"])
         actual   = self._run_sandboxed([Config.minishell_exec_path, "-c"])
-        self.result = Result(self.full_cmd, self.files, expected, actual)
-        self.result.put(index)
+        return Result(self.full_cmd, self.files, expected, actual)
 
-    def _run_sandboxed(self, shell_cmd: List[Union[str, Path]]) -> Captured:
+    def _run_sandboxed(self, shell_cmd: List[Union[str, Path]]) -> CapturedType:
         """ Run the command in a sandbox environment """
         with sandbox.context():
             if self.setup != "":
@@ -97,7 +93,7 @@ class Test:
                     sys.exit(1)
             return self._run_capture(shell_cmd)
 
-    def _run_capture(self, shell_cmd: List[Union[str, Path]]) -> Captured:
+    def _run_capture(self, shell_cmd: List[Union[str, Path]]) -> CapturedType:
         """ Capture the output (stdout and stderr)
             Capture the content of the watched files after the command is run
         """
@@ -121,7 +117,7 @@ class Test:
         except subprocess.TimeoutExpired:
             process.kill()
             # _, _ = process.communicate(timeout=2)
-            return Captured.timeout()
+            return CapturedTimeout()
         try:
             output = stdout.decode()
         except UnicodeDecodeError:
@@ -150,7 +146,7 @@ class Test:
                 lines[i] = Config.minishell_prefix + line[len(Config.shell_reference_prefix):]
         output = '\n'.join(lines)
 
-        return Captured(output, process.returncode, files_content)
+        return CapturedCommand(output, process.returncode, files_content)
 
     @property
     def full_cmd(self) -> str:
@@ -166,10 +162,10 @@ class Test:
     @classmethod
     def try_run(cls, cmd: str) -> str:
         test = Test(cmd)
-        test.run(0)
-        if isinstance(test.result, LeakResult):
-            return test.result.captured.output
-        elif isinstance(test.result, Result):
-            return test.result.actual.output
+        result = test.run(0)
+        if isinstance(result, LeakResult):
+            return result.captured.output
+        elif isinstance(result, Result):
+            return result.actual.output
         else:
             return "No output"

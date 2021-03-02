@@ -6,26 +6,25 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/01 15:55:11 by cacharle          #+#    #+#              #
-#    Updated: 2021/03/01 16:19:23 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/02 10:14:23 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import pytest
 import copy
 
-from minishell_test.test.captured import Captured
+from minishell_test.test.captured import CapturedCommand, CapturedTimeout
 
 
 @pytest.fixture
 def captured():
-    return Captured("foo", 0, ["file1", "file2"], False)
+    return CapturedCommand("foo", 0, ["file1", "file2"])
 
 
 def test_init(captured):
     assert "foo"              == captured.output
     assert 0                  == captured.status
     assert ["file1", "file2"] == captured.files_content
-    assert not captured.is_timeout
 
 
 def test_eq(captured):
@@ -42,9 +41,5 @@ def test_eq(captured):
     c2 = copy.deepcopy(captured)
     c2.files_content = ["asdfasdf"]
     assert captured != c2
-    assert captured != Captured.timeout()
-    assert Captured.timeout() == Captured.timeout()
-
-
-def test_timeout():
-    assert Captured.timeout().is_timeout
+    assert captured != CapturedTimeout()
+    assert CapturedTimeout() == CapturedTimeout()
