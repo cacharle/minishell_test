@@ -6,78 +6,91 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/03/02 11:10:28 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/02 19:08:25 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
-import os
 import re
-import sys
 import subprocess
 from pathlib import Path
-from typing import Optional, List, Dict, Union, Callable
+from typing import Optional, List, Dict, Union, Callable, TypeVar
 
 from minishell_test.config import Config
 from minishell_test.test.captured import CapturedCommand, CapturedTimeout, CapturedType
 from minishell_test.test.result import Result, LeakResult
 from minishell_test import sandbox
 
+
 HookType       = Union[Callable[[str], str], List[Callable[[str], str]]]
 HookStatusType = Union[Callable[[int], int], List[Callable[[int], int]]]
+
+T = TypeVar('T')
 
 
 class Test:
     def __init__(
         self,
-        cmd:         str,
-        setup:       str            = "",
-        files:       List[str]      = [],
-        exports:     Dict[str, str] = {},
-        timeout:     float          = -1,
-        hook:        HookType       = [],
-        hook_status: HookStatusType = [],
+        cmd:          str,
+        setup:        str                   = "",
+        files:        Union[str, List[str]] = [],
+        exports:      Dict[str, str]        = {},
+        timeout:      float                 = -1,
+        hooks:        HookType              = [],
+        hooks_status: HookStatusType        = [],
     ):
-        """ Test class
-            cmd:         command to execute
-            setup:       command to execute before tested command
-            files:       files to watch (check content after test)
-            exports:     exported variables
-            timeout:     maximum amount of time taken by the test
-            hook:        function to execute on the output of the test
-            hook_status: function to execute on status code
         """
-        self.cmd = cmd
-        self.setup = setup
-        self.files = files
-        self.exports = exports
-        self.timeout = timeout if timeout > 0 else Config.timeout_test
-        if not isinstance(hook, list):
-            hook = [hook]
-        if not isinstance(hook_status, list):
-            hook_status = [hook_status]
-        self.hook = hook
-        self.hook_status = hook_status
+            :param cmd:
+                Command to test
+            :param setup:
+                Command to execute before tested command
+            :param files:
+                Files to watch, content of each file is check after the test
+            :param exports:
+                Exported variables to :param:`cmd`
+            :param timeout:
+                Maximum amount of time taken by the test
+            :param hook:
+                Function to execute on the test output
+            :param hook_status:
+                Function to execute on the test status code
+        """
+        self._cmd = cmd
+        self._setup = setup
+        self._files = Test._coerce_into_list(files)
+        self._exports = exports
+        if Config.check_leaks:
+            self._timeout = Config.timeout_leaks
+        elif timeout <= 0:
+            self._timeout = Config.timeout_test
+        else:
+            self._timeout = timeout
+        self._hooks = Test._coerce_into_list(hooks)
+        self._hooks_status = Test._coerce_into_list(hooks_status)
+
+    @staticmethod
+    def _coerce_into_list(x: Union[T, List[T]]) -> List[T]:
+        if not isinstance(x, list):
+            return [x]
+        return x
 
     def run(self) -> Union[Result, LeakResult]:
         """ Run the test for minishell and the reference shell and print the result out """
 
         if Config.check_leaks:
-            self.hook = []
-            self.hook_status = []
-            captured = self._run_sandboxed([*Config.valgrind_cmd, "-c"])
-            return LeakResult(self.full_cmd, captured)
+            captured = self._run_sandboxed(*Config.valgrind_cmd, "-c")
+            return LeakResult(self._extended_cmd, captured)
 
-        expected = self._run_sandboxed([Config.shell_reference_path, *Config.shell_reference_args, "-c"])
-        actual   = self._run_sandboxed([Config.minishell_exec_path, "-c"])
-        return Result(self.full_cmd, self.files, expected, actual)
+        expected = self._run_sandboxed(Config.shell_reference_path, *Config.shell_reference_args, "-c")
+        actual   = self._run_sandboxed(Config.minishell_exec_path, "-c")
+        return Result(self._extended_cmd, self._files, expected, actual)
 
-    def _run_sandboxed(self, shell_cmd: List[Union[str, Path]]) -> CapturedType:
+    def _run_sandboxed(self, *argv: Union[str, Path]) -> CapturedType:
         """ Run the command in a sandbox environment """
         with sandbox.context():
-            if self.setup != "":
+            if self._setup != "":
                 try:
                     subprocess.run(
-                        self.setup,
+                        self._setup,
                         shell=True,
                         cwd=Config.sandbox_dir,
                         stderr=subprocess.STDOUT,
@@ -85,58 +98,48 @@ class Test:
                         check=True
                     )
                 except subprocess.CalledProcessError as e:
-                    print("Error: `{}` setup command failed for `{}`\n\twith '{}'"
-                          .format(self.setup,
-                                  self.cmd,
-                                  "no stderr" if e.stdout is None
-                                  else e.stdout.decode().strip()))
-                    sys.exit(1)
-            return self._run_capture(shell_cmd)
+                    raise TestSetupFailedException(self._setup, self._cmd, e.stdout)
+            return self._run_capture(*argv)
 
-    def _run_capture(self, shell_cmd: List[Union[str, Path]]) -> CapturedType:
+    def _run_capture(self, *argv: Union[str, Path]) -> CapturedType:
         """ Capture the output (stdout and stderr)
             Capture the content of the watched files after the command is run
         """
         # run the command in the sandbox
         process = subprocess.Popen(
-            [*shell_cmd, self.cmd],
+            [*argv, self._cmd],
             stderr=subprocess.STDOUT,
             stdout=subprocess.PIPE,
             cwd=Config.sandbox_dir,
             env={
                 'PATH': Config.shell_path_variable,
                 'TERM': 'xterm-256color',
-                **self.exports,
+                **self._exports,
             },
         )
 
         # https://docs.python.org/3/library/subprocess.html#subprocess.Popen.communicate
         try:
-            stdout, _ = process.communicate(
-                timeout=(self.timeout if not Config.check_leaks else Config.timeout_leaks))
+            stdout, _ = process.communicate(timeout=self._timeout)
         except subprocess.TimeoutExpired:
             process.kill()
-            # _, _ = process.communicate(timeout=2)
             return CapturedTimeout()
         try:
             output = stdout.decode()
         except UnicodeDecodeError:
-            output = "UNICODE ERROR: {}".format(process.stdout)
+            output = "UNICODE ERROR: {process.stdout}"
 
         # capture watched files content
         files_content: List[Optional[str]] = []
-        for file_name in self.files:
+        for file_name in self._files:
             try:
-                with open(os.path.join(Config.sandbox_dir, file_name), "rb") as f:
+                with open(Config.sandbox_dir / file_name, "rb") as f:
                     files_content.append(f.read().decode())
             except FileNotFoundError:
                 files_content.append(None)
 
-        # apply output/status hooks
-        for hook in self.hook:
-            output = hook(output)
-        for hook_status in self.hook_status:
-            process.returncode = hook_status(process.returncode)
+        output             = Test._apply_hook(output, self._hooks)
+        process.returncode = Test._apply_hook(process.returncode, self._hooks_status)
 
         # replace reference prefix with minishell prefix
         lines = output.split('\n')
@@ -148,24 +151,42 @@ class Test:
 
         return CapturedCommand(output, process.returncode, files_content)
 
+    @staticmethod
+    def _apply_hook(origin: T, hooks: List[Callable[[T], T]]) -> T:
+        if Config.check_leaks:
+            return origin
+        for hook in hooks:
+            origin = hook(origin)
+        return origin
+
     @property
-    def full_cmd(self) -> str:
+    def _extended_cmd(self) -> str:
         """ Return the command prefixed by the setup and exports """
-        s = self.cmd
-        if len(self.exports) != 0:
-            s = "[EXPORTS {}] {}".format(
-                ' '.join(["{}='{}'".format(k, v) for k, v in self.exports.items()]), s)
-        if self.setup != "":
-            s = "[SETUP {}] {}".format(self.setup, s)
+        s = self._cmd
+        if len(self._exports) != 0:
+            exports = ' '.join(f"{k}='{v}'" for k, v in self._exports.items())
+            s = f"[EXPORTS {exports}] {s}"
+        if self._setup != "":
+            s = "[SETUP {self._setup}] {s}"
         return s
 
     @classmethod
     def try_run(cls, cmd: str) -> str:
         test = Test(cmd)
-        result = test.run(0)
+        result = test.run()
         if isinstance(result, LeakResult):
-            return result.captured.output
+            return str(result)
         elif isinstance(result, Result):
-            return result.actual.output
+            return str(result)
         else:
             return "No output"
+
+
+class TestSetupFailedException(Exception):
+    def __init__(self, setup: str, cmd: str, stdout: bytes):
+        self._setup = setup
+        self._cmd = cmd
+        self._setup_output = "no output" if stdout is None else stdout.decode().strip()
+
+    def __str__(self):
+        return f"Error: `{self._setup}` setup command failed for `{self._cmd}`\n\twith '{self._setup_output}'"
