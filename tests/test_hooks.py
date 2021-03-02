@@ -6,11 +6,9 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/27 20:03:52 by cacharle          #+#    #+#              #
-#    Updated: 2021/02/28 12:05:58 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/02 17:45:15 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
-
-import contextlib
 
 from minishell_test.config import Config
 
@@ -28,17 +26,10 @@ from minishell_test.hooks import (
     DISCARDED_TEXT,
 )
 
+from tests.helpers import config_context
+
+
 Config.init([])
-
-
-@contextlib.contextmanager
-def config_context(attr, value):
-    prev = getattr(Config, attr)
-    setattr(Config, attr, value)
-    try:
-        yield
-    finally:
-        setattr(Config, attr, prev)
 
 
 def test_sort_lines():
@@ -116,7 +107,7 @@ declare -x YSU_VERSION="1.7.3"
 declare -x ZDOTDIR="/home/cacharle/.config/zsh"\
 """)
 
-    with config_context("shell_reference_args", ["--posix"]):
+    with config_context(shell_reference_args=["--posix"]):
         assert "" == export_singleton("export IGOTNUMBERS42")
         assert "" == export_singleton("export IGOTUNDERSCORE__")
         assert "" == export_singleton("export I")
@@ -165,31 +156,31 @@ def test_should_not_be():
 
 
 def test_platform_status():
-    with config_context('platform', 'darwin'):
+    with config_context(platform='darwin'):
         assert 0 == platform_status(0, 1)(0)
         assert 1 == platform_status(42, 42)(1)
-    with config_context('platform', 'linux'):
+    with config_context(platform='linux'):
         assert 0 == platform_status(0, 1)(1)
         assert 42 == platform_status(0, 1)(42)
-    with config_context('platform', 'foo'):
+    with config_context(platform='foo'):
         assert 0 == platform_status(42, 42)(0)
 
 
 def test_linux_replace():
-    with config_context('platform', 'darwin'):
+    with config_context(platform='darwin'):
         assert "Is a directory" == linux_replace("Is a directory", "is a directory")("Is a directory")
         assert "SHLVL=0"        == linux_replace("SHLVL=0", "SHLVL=1")("SHLVL=0")
         assert "\\"             == linux_replace("\\", "")("\\")
-    with config_context('platform', 'linux'):
+    with config_context(platform='linux'):
         assert "is a directory" == linux_replace("Is a directory", "is a directory")("Is a directory")
         assert "SHLVL=1"        == linux_replace("SHLVL=0", "SHLVL=1")("SHLVL=0")
         assert ""               == linux_replace("\\", "")("\\")
 
 
 def test_linux_discard():
-    with config_context('platform', 'darwin'):
+    with config_context(platform='darwin'):
         assert ""    == linux_discard("")
         assert "foo" == linux_discard("foo")
-    with config_context('platform', 'linux'):
+    with config_context(platform='linux'):
         assert DISCARDED_TEXT == linux_discard("")
         assert DISCARDED_TEXT == linux_discard("foo")

@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:29 by charles           #+#    #+#              #
-#    Updated: 2021/03/02 11:12:35 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/02 13:17:31 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -129,6 +129,7 @@ class Suite:
         self.bonus = bonus
         self.generator_func: Optional[Callable] = None
         self.tests: List[Test] = []
+        self.results: List[Result] = []
 
     def add(self, test):
         """Append a test to the suite"""
@@ -149,6 +150,7 @@ class Suite:
             self.tests = self.test[Config.range[0] : Config.range[1] + 1]
         for i, test in enumerate(self.tests):
             result = test.run()
+            self.results.append(result)
             print(result.to_string(i))
             if Config.exit_first and result is not None and result.failed:
                 return False
@@ -157,10 +159,10 @@ class Suite:
     def total(self) -> Tuple[int, int]:
         """Returns the total of passed and failed tests"""
         passed_total = 0
-        for t in self.tests:
-            if t.result is None:
+        for result in self.results:
+            if result is None:
                 return (-1, -1)
-            if t.result.passed:
+            if result.passed:
                 passed_total += 1
         return passed_total, len(self.tests) - passed_total
 
@@ -184,10 +186,8 @@ class Suite:
     @classmethod
     def save_log(cls):
         """Save the result of all suites to a file"""
+        colors.disable()
         with open(Config.log_path, "w") as log_file:
-            for s in cls.available:
-                for t in s.tests:
-                    if t.result is not None and t.result.failed:
-                        t.result.colored = False
-                        t.result.set_colors()
-                        log_file.write(t.result.full_diff() + '\n')
+            for result in self.results:
+                if result is not None and result.failed:
+                    log_file.write(result.full_diff() + '\n')

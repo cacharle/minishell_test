@@ -6,15 +6,15 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:17:34 by charles           #+#    #+#              #
-#    Updated: 2021/03/02 14:17:01 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/02 17:44:02 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import re
-from typing import Match, List, Optional, Union
+from typing import Match, List
 
 from minishell_test.config import Config
-from minishell_test.colors import green, red, blue, bold
+from minishell_test.colors import green, red
 from minishell_test.test.captured import CapturedCommand, CapturedTimeout, CapturedType
 
 
@@ -76,7 +76,6 @@ class BaseResult:
         return f"|> WITH {self._cmd}\n"
 
 
-
 class Result(BaseResult):
     def __init__(
         self,
@@ -96,6 +95,8 @@ class Result(BaseResult):
         :param actual:
             actual capture
         """
+        if isinstance(expected, CapturedTimeout):
+            raise RuntimeError
         super().__init__(cmd)
         self.file_names = file_names
         self.expected   = expected
@@ -110,8 +111,7 @@ class Result(BaseResult):
         return (
             self._cmd_header +
             self._cmd_diff() +
-            self._files_diff() +
-            "=" * 80 + '\n'
+            self._files_diff()
         )
 
     def _cmd_diff(self) -> str:
@@ -125,7 +125,7 @@ class Result(BaseResult):
             out += self._content_diff(self.expected.output, self.actual.output)
         return out
 
-    _FILE_NOT_CREATED_MESSAGE = "FROM TEST: File not created\n"
+    _FILE_NOT_CREATED_MESSAGE = "FROM TEST: File not created"
 
     def _files_diff(self):
         """Difference between watched files"""
@@ -133,62 +133,57 @@ class Result(BaseResult):
         if isinstance(self.actual, CapturedTimeout):
             return ""
 
-        def diff(name, expected, actual):
-            expected = expected or self._FILE_NOT_CREATED_MESSAGE
-            actual   = actual   or self._FILE_NOT_CREATED_MESSAGE
+        def diff(file_name, expected, actual):
+            if expected is None:
+                expected = self._FILE_NOT_CREATED_MESSAGE
+            if actual is None:
+                actual = self._FILE_NOT_CREATED_MESSAGE
             return f"|# FILE {file_name}\n" + self._content_diff(expected, actual)
 
-        return '\n'.join([
+        return ''.join([
             diff(name, expected, actual)
             for name, expected, actual in
-                zip(
-                    self.file_names,
-                    self.expected.files_content,
-                    self.actual.files_content
-                )
+            zip(
+                self.file_names,
+                self.expected.files_content,
+                self.actual.files_content
+            )
             if expected != actual
         ])
 
     def _content_diff(self, expected: str, actual: str) -> str:
-        return (
-            self._expected_header +
-            self._show_newlines(expected) +
-            self._actual_header +
-            self._show_newlines(actual)
-        )
-
-    def _header(self, title: str) -> str:
-        """Create a 80 characters wide header in the format ``-- title --``"""
-        return f"|{'-' * 40}{title:-<40}\n"
-
-    @property
-    def _expected_header(self) -> str:
-        return self._header("EXPECTED")
-
-    @property
-    def _actual_header(self) -> str:
-        return self._header("ACTUAL")
-
-    def _show_newlines(self, s: str) -> str:
         """Add a ``$`` at the end of each newline
 
             If the string doesn't end with a newline add one but doesn't add a
             ``$`` to represent it.
         """
-        s = s.replace("\n", "$\n")
-        if len(s) < 2:
+
+        def header(title):
+            return f"|{'-' * 40}{title:-<39}\n"
+
+        def show_newlines(s):
+            s = s.replace("\n", "$\n")
+            if len(s) < 2:
+                return s
+            if s[-1] != '\n':
+                s += '\n'
             return s
-        if s[-1] != '\n':
-            s += '\n'
-        return s
+
+        return (
+            header("EXPECTED") +
+            show_newlines(expected) +
+            header("ACTUAL") +
+            show_newlines(actual)
+        )
 
 
 class LeakResultException(Exception):
-    def __init__(self, result: 'LeakResult'):
-        self._result = result
+    def __init__(self, cmd: str, captured: CapturedCommand):
+        self._cmd      = cmd
+        self._captured = captured
 
     def __str__(self) -> str:
-        return f"valgrind output parsing failed for `{self._result._cmd}`:\n{self._result._captured.output}"
+        return f"valgrind output parsing failed for `{self._cmd}`:\n{self._captured.output}"
 
 
 class LeakResult(BaseResult):
@@ -197,33 +192,31 @@ class LeakResult(BaseResult):
         super().__init__(cmd)
 
     def __repr__(self) -> str:
-        return self._cmd_header + self.captured.output
-
-    @property
-    def passed(self) -> str:
         if isinstance(self._captured, CapturedTimeout):
-            return False
-        return self._lost_bytes == 0
+            return self._cmd_header + "TIMEOUT\n"
+        return self._cmd_header + self._captured.output
 
     _VALGRIND_OK_MESSAGE = "All heap blocks were freed -- no leaks are possible"
 
     @property
-    def _lost_bytes(self):
+    def passed(self) -> bool:
+        if isinstance(self._captured, CapturedTimeout):
+            return False
         # Some versions of valgrind don't output `definitely` and `indirectly`
         # when no leaks are found.
         if self._captured.output.find(self._VALGRIND_OK_MESSAGE) != -1:
-            return 0
-        definite_match = self._search_leak_kind("definitely")
-        indirect_match = self._search_leak_kind("indirectly")
+            return True
+        definite_match = self._search_leak_kind("definitely", self._captured)
+        indirect_match = self._search_leak_kind("indirectly", self._captured)
         definite_bytes = int(definite_match.group("bytes").replace(",", ""))
         indirect_bytes = int(indirect_match.group("bytes").replace(",", ""))
-        return definite_bytes + indirect_bytes
+        return (definite_bytes + indirect_bytes) == 0
 
-    def _search_leak_kind(self, kind: str) -> Match:
+    def _search_leak_kind(self, kind: str, captured: CapturedCommand) -> Match:
         match = re.search(
             r"==\d+==\s+" + kind + r" lost: (?P<bytes>[0-9,]+) bytes in [0-9,]+ blocks",
-            self._captured.output
+            captured.output
         )
         if match is None:
-            raise LeakResultException(self)
+            raise LeakResultException(self._cmd, captured)
         return match
