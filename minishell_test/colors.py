@@ -23,6 +23,14 @@ def disable() -> None:
     _COLORS["close"] = ""
 
 
+def enable() -> None:
+    _COLORS["red"]   = _DEFAULTS["red"]
+    _COLORS["green"] = _DEFAULTS["green"]
+    _COLORS["blue"]  = _DEFAULTS["blue"]
+    _COLORS["bold"]  = _DEFAULTS["bold"]
+    _COLORS["close"] = _DEFAULTS["close"]
+
+
 def green(s: str) -> str:
     return _COLORS["green"] + s + _COLORS["close"]
 

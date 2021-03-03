@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/27 20:03:52 by cacharle          #+#    #+#              #
-#    Updated: 2021/03/02 17:45:15 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/03 09:17:22 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -73,6 +73,8 @@ def test_error_line0():
     assert "minishell: bonjour\n"                           == error_line0(Config.shell_reference_prefix + "-c: bonjour\nfoo\n")
     assert "minishell: \n"                                  == error_line0(Config.shell_reference_prefix + "-c: \nfoo\n")
     assert Config.shell_reference_prefix + "-c:asdf\nfoo\n" == error_line0(Config.shell_reference_prefix + "-c:asdf\nfoo\n")
+    with config_context(check_error_messages=False):
+        assert DISCARDED_TEXT == error_line0(Config.shell_reference_prefix + "-c: bonjour\nfoo\n")
 
 
 def test_discard():

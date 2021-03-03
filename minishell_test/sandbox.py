@@ -6,23 +6,21 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 13:48:07 by charles           #+#    #+#              #
-#    Updated: 2021/02/27 12:32:17 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/03 09:15:11 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import shutil
 import subprocess
 from contextlib import contextmanager
+from pathlib import Path
 
 from minishell_test.config import Config
 
 
 def create():
     """Create a new sandbox directory"""
-    try:
-        Config.sandbox_dir.mkdir(parents=True, exist_ok=True)
-    except OSError:
-        pass
+    Config.sandbox_dir.mkdir(parents=True, exist_ok=True)
 
 
 def remove():
@@ -32,7 +30,7 @@ def remove():
     try:
         shutil.rmtree(Config.sandbox_dir)
     except PermissionError:
-        subprocess.run(["chmod", "777", *Config.sandbox_dir.glob("*")], check=True)
+        subprocess.run(["chmod", "-R", "777", Config.sandbox_dir], check=True)
         shutil.rmtree(Config.sandbox_dir)
     except FileNotFoundError:
         pass
