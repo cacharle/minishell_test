@@ -9,3 +9,5 @@ build/
 docs/_build/
 bash3.2.57
 *.bak
+.coverage
+coverage.xml

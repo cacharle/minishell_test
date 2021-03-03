@@ -3,6 +3,7 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/minishell-test)](https://pypi.org/project/minishell-test/)
 [![Documentation](https://readthedocs.org/projects/minishell-test/badge/?version=latest)](https://minishell-test.readthedocs.io)
 [![Build Status](https://api.travis-ci.com/cacharle/minishell_test.svg?branch=master)](https://travis-ci.com/cacharle/minishell_test)
+[![Code coverage](https://codecov.io/gh/cacharle/minishell_test/branch/master/graph/badge.svg?token=NB9C6688R1)](https://codecov.io/gh/cacharle/minishell_test)
 
 ![preview](https://i.imgur.com/98xh2xY.gif)
 
