@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo bonjour > bonjour
+echo aurevoir > aurevoir

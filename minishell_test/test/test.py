@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/03/02 19:08:25 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/03 12:23:59 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -28,6 +28,8 @@ T = TypeVar('T')
 
 
 class Test:
+    __test__ = False  # Tell pytest to ignore this class
+
     def __init__(
         self,
         cmd:          str,
@@ -49,9 +51,9 @@ class Test:
                 Exported variables to :param:`cmd`
             :param timeout:
                 Maximum amount of time taken by the test
-            :param hook:
+            :param hooks:
                 Function to execute on the test output
-            :param hook_status:
+            :param hooks_status:
                 Function to execute on the test status code
         """
         self._cmd = cmd
@@ -75,11 +77,9 @@ class Test:
 
     def run(self) -> Union[Result, LeakResult]:
         """ Run the test for minishell and the reference shell and print the result out """
-
         if Config.check_leaks:
             captured = self._run_sandboxed(*Config.valgrind_cmd, "-c")
             return LeakResult(self._extended_cmd, captured)
-
         expected = self._run_sandboxed(Config.shell_reference_path, *Config.shell_reference_args, "-c")
         actual   = self._run_sandboxed(Config.minishell_exec_path, "-c")
         return Result(self._extended_cmd, self._files, expected, actual)
@@ -98,7 +98,7 @@ class Test:
                         check=True
                     )
                 except subprocess.CalledProcessError as e:
-                    raise TestSetupFailedException(self._setup, self._cmd, e.stdout)
+                    raise TestSetupException(self._setup, self._cmd, e.stdout)
             return self._run_capture(*argv)
 
     def _run_capture(self, *argv: Union[str, Path]) -> CapturedType:
@@ -127,7 +127,7 @@ class Test:
         try:
             output = stdout.decode()
         except UnicodeDecodeError:
-            output = "UNICODE ERROR: {process.stdout}"
+            output = "UNICODE DECODE ERROR: {process.stdout}"
 
         # capture watched files content
         files_content: List[Optional[str]] = []
@@ -138,8 +138,8 @@ class Test:
             except FileNotFoundError:
                 files_content.append(None)
 
-        output             = Test._apply_hook(output, self._hooks)
-        process.returncode = Test._apply_hook(process.returncode, self._hooks_status)
+        output             = Test._apply_hooks(output, self._hooks)
+        process.returncode = Test._apply_hooks(process.returncode, self._hooks_status)
 
         # replace reference prefix with minishell prefix
         lines = output.split('\n')
@@ -152,7 +152,7 @@ class Test:
         return CapturedCommand(output, process.returncode, files_content)
 
     @staticmethod
-    def _apply_hook(origin: T, hooks: List[Callable[[T], T]]) -> T:
+    def _apply_hooks(origin: T, hooks: List[Callable[[T], T]]) -> T:
         if Config.check_leaks:
             return origin
         for hook in hooks:
@@ -167,7 +167,7 @@ class Test:
             exports = ' '.join(f"{k}='{v}'" for k, v in self._exports.items())
             s = f"[EXPORTS {exports}] {s}"
         if self._setup != "":
-            s = "[SETUP {self._setup}] {s}"
+            s = f"[SETUP {self._setup}] {s}"
         return s
 
     @classmethod
@@ -182,11 +182,15 @@ class Test:
             return "No output"
 
 
-class TestSetupFailedException(Exception):
-    def __init__(self, setup: str, cmd: str, stdout: bytes):
+class TestSetupException(Exception):
+    __test__ = False
+
+    def __init__(self, setup: str, cmd: str, stdout: Optional[bytes]):
         self._setup = setup
         self._cmd = cmd
-        self._setup_output = "no output" if stdout is None else stdout.decode().strip()
+        if stdout is None or stdout.decode().strip() == "":
+            stdout = b"no output"
+        self._setup_output = stdout.decode().strip()
 
     def __str__(self):
         return f"Error: `{self._setup}` setup command failed for `{self._cmd}`\n\twith '{self._setup_output}'"

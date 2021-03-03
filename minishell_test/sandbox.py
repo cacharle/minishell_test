@@ -6,14 +6,13 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 13:48:07 by charles           #+#    #+#              #
-#    Updated: 2021/03/03 09:15:11 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/03 10:00:16 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import shutil
 import subprocess
 from contextlib import contextmanager
-from pathlib import Path
 
 from minishell_test.config import Config
 

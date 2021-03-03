@@ -6,15 +6,13 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/03 07:56:43 by cacharle          #+#    #+#              #
-#    Updated: 2021/03/03 08:07:46 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/03 10:00:43 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
 import pytest
 
 from minishell_test import colors
-
-
 
 
 @pytest.fixture
@@ -50,6 +48,7 @@ def test_bold(texts):
     colors.enable()
     for text in texts:
         assert colors._DEFAULTS["bold"] + text + colors._DEFAULTS["close"] == colors.bold(text)
+
 
 def test_toggling(texts):
     colors.disable()

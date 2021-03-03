@@ -1,6 +1,7 @@
 *__pycache__*
 *.log
 bin/
+!tests/test/bin/
 tags
 dist/
 *.egg-info

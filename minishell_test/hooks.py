@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 16:10:20 by charles           #+#    #+#              #
-#    Updated: 2021/02/28 12:06:14 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/03 09:25:48 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -27,7 +27,6 @@ def error_line0(output):
     """Replace "/bin/bash: -c: line n:" by "minishell:" and delete the second line"""
     if not Config.check_error_messages:
         return DISCARDED_TEXT
-
     lines = output.split('\n')
     if len(lines) != 3:
         return output
