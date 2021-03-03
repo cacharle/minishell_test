@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/26 09:40:36 by cacharle          #+#    #+#              #
-#    Updated: 2021/03/01 19:30:33 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/03 16:26:59 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -15,9 +15,9 @@ import sys
 import configparser
 import inspect
 import shutil
-import distutils
+import distutils.spawn
 from pathlib import Path
-from typing import cast, List, Tuple
+from typing import cast, List, Tuple, Optional
 
 import minishell_test.data
 from minishell_test.args import parse_args
@@ -38,10 +38,10 @@ class ConfigParser(configparser.ConfigParser):
 
     def getargs(self, section, options):
         value = self.get(section, options)
-        return value.strip().split(' ') if len(value) != 0 else []
+        return value.strip().split()
 
     def getmultiline(self, section, options):
-        return self.get(section, options).strip().split('\n')
+        return self.get(section, options).strip().splitlines()
 
 
 class Config():
@@ -136,7 +136,7 @@ class Config():
         if cls.check_leaks:
             valgrind_path = distutils.spawn.find_executable("valgrind")
             if valgrind_path is None:
-                raise RuntimeError("could not find valgrind command on your system")
+                raise ConfigSetupException("Could not find the valgrind command on your system")
             cls.valgrind_cmd = [
                 str(valgrind_path),
                 "--trace-children=no",
@@ -148,12 +148,12 @@ class Config():
 
         cls.term_cols = shutil.get_terminal_size().columns
         if cls.term_cols < 40:
-            raise RuntimeError("You're terminal isn't wide enough 40 cols minimum required")
+            raise ConfigSetupException("You're terminal isn't wide enough 40 cols minimum required")
 
         cls.platform = sys.platform
         supported = ['linux', 'darwin']
         if cls.platform not in supported:
-            raise RuntimeError("Your platform ({cls.platform}) is not supported, supported platforms are: {', '.join(supported)}")
+            raise ConfigSetupException(f"Your platform ({cls.platform}) is not supported, supported platforms are: {', '.join(supported)}")
 
     @classmethod
     def _load_cfg(cls):
@@ -164,10 +164,30 @@ class Config():
 
         for section in user_cfg:
             if section not in cfg:
-                raise RuntimeError(f"Unknown section name: {section}")
+                raise ConfigParserException(section)
             for key in user_cfg[section]:
                 if key not in cfg[section]:
-                    raise RuntimeError(f"Unknown key name: {key}")
+                    raise ConfigParserException(section, key)
 
         cfg.read_dict({**cfg, **user_cfg})
         return cfg
+
+
+class MinishellTestException(Exception):
+    pass
+
+
+class ConfigSetupException(MinishellTestException):
+    pass
+
+
+class ConfigParserException(MinishellTestException):
+    def __init__(self, section: str, key: Optional[str] = None):
+        self._section = section
+        self._key = key
+
+    def __str__(self) -> str:
+        if self._key is None:
+            return f"Configuration parsing error: unknown section name: {self._section}"
+        else:
+            return f"Configuration parsing error: unknown key name: {self._key} in {self._section}"

@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/02 18:48:57 by cacharle          #+#    #+#              #
-#    Updated: 2021/03/03 12:22:32 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/03 15:59:01 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -29,6 +29,10 @@ Config.init([])
 
 
 class TestTest:
+    @pytest.fixture(autouse=True)
+    def reset_config(self):
+        Config.init([])
+
     def test_init_timeout(self):
         assert Config.timeout_test == Test("")._timeout
         assert Config.timeout_test == Test("", timeout=0)._timeout
