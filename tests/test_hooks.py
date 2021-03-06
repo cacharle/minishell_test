@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/27 20:03:52 by cacharle          #+#    #+#              #
-#    Updated: 2021/03/03 09:17:22 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/06 09:56:09 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -25,8 +25,6 @@ from minishell_test.hooks import (
     should_not_be,
     DISCARDED_TEXT,
 )
-
-from tests.helpers import config_context
 
 
 Config.init([])
@@ -65,7 +63,7 @@ _=/usr/bin/env\
 """)
 
 
-def test_error_line0():
+def test_error_line0(monkeypatch):
     assert ""                                               == error_line0("")
     assert "foo"                                            == error_line0("foo")
     assert "a\nb"                                           == error_line0("a\nb")
@@ -73,8 +71,8 @@ def test_error_line0():
     assert "minishell: bonjour\n"                           == error_line0(Config.shell_reference_prefix + "-c: bonjour\nfoo\n")
     assert "minishell: \n"                                  == error_line0(Config.shell_reference_prefix + "-c: \nfoo\n")
     assert Config.shell_reference_prefix + "-c:asdf\nfoo\n" == error_line0(Config.shell_reference_prefix + "-c:asdf\nfoo\n")
-    with config_context(check_error_messages=False):
-        assert DISCARDED_TEXT == error_line0(Config.shell_reference_prefix + "-c: bonjour\nfoo\n")
+    monkeypatch.setattr(Config, 'check_error_messages', False)
+    assert DISCARDED_TEXT == error_line0(Config.shell_reference_prefix + "-c: bonjour\nfoo\n")
 
 
 def test_discard():
@@ -82,7 +80,7 @@ def test_discard():
     assert DISCARDED_TEXT == discard("foo")
 
 
-def test_export_singleton():
+def test_export_singleton(monkeypatch):
     assert "" == export_singleton("declare -x IGOTNUMBERS42")
     assert "" == export_singleton("declare -x IGOTUNDERSCORE__")
     assert "" == export_singleton("declare -x I")
@@ -109,12 +107,12 @@ declare -x YSU_VERSION="1.7.3"
 declare -x ZDOTDIR="/home/cacharle/.config/zsh"\
 """)
 
-    with config_context(shell_reference_args=["--posix"]):
-        assert "" == export_singleton("export IGOTNUMBERS42")
-        assert "" == export_singleton("export IGOTUNDERSCORE__")
-        assert "" == export_singleton("export I")
-        assert "" == export_singleton("export _")
-        assert """\
+    monkeypatch.setattr(Config, 'shell_reference_args', ['--posix'])
+    assert "" == export_singleton("export IGOTNUMBERS42")
+    assert "" == export_singleton("export IGOTUNDERSCORE__")
+    assert "" == export_singleton("export I")
+    assert "" == export_singleton("export _")
+    assert """\
 export XDG_SESSION_TYPE="tty"
 export XDG_VTNR="1"
 export XINITRC="/home/cacharle/.config/x11/xinitrc"
@@ -157,32 +155,32 @@ def test_should_not_be():
     assert DISCARDED_TEXT                 == should_not_be("bar")("bonjour")
 
 
-def test_platform_status():
-    with config_context(platform='darwin'):
-        assert 0 == platform_status(0, 1)(0)
-        assert 1 == platform_status(42, 42)(1)
-    with config_context(platform='linux'):
-        assert 0 == platform_status(0, 1)(1)
-        assert 42 == platform_status(0, 1)(42)
-    with config_context(platform='foo'):
-        assert 0 == platform_status(42, 42)(0)
+def test_platform_status(monkeypatch):
+    monkeypatch.setattr(Config, 'platform', 'darwin')
+    assert 0 == platform_status(0, 1)(0)
+    assert 1 == platform_status(42, 42)(1)
+    monkeypatch.setattr(Config, 'platform', 'linux')
+    assert 0 == platform_status(0, 1)(1)
+    assert 42 == platform_status(0, 1)(42)
+    monkeypatch.setattr(Config, 'platform', 'foo')
+    assert 0 == platform_status(42, 42)(0)
 
 
-def test_linux_replace():
-    with config_context(platform='darwin'):
-        assert "Is a directory" == linux_replace("Is a directory", "is a directory")("Is a directory")
-        assert "SHLVL=0"        == linux_replace("SHLVL=0", "SHLVL=1")("SHLVL=0")
-        assert "\\"             == linux_replace("\\", "")("\\")
-    with config_context(platform='linux'):
-        assert "is a directory" == linux_replace("Is a directory", "is a directory")("Is a directory")
-        assert "SHLVL=1"        == linux_replace("SHLVL=0", "SHLVL=1")("SHLVL=0")
-        assert ""               == linux_replace("\\", "")("\\")
+def test_linux_replace(monkeypatch):
+    monkeypatch.setattr(Config, 'platform', 'darwin')
+    assert "Is a directory" == linux_replace("Is a directory", "is a directory")("Is a directory")
+    assert "SHLVL=0"        == linux_replace("SHLVL=0", "SHLVL=1")("SHLVL=0")
+    assert "\\"             == linux_replace("\\", "")("\\")
+    monkeypatch.setattr(Config, 'platform', 'linux')
+    assert "is a directory" == linux_replace("Is a directory", "is a directory")("Is a directory")
+    assert "SHLVL=1"        == linux_replace("SHLVL=0", "SHLVL=1")("SHLVL=0")
+    assert ""               == linux_replace("\\", "")("\\")
 
 
-def test_linux_discard():
-    with config_context(platform='darwin'):
-        assert ""    == linux_discard("")
-        assert "foo" == linux_discard("foo")
-    with config_context(platform='linux'):
-        assert DISCARDED_TEXT == linux_discard("")
-        assert DISCARDED_TEXT == linux_discard("foo")
+def test_linux_discard(monkeypatch):
+    monkeypatch.setattr(Config, 'platform', 'darwin')
+    assert ""    == linux_discard("")
+    assert "foo" == linux_discard("foo")
+    monkeypatch.setattr(Config, 'platform', 'linux')
+    assert DISCARDED_TEXT == linux_discard("")
+    assert DISCARDED_TEXT == linux_discard("foo")

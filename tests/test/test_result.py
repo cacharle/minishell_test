@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/01 16:26:34 by cacharle          #+#    #+#              #
-#    Updated: 2021/03/03 07:53:09 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/06 10:01:04 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -17,8 +17,6 @@ from minishell_test import colors
 
 from minishell_test.test.result import BaseResult, Result, LeakResult, LeakResultException
 from minishell_test.test.captured import CapturedCommand, CapturedTimeout
-
-from tests.helpers import config_context
 
 
 colors.disable()
@@ -152,42 +150,43 @@ class TestResult:
         assert result_fail_file_not_exist_expected.failed
 
     @pytest.mark.parametrize("term_cols", range(40, 300, 40))
-    def test_summarize(self, result_pass, result_fail, result_fail_status, result_fail_file, result_fail_file_not_exist,
+    def test_summarize(self, monkeypatch, result_pass, result_fail, result_fail_status, result_fail_file, result_fail_file_not_exist,
                        result_fail_timeout, result_fail_file_not_exist_expected, result_pass_long_cmd, term_cols):
-        with config_context(show_range=False, term_cols=term_cols):
-            assert f"{'echo bonjour':{term_cols - 7}} [PASS]" == result_pass.summarize(-1)
-            assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_fail.summarize(-1)
-            assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_fail_status.summarize(-1)
-            assert f"{'echo bonjour > foo':{term_cols - 7}} [FAIL]" == result_fail_file.summarize(-1)
-            assert f"{'echo bonjour > foo':{term_cols - 7}} [FAIL]" == result_fail_file_not_exist.summarize(-1)
-            assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_fail_timeout.summarize(-1)
-            assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_fail_file_not_exist_expected.summarize(-1)
-            assert f"{('e' * 300)[:term_cols - 10]}... [PASS]" == result_pass_long_cmd.summarize(-1)
-        with config_context(show_range=True, term_cols=term_cols):
-            assert f" 1: {'echo bonjour':{term_cols - 11}} [PASS]" == result_pass.summarize(1)
-            assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail.summarize(1)
-            assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail_status.summarize(1)
-            assert f" 1: {'echo bonjour > foo':{term_cols - 11}} [FAIL]" == result_fail_file.summarize(1)
-            assert f" 1: {'echo bonjour > foo':{term_cols - 11}} [FAIL]" == result_fail_file_not_exist.summarize(1)
-            assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail_timeout.summarize(1)
-            assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail_file_not_exist_expected.summarize(1)
-            assert f" 1: {('e' * 300)[:term_cols - 14]}... [PASS]" == result_pass_long_cmd.summarize(1)
-            assert f"99: {'echo bonjour':{term_cols - 11}} [PASS]" == result_pass.summarize(99)
-            assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail.summarize(99)
-            assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail_status.summarize(99)
-            assert f"99: {'echo bonjour > foo':{term_cols - 11}} [FAIL]" == result_fail_file.summarize(99)
-            assert f"99: {'echo bonjour > foo':{term_cols - 11}} [FAIL]" == result_fail_file_not_exist.summarize(99)
-            assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail_timeout.summarize(99)
-            assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail_file_not_exist_expected.summarize(99)
-            assert f"99: {('e' * 300)[:term_cols - 14]}... [PASS]" == result_pass_long_cmd.summarize(99)
-            assert f"100: {'echo bonjour':{term_cols - 12}} [PASS]" == result_pass.summarize(100)
-            assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_fail.summarize(100)
-            assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_fail_status.summarize(100)
-            assert f"100: {'echo bonjour > foo':{term_cols - 12}} [FAIL]" == result_fail_file.summarize(100)
-            assert f"100: {'echo bonjour > foo':{term_cols - 12}} [FAIL]" == result_fail_file_not_exist.summarize(100)
-            assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_fail_timeout.summarize(100)
-            assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_fail_file_not_exist_expected.summarize(100)
-            assert f"100: {('e' * 300)[:term_cols - 15]}... [PASS]" == result_pass_long_cmd.summarize(100)
+        monkeypatch.setattr(Config, 'term_cols', term_cols)
+        monkeypatch.setattr(Config, 'show_range', False)
+        assert f"{'echo bonjour':{term_cols - 7}} [PASS]" == result_pass.summarize(-1)
+        assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_fail.summarize(-1)
+        assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_fail_status.summarize(-1)
+        assert f"{'echo bonjour > foo':{term_cols - 7}} [FAIL]" == result_fail_file.summarize(-1)
+        assert f"{'echo bonjour > foo':{term_cols - 7}} [FAIL]" == result_fail_file_not_exist.summarize(-1)
+        assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_fail_timeout.summarize(-1)
+        assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_fail_file_not_exist_expected.summarize(-1)
+        assert f"{('e' * 300)[:term_cols - 10]}... [PASS]" == result_pass_long_cmd.summarize(-1)
+        monkeypatch.setattr(Config, 'show_range', True)
+        assert f" 1: {'echo bonjour':{term_cols - 11}} [PASS]" == result_pass.summarize(1)
+        assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail.summarize(1)
+        assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail_status.summarize(1)
+        assert f" 1: {'echo bonjour > foo':{term_cols - 11}} [FAIL]" == result_fail_file.summarize(1)
+        assert f" 1: {'echo bonjour > foo':{term_cols - 11}} [FAIL]" == result_fail_file_not_exist.summarize(1)
+        assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail_timeout.summarize(1)
+        assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail_file_not_exist_expected.summarize(1)
+        assert f" 1: {('e' * 300)[:term_cols - 14]}... [PASS]" == result_pass_long_cmd.summarize(1)
+        assert f"99: {'echo bonjour':{term_cols - 11}} [PASS]" == result_pass.summarize(99)
+        assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail.summarize(99)
+        assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail_status.summarize(99)
+        assert f"99: {'echo bonjour > foo':{term_cols - 11}} [FAIL]" == result_fail_file.summarize(99)
+        assert f"99: {'echo bonjour > foo':{term_cols - 11}} [FAIL]" == result_fail_file_not_exist.summarize(99)
+        assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail_timeout.summarize(99)
+        assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_fail_file_not_exist_expected.summarize(99)
+        assert f"99: {('e' * 300)[:term_cols - 14]}... [PASS]" == result_pass_long_cmd.summarize(99)
+        assert f"100: {'echo bonjour':{term_cols - 12}} [PASS]" == result_pass.summarize(100)
+        assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_fail.summarize(100)
+        assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_fail_status.summarize(100)
+        assert f"100: {'echo bonjour > foo':{term_cols - 12}} [FAIL]" == result_fail_file.summarize(100)
+        assert f"100: {'echo bonjour > foo':{term_cols - 12}} [FAIL]" == result_fail_file_not_exist.summarize(100)
+        assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_fail_timeout.summarize(100)
+        assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_fail_file_not_exist_expected.summarize(100)
+        assert f"100: {('e' * 300)[:term_cols - 15]}... [PASS]" == result_pass_long_cmd.summarize(100)
 
     def test_repr(self, result_fail, result_fail_status, result_fail_file, result_fail_file_not_exist, result_fail_file_multiple,
                   result_fail_timeout, result_fail_file_not_exist_expected):
@@ -415,34 +414,35 @@ bonjour
         assert result_leak_fail_timeout.failed
 
     @pytest.mark.parametrize("term_cols", range(40, 300, 40))
-    def test_summarize(self, result_leak_pass, result_leak_fail_indirect, result_leak_fail_definitive,
+    def test_summarize(self, monkeypatch, result_leak_pass, result_leak_fail_indirect, result_leak_fail_definitive,
                        result_leak_fail_both, result_leak_pass_no_count, result_leak_fail_timeout, term_cols):
-        with config_context(show_range=False, term_cols=term_cols):
-            assert f"{'echo bonjour':{term_cols - 7}} [PASS]" == result_leak_pass.summarize(-1)
-            assert f"{'echo bonjour':{term_cols - 7}} [PASS]" == result_leak_pass_no_count.summarize(-1)
-            assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_leak_fail_definitive.summarize(-1)
-            assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_leak_fail_indirect.summarize(-1)
-            assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_leak_fail_both.summarize(-1)
-            assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_leak_fail_timeout.summarize(-1)
-        with config_context(show_range=True, term_cols=term_cols):
-            assert f" 1: {'echo bonjour':{term_cols - 11}} [PASS]" == result_leak_pass.summarize(1)
-            assert f" 1: {'echo bonjour':{term_cols - 11}} [PASS]" == result_leak_pass_no_count.summarize(1)
-            assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_definitive.summarize(1)
-            assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_indirect.summarize(1)
-            assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_both.summarize(1)
-            assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_timeout.summarize(1)
-            assert f"99: {'echo bonjour':{term_cols - 11}} [PASS]" == result_leak_pass.summarize(99)
-            assert f"99: {'echo bonjour':{term_cols - 11}} [PASS]" == result_leak_pass_no_count.summarize(99)
-            assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_definitive.summarize(99)
-            assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_indirect.summarize(99)
-            assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_both.summarize(99)
-            assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_timeout.summarize(99)
-            assert f"100: {'echo bonjour':{term_cols - 12}} [PASS]" == result_leak_pass.summarize(100)
-            assert f"100: {'echo bonjour':{term_cols - 12}} [PASS]" == result_leak_pass_no_count.summarize(100)
-            assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_leak_fail_definitive.summarize(100)
-            assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_leak_fail_indirect.summarize(100)
-            assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_leak_fail_both.summarize(100)
-            assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_leak_fail_timeout.summarize(100)
+        monkeypatch.setattr(Config, 'term_cols', term_cols)
+        monkeypatch.setattr(Config, 'show_range', False)
+        assert f"{'echo bonjour':{term_cols - 7}} [PASS]" == result_leak_pass.summarize(-1)
+        assert f"{'echo bonjour':{term_cols - 7}} [PASS]" == result_leak_pass_no_count.summarize(-1)
+        assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_leak_fail_definitive.summarize(-1)
+        assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_leak_fail_indirect.summarize(-1)
+        assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_leak_fail_both.summarize(-1)
+        assert f"{'echo bonjour':{term_cols - 7}} [FAIL]" == result_leak_fail_timeout.summarize(-1)
+        monkeypatch.setattr(Config, 'show_range', True)
+        assert f" 1: {'echo bonjour':{term_cols - 11}} [PASS]" == result_leak_pass.summarize(1)
+        assert f" 1: {'echo bonjour':{term_cols - 11}} [PASS]" == result_leak_pass_no_count.summarize(1)
+        assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_definitive.summarize(1)
+        assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_indirect.summarize(1)
+        assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_both.summarize(1)
+        assert f" 1: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_timeout.summarize(1)
+        assert f"99: {'echo bonjour':{term_cols - 11}} [PASS]" == result_leak_pass.summarize(99)
+        assert f"99: {'echo bonjour':{term_cols - 11}} [PASS]" == result_leak_pass_no_count.summarize(99)
+        assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_definitive.summarize(99)
+        assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_indirect.summarize(99)
+        assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_both.summarize(99)
+        assert f"99: {'echo bonjour':{term_cols - 11}} [FAIL]" == result_leak_fail_timeout.summarize(99)
+        assert f"100: {'echo bonjour':{term_cols - 12}} [PASS]" == result_leak_pass.summarize(100)
+        assert f"100: {'echo bonjour':{term_cols - 12}} [PASS]" == result_leak_pass_no_count.summarize(100)
+        assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_leak_fail_definitive.summarize(100)
+        assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_leak_fail_indirect.summarize(100)
+        assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_leak_fail_both.summarize(100)
+        assert f"100: {'echo bonjour':{term_cols - 12}} [FAIL]" == result_leak_fail_timeout.summarize(100)
 
     def test_repr(self, result_leak_fail_indirect, result_leak_fail_definitive, result_leak_fail_both, result_leak_fail_timeout):
         assert r"""

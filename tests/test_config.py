@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/03 12:25:29 by cacharle          #+#    #+#              #
-#    Updated: 2021/03/03 16:27:07 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/06 10:11:30 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -169,26 +169,25 @@ class TestConfig:
         Config.init(["--range", "1", "100"])
         assert Config.show_range
 
-    def test_init_valgrind_not_found(self):
-        prev = distutils.spawn.find_executable
-        distutils.spawn.find_executable = lambda _: None  # noqa
+    def test_init_valgrind_not_found(self, monkeypatch):
+        monkeypatch.setattr(distutils.spawn, "find_executable", lambda _: None)
         with pytest.raises(ConfigSetupException) as e:
             Config.init(["--check-leaks"])
-        distutils.spawn.find_executable = prev
         assert "Could not find the valgrind command on your system" == e.value.__str__()
 
-    def test_init_term_cols_too_low(self):
-        prev = shutil.get_terminal_size
-        shutil.get_terminal_size = lambda: os.terminal_size((39, 80))  # noqa
+    def test_init_term_cols_too_low(self, monkeypatch):
+        def mock_get_terminal_size(fallback=None):
+            # has to support fallback since pytest uses this function during the verbose test
+            if fallback is not None:
+                return os.terminal_size(fallback)
+            return os.terminal_size((39, 80))
+        monkeypatch.setattr(shutil, "get_terminal_size", mock_get_terminal_size)
         with pytest.raises(ConfigSetupException) as e:
             Config.init(["--check-leaks"])
-        shutil.get_terminal_size = prev
         assert "You're terminal isn't wide enough 40 cols minimum required" == e.value.__str__()
 
-    def test_platform_not_supported(self):
-        prev = sys.platform
-        sys.platform = 'windows'
+    def test_platform_not_supported(self, monkeypatch):
+        monkeypatch.setattr(sys, "platform", "windows")
         with pytest.raises(ConfigSetupException) as e:
             Config.init(["--check-leaks"])
-        sys.platform = prev
         assert "Your platform (windows) is not supported, supported platforms are: linux, darwin" == e.value.__str__()
