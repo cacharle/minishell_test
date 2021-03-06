@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/01 16:26:34 by cacharle          #+#    #+#              #
-#    Updated: 2021/03/06 10:01:04 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/06 15:39:03 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -17,10 +17,6 @@ from minishell_test import colors
 
 from minishell_test.test.result import BaseResult, Result, LeakResult, LeakResultException
 from minishell_test.test.captured import CapturedCommand, CapturedTimeout
-
-
-colors.disable()
-Config.init([])
 
 
 class TestBaseResult:

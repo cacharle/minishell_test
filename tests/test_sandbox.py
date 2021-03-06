@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/03 08:09:00 by cacharle          #+#    #+#              #
-#    Updated: 2021/03/06 09:58:17 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/06 15:38:49 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -16,8 +16,6 @@ from pathlib import Path
 
 from minishell_test import sandbox
 from minishell_test.config import Config
-
-Config.init([])
 
 
 @pytest.fixture

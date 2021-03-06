@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/15 18:24:32 by charles           #+#    #+#              #
-#    Updated: 2021/02/28 09:06:53 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/06 10:47:07 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -62,11 +62,6 @@ def parse_args(argv):
         "-x", "--exit-first",
         action="store_true",
         help="Exit on first fail"
-    )
-    parser.add_argument(
-        "-m", "--make",
-        action="store_true",
-        help="Make minishell and exit"
     )
     parser.add_argument(
         "-g", "--pager",

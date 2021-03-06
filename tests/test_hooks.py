@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/27 20:03:52 by cacharle          #+#    #+#              #
-#    Updated: 2021/03/06 09:56:09 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/06 15:38:22 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -25,9 +25,6 @@ from minishell_test.hooks import (
     should_not_be,
     DISCARDED_TEXT,
 )
-
-
-Config.init([])
 
 
 def test_sort_lines():

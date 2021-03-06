@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/02 18:48:57 by cacharle          #+#    #+#              #
-#    Updated: 2021/03/06 10:07:07 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/06 15:38:12 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -22,15 +22,7 @@ from minishell_test.test.captured import CapturedCommand, CapturedTimeout
 from minishell_test.test.test import Test, TestSetupException
 
 
-colors.disable()
-Config.init([])
-
-
 class TestTest:
-    @pytest.fixture(autouse=True)
-    def reset_config(self):
-        Config.init([])
-
     def test_init_timeout(self, monkeypatch):
         assert Config.timeout_test == Test("")._timeout
         assert Config.timeout_test == Test("", timeout=0)._timeout

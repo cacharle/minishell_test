@@ -6,7 +6,7 @@
 #    By: charles <me@cacharle.xyz>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/11 12:28:00 by charles           #+#    #+#              #
-#    Updated: 2021/02/05 17:44:25 by charles          ###   ########.fr        #
+#    Updated: 2021/03/06 11:31:33 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -17,31 +17,49 @@ from minishell_test.suite import Suite
 from minishell_test.test import Test
 
 
-def suite(groups: List[str] = [], bonus: bool = False):  # type: ignore
+class SuiteRegistrationException(Exception):
+    def __init__(self, function_name: str, message: str):
+        self._function_name = function_name
+        self._message = message
+
+    def __str__(self) -> str:
+        return "Error during the registration of {self._function_name} as a suite: {self._message}"
+
+
+_SUITE_FUNCTION_PREFIX = "suite_"
+
+
+def suite(bonus: bool = False):  # type: ignore
     """Decorator generator for suites arguments"""
 
     def suite_wrapper(origin):
         """Decorator for a suite function (fmt: suite_[name]) """
 
-        mod = inspect.getmodule(origin)
-        if mod is None:
-            raise NotImplementedError
-        mod_name = mod.__name__[len("minishell_test.suites."):]
-        name = "{}/{}".format(mod_name, origin.__name__[len("suite_"):])
+        # get the function name
+        function_name = origin.__name__
+        if not function_name.startswith(_SUITE_FUNCTION_PREFIX):
+            raise SuiteRegistrationException(function_name, f"Function need to start with {_SUITE_FUNCTION_PREFIX}")
+        function_name = function_name[len(_SUITE_FUNCTION_PREFIX):]
+        # get the module name
+        module = inspect.getmodule(origin)
+        if module is None:
+            raise SuiteRegistrationException(function_name, "Could not get function module")
+        module_name = module.__name__[len("minishell_test.suites."):]
+        # get the first line of the function docstring as the suite description
         description = origin.__doc__
         if description is None:
-            print("You should had a doc string to the {} suite".format(name))
+            warnings.warn(f"You should had a doc string to the {name} suite")
             description = "no description"
-        description = description.split("\n")[0].strip()
-        s = Suite(name, groups + [mod_name], bonus, description)
+        description = description.splitlines()[0].strip()
 
-        def test_generator():
-            def test(*args, **kwargs):
-                s.add(Test(*args, **kwargs))
-            origin(test)
+        suite = Suite(origin, function_name, module_name, bonus, description)
+        Suite._available.append(suite)
 
-        s.generator_func = test_generator
-        Suite.available.append(s)
-        return test_generator
+        # def test_generator():
+        #     def test(*args, **kwargs):
+        #         suite.append_test(Test(*args, **kwargs))
+        #     origin(test)
+        # suite.generator_func = test_generator
+        return origin
 
     return suite_wrapper

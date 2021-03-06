@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/03 12:25:29 by cacharle          #+#    #+#              #
-#    Updated: 2021/03/06 10:11:30 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/06 15:38:41 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -25,9 +25,6 @@ from minishell_test.config import (
     ConfigParser,
     ConfigParserException,
 )
-
-
-Config.init([])
 
 
 class TestConfigParser:

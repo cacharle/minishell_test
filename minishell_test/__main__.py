@@ -22,8 +22,8 @@ from minishell_test.config import Config
 from minishell_test import sandbox
 from minishell_test.args import parse_args
 from minishell_test.suite.suite import Suite, SuiteException
-from minishell_test.suites import *  # noqa: F403,F401
 from minishell_test.test import Test
+from minishell_test.suites import *  # noqa: F403,F401
 
 
 def main(argv=None):
@@ -31,11 +31,11 @@ def main(argv=None):
     Config.init(args)
 
     if args.list:
-        Suite.list()
+        print(Suite.list(), end="")
         sys.exit(0)
 
     # running ``make`` in minishell directory
-    if Config.make or args.make:
+    if Config.make:
         print("{:=^{width}}".format("MAKE", width=Config.term_cols))
         try:
             subprocess.run(
@@ -46,8 +46,6 @@ def main(argv=None):
         except subprocess.CalledProcessError:
             sys.exit(1)
         print("=" * Config.term_cols)
-        if args.make:
-            sys.exit(0)
 
     # setup available commands
     if not Config.shell_available_commands_dir.exists():
@@ -67,28 +65,26 @@ def main(argv=None):
         sys.exit(0)
 
     try:
-        Suite.setup(args.suites)
-    except SuiteException as e:
-        print(e)
-        sys.exit(1)
-
-    try:
-        Suite.run_all()
+        Suite.run(args.suites)
     except KeyboardInterrupt:
         pass
     finally:
         sandbox.remove()
-
     Suite.summarize()
-    Suite.save_log()
-    print("See", Config.log_path, "for more information")
-    if Config.check_leaks:
-        print("HELP: Valgrind is really slow the -x and --range options could be useful"
-              " ({} -h for more details)".format(sys.argv[0]))
+    Suite.save()
 
-    if Config.pager:
-        # TODO {} replaced by filename in pager config var
-        subprocess.run([Config.pager_prog, Config.log_path])
+    # Suite.summarize()
+    # Suite.save_log()
+
+    # print("See", Config.log_path, "for more information")
+    #
+    # if Config.check_leaks:
+    #     print("HELP: Valgrind is really slow the -x and --range options could be useful"
+    #           " ({} -h for more details)".format(sys.argv[0]))
+
+    # if Config.pager:
+    #     # TODO {} replaced by filename in pager config var
+    #     subprocess.run([Config.pager_prog, Config.log_path])
 
 
 if __name__ == "__main__":
