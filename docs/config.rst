@@ -84,6 +84,12 @@ Global settings are defined under the ``[minishell_test]`` section.
    | Pager to use when viewing your results after the tests finished running.
    | Will be called like: ``{pager} {log_filename}``.
 
+.. conf:: end_command_with_linefeed
+
+   :type: true|false
+
+   Weather the test should add a linefeed (``\n``) at the end of the command passed via ``-c``.
+
 Shell
 -----
 
