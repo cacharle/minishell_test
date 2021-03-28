@@ -6,7 +6,7 @@
 #    By: charles <charles.cabergs@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/16 21:48:50 by charles           #+#    #+#              #
-#    Updated: 2021/03/01 16:02:35 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/28 20:08:57 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -47,6 +47,8 @@ class Test:
             hook_status: function to execute on status code
         """
         self.cmd = cmd
+        if Config.end_command_with_linefeed:
+            self.cmd = self.cmd + '\n'
         self.setup = setup
         self.files = files
         self.exports = exports

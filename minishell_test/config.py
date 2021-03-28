@@ -6,7 +6,7 @@
 #    By: cacharle <me@cacharle.xyz>                 +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/02/26 09:40:36 by cacharle          #+#    #+#              #
-#    Updated: 2021/02/28 11:19:13 by cacharle         ###   ########.fr        #
+#    Updated: 2021/03/28 20:06:36 by cacharle         ###   ########.fr        #
 #                                                                              #
 # ############################################################################ #
 
@@ -60,6 +60,7 @@ class Config():
     shell_reference_args         = cast(List[str], None)
     timeout_test                 = cast(float, None)
     timeout_leaks                = cast(float, None)
+    end_command_with_linefeed    = cast(bool, None)
     cache_dir                    = cast(Path, None)
     sandbox_dir                  = cast(Path, None)
     shell_available_commands_dir = cast(Path, None)
@@ -74,6 +75,7 @@ class Config():
     valgrind_cmd                 = cast(List[str], None)
     term_cols                    = cast(int, None)
     platform                     = cast(str, None)
+    platform                     = cast(str, None)
 
     @classmethod
     def init(cls, args):
@@ -84,23 +86,24 @@ class Config():
 
         cfg = cls._load_cfg()
 
-        cls.bonus                    = cfg.getboolean('minishell_test', 'bonus')
-        cls.exec_name                = cfg.get('minishell_test', 'exec_name')
-        cls.make                     = cfg.getboolean('minishell_test', 'make')
-        cls.make_args                = cfg.getargs('minishell_test', 'make_args')
-        cls.pager                    = cfg.getboolean('minishell_test', 'pager')
-        cls.pager_prog               = cfg.get('minishell_test', 'pager_prog')
-        cls.log_path                 = cfg.getpath('minishell_test', 'log_path')
-        cls.check_error_messages     = cfg.getboolean('minishell_test', 'check_error_messages')
+        cls.bonus                     = cfg.getboolean('minishell_test', 'bonus')
+        cls.exec_name                 = cfg.get('minishell_test', 'exec_name')
+        cls.make                      = cfg.getboolean('minishell_test', 'make')
+        cls.make_args                 = cfg.getargs('minishell_test', 'make_args')
+        cls.pager                     = cfg.getboolean('minishell_test', 'pager')
+        cls.pager_prog                = cfg.get('minishell_test', 'pager_prog')
+        cls.log_path                  = cfg.getpath('minishell_test', 'log_path')
+        cls.check_error_messages      = cfg.getboolean('minishell_test', 'check_error_messages')
+        cls.end_command_with_linefeed = cfg.getboolean('minishell_test', 'end_command_with_linefeed')
 
-        cls.shell_available_commands = cfg.getmultiline('shell', 'available_commands')
-        cls.shell_path_variable      = cfg.get('shell', 'path_variable')
+        cls.shell_available_commands  = cfg.getmultiline('shell', 'available_commands')
+        cls.shell_path_variable       = cfg.get('shell', 'path_variable')
 
-        cls.shell_reference_path     = cfg.getpath('shell:reference', 'path')
-        cls.shell_reference_args     = cfg.getargs('shell:reference', 'args')
+        cls.shell_reference_path      = cfg.getpath('shell:reference', 'path')
+        cls.shell_reference_args      = cfg.getargs('shell:reference', 'args')
 
-        cls.timeout_test             = cfg.getfloat('timeout', 'test')
-        cls.timeout_leaks            = cfg.getfloat('timeout', 'leaks')
+        cls.timeout_test              = cfg.getfloat('timeout', 'test')
+        cls.timeout_leaks             = cfg.getfloat('timeout', 'leaks')
 
         xdg_cache_home = os.environ.get('XDG_CACHE_HOME')
         home = os.environ.get('HOME')
