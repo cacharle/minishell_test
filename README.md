@@ -1,6 +1,6 @@
 # minishell\_test
 
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/minishell-test)](https://pypi.org/project/minishell-test/)
+[![PyPI - Python Version](https://img.shields.io/pypi/v/minishell-test)](https://pypi.org/project/minishell-test/)
 [![Documentation](https://readthedocs.org/projects/minishell-test/badge/?version=latest)](https://minishell-test.readthedocs.io)
 [![Build Status](https://api.travis-ci.com/cacharle/minishell_test.svg?branch=master)](https://travis-ci.com/cacharle/minishell_test)
 
